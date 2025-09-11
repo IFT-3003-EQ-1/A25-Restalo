@@ -5,7 +5,7 @@ WORKDIR /app
 COPY pom.xml .
 RUN mvn exec:java || exit 0
 
-COPY src src
+COPY . .
 RUN mvn compile
 
 CMD ["mvn", "exec:java", "--offline"]
