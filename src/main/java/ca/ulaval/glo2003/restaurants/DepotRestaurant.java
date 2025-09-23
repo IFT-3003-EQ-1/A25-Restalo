@@ -19,4 +19,11 @@ final class DepotRestaurant {
         return Optional.ofNullable(base.get(identifiant));
     }
 
+    /** Liste les restaurants appartenant à un propriétaire donné. */
+    static List<Restaurant> listerParProprietaire(String proprietaireId) {
+        return base.values().stream()
+                .filter(r -> Objects.equals(r.proprietaireId, proprietaireId))
+                .toList();
+    }
+
 }
