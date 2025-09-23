@@ -152,3 +152,34 @@ Voici les variables que nous avons configurées pour nos requêtes Postman :
     - Heures entre 00:00:00 et 23:59:59 ✔
 
 ---
+
+## Plannification
+
+Nous avons créer le tableau Kanban suivant dans le but d'organiser et répartir nos tâches.
+
+![GET Kanban](./images/Kanban.png)
+
+L'ensemble des issues contenu dans le Kanabn sont associé au milestone correspondant à la remise #1.
+
+![GET milestone](./images/milestone.png)
+
+Voici le détails des issues mentionnés si-dessus.
+
+Issue #1
+![GET issue_1](./images/issue_1.png)
+
+Issue #2
+
+![GET issue_2](./images/issue_2.png)
+
+Issue #3
+
+![GET issue_3](./images/issue_3.png)
+
+Ces issues ont été réaliés via les pull request suivant.
+
+
+
+Voicie une vue global des commits réalisés
+
+![GET commit_tree](./images/commit_tree.png)
