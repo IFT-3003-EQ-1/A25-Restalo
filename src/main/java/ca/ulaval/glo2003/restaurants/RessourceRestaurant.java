@@ -110,6 +110,24 @@ public class RessourceRestaurant {
         return Response.ok(versJson(resto)).build(); // ne pas exposer proprietaireId
     }
 
+    // ---------------------------------------------------
+    // GET /restaurants : lister pour un propriétaire
+    // ---------------------------------------------------
+    @GET
+    public Response listerRestaurants(@HeaderParam("Owner") String proprietaireId) {
+        if (proprietaireId == null || proprietaireId.isBlank()) {
+            return mauvaiseRequete("MISSING_PARAMETER", "`Owner` header est requis");
+        }
+
+        List<Map<String, Object>> sortie = DepotRestaurant
+                .listerParProprietaire(proprietaireId)
+                .stream()
+                .map(this::versJson) // masque proprietaireId
+                .toList();
+
+        return Response.ok(sortie).build();
+    }
+
     // -----------------
     // Helpers internes
     // -----------------
