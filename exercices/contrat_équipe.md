@@ -30,7 +30,7 @@
 |------------------|-------------------------|
 | Gabriel Gibeau   | 537333349               |
 | Youcef Lamara    | 111270974               |
-| Oussama Touadini |                         |
+| Oussama Touadini | 537032595               |
 | Hamid Mesbah     |                         |
 
 **Date de signature du contrat :** 15 / septembre / 2025
