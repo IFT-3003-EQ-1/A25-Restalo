@@ -14,4 +14,9 @@ final class DepotRestaurant {
         return restaurant.identifiant;
     }
 
+    /** Retrouve un restaurant par identifiant. */
+    static Optional<Restaurant> trouver(String identifiant) {
+        return Optional.ofNullable(base.get(identifiant));
+    }
+
 }

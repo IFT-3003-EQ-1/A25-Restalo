@@ -85,6 +85,47 @@ public class RessourceRestaurant {
         return Response.created(location).build();
     }
 
+    // ---------------------------------------
+    // GET /restaurants/{id} : obtenir par id
+    // ---------------------------------------
+    @GET
+    @Path("/{id}")
+    public Response obtenirRestaurant(@HeaderParam("Owner") String proprietaireId,
+                                      @PathParam("id") String identifiant) {
+        if (proprietaireId == null || proprietaireId.isBlank()) {
+            return mauvaiseRequete("MISSING_PARAMETER", "`Owner` header est requis");
+        }
+
+        var opt = DepotRestaurant.trouver(identifiant);
+        if (opt.isEmpty()) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        var resto = opt.get();
+        // Accès réservé au propriétaire (sinon 404, on ne révèle pas l'existence)
+        if (!proprietaireId.equals(resto.proprietaireId)) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        return Response.ok(versJson(resto)).build(); // ne pas exposer proprietaireId
+    }
+
+    // -----------------
+    // Helpers internes
+    // -----------------
+    /** Formate la réponse sans exposer proprietaireId. */
+    private Map<String, Object> versJson(Restaurant r) {
+        return Map.of(
+                "id", r.identifiant,
+                "nom", r.nom,
+                "capacite", r.capacite,
+                "horaires", Map.of(
+                        "ouverture", r.horaires.ouverture,
+                        "fermeture", r.horaires.fermeture
+                )
+        );
+    }
+
     /** 400 BAD REQUEST au format attendu. */
     private Response mauvaiseRequete(String code, String description) {
         return Response.status(Response.Status.BAD_REQUEST)
