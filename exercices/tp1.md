@@ -178,7 +178,11 @@ Issue #3
 
 Ces issues ont été réaliés via les pull request suivant.
 
+![GET pull_request_1](./images/pull_request_1.png)
 
+![GET pull_request_1](./images/pull_request_2.png)
+
+![GET pull_request_1](./images/pull_request_3.png)
 
 Voicie une vue global des commits réalisés
 
