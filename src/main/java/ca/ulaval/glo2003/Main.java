@@ -1,6 +1,5 @@
 package ca.ulaval.glo2003;
 
-import ca.ulaval.glo2003.restaurants.RessourceRestaurant;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -11,9 +10,9 @@ public class Main {
     public static final String BASE_URI = "http://0.0.0.0:8080/";
 
     public static HttpServer startServer() {
+        AppContext app = new AppContext();
         final ResourceConfig rc = new ResourceConfig()
-                .register(new HealthResource())
-                .register(new RessourceRestaurant());
+                .register(app.getRessource());
 
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
     }
