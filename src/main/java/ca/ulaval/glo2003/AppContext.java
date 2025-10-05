@@ -7,8 +7,10 @@ import ca.ulaval.glo2003.entities.assemblers.ProprietaireFactory;
 import ca.ulaval.glo2003.entities.assemblers.RestaurantAssembler;
 import ca.ulaval.glo2003.entities.assemblers.RestaurantFactory;
 import ca.ulaval.glo2003.infra.persistence.InMemoryRestaurantRepository;
+import org.glassfish.jersey.server.ResourceConfig;
 
-public class AppContext {
+public class AppContext extends ResourceConfig {
+
     public RestaurantRessource getRessource() {
         return new RestaurantRessource(
                 new RestaurantService(
@@ -20,5 +22,6 @@ public class AppContext {
                 new RestaurantDtoAssembler()
         );
     }
+
 
 }
