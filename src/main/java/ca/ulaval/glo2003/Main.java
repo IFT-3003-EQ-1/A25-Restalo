@@ -17,14 +17,7 @@ public class Main {
     private static HttpServer server;
 
     public static HttpServer startServer() {
-        AppContext app = new AppContext();
-        final ResourceConfig rc = new ResourceConfig()
-                .register(app.getRessource())
-                .register(AccessInterditExceptionMapper.class)
-                .register(ParametreInvalideExceptionMapper.class)
-                .register(ParametreManquantExceptionMapper.class)
-                .register(NotFoundExceptionMapper.class);
-        server = GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
+        server = GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), AppContext.getRessources());
         return server;
     }
 

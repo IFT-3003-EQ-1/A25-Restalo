@@ -1,47 +1,54 @@
 package ca.ulaval.glo2003.api;
 
+import ca.ulaval.glo2003.AppContext;
 import ca.ulaval.glo2003.Main;
+import ca.ulaval.glo2003.api.assemblers.RestaurantDtoAssembler;
 import ca.ulaval.glo2003.domain.dtos.ProprietaireDto;
 import ca.ulaval.glo2003.domain.dtos.RestaurantDto;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.Application;
+import jakarta.ws.rs.core.Response;
+import org.glassfish.jersey.test.JerseyTest;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class RestaurantEnd2EndTest {
+import java.util.Map;
 
-    @BeforeAll
-    static void startServer() {
-        Main.main(new String[0]);
-    }
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-    @BeforeEach
-    void setUp() {
 
-    }
+public class RestaurantEnd2EndTest extends JerseyTest {
 
-    @AfterAll
-    static void stopServer() {
-        Main.stopServer();
+    @Override
+    protected Application configure() {
+        return AppContext.getRessources();
     }
 
     @Test
-    public void canCreateRestaurant() {
+    public void givenPostRestaurant_whenCorrectRequest_thenResponseIsCreated() {
         // given
-        ProprietaireDto proprietaireDto = new ProprietaireDto();
-        proprietaireDto.nom = "";
-        proprietaireDto.id = "";
+        RestaurantDto restaurantDto = RestaurantEnd2EndUtils.buildDefaultRestaurantDto();
 
-        RestaurantDto  restaurantDto = new RestaurantDto();
-        restaurantDto.capacite = 2;
-        restaurantDto.horaireOuverture = "";
-        restaurantDto.horaireFermeture = "";
-        restaurantDto.nom = "";
-        restaurantDto.proprietaire = proprietaireDto;
-
+        Map<String, Object> json =  (new RestaurantDtoAssembler()).versJson(restaurantDto);
         // when
-        
 
+        Response response = target("/restaurants").request().header("Owner", "1").post(Entity.json(json));
         // expected
+
+        assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void givenPostRestaurant_whenNullProprietaireId_thenResponseIsError() {
+        RestaurantDto restaurantDto = RestaurantEnd2EndUtils.buildDefaultRestaurantDto();
+        Map<String, Object> json =  (new RestaurantDtoAssembler()).versJson(restaurantDto);
+        // when
+
+        Response response = target("/restaurants").request().post(Entity.json(json));
+        // expected
+
+        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+        String content = response.readEntity(String.class);
+
     }
 }
