@@ -9,7 +9,6 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.Application;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.test.JerseyTest;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -48,7 +47,7 @@ public class RestaurantEnd2EndTest extends JerseyTest {
         // expected
 
         assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
-        String content = response.readEntity(String.class);
-
     }
+
+
 }
