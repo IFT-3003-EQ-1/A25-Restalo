@@ -1,4 +1,4 @@
-package ca.ulaval.glo2003.restaurants.domain.dtos;
+package ca.ulaval.glo2003.restaurants.domain;
 
 public class Hours {
         private String open;

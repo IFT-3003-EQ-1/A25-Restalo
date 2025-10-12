@@ -1,6 +1,6 @@
 package ca.ulaval.glo2003.restaurants;
 
-import ca.ulaval.glo2003.restaurants.domain.dtos.Restaurant;
+import ca.ulaval.glo2003.restaurants.domain.Restaurant;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

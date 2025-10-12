@@ -1,4 +1,4 @@
-package ca.ulaval.glo2003.restaurants.domain.dtos;
+package ca.ulaval.glo2003.restaurants.domain;
 
 /**
  * Modèle de données pour la (dé)sérialisation JSON-B.

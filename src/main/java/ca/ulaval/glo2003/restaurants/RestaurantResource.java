@@ -1,18 +1,14 @@
 package ca.ulaval.glo2003.restaurants;
 
-import ca.ulaval.glo2003.restaurants.domain.dtos.Hours;
-import ca.ulaval.glo2003.restaurants.domain.dtos.Restaurant;
-import ca.ulaval.glo2003.restaurants.domain.dtos.ValidationObject;
-import ca.ulaval.glo2003.restaurants.domain.dtos.Validator;
+import ca.ulaval.glo2003.restaurants.domain.Restaurant;
+import ca.ulaval.glo2003.restaurants.utils.ValidationObject;
+import ca.ulaval.glo2003.restaurants.utils.Validator;
 import ca.ulaval.glo2003.restaurants.service.RestaurantService;
+import ca.ulaval.glo2003.restaurants.utils.JsonUtil;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import java.net.URI;
-import java.time.*;
-import java.time.format.DateTimeParseException;
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Path("/restaurants")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -58,7 +54,7 @@ public class RestaurantResource {
        if(restaurant == null){
            return Response.status(Response.Status.NOT_FOUND).build();
        }
-        return Response.ok(toJson(restaurant)).build();
+        return Response.ok(JsonUtil.toJson(restaurant)).build();
     }
 
     // ---------------------------------------------------
@@ -83,17 +79,5 @@ public class RestaurantResource {
         return Response.status(Response.Status.BAD_REQUEST)
                 .entity(Map.of("error", validationObject.getCode(), "description", validationObject.getDescription()))
                 .build();
-    }
-
-    private Map<String, Object> toJson(Restaurant r) {
-        return Map.of(
-                "id", r.getId(),
-                "name", r.getName(),
-                "capacity", r.getCapacity(),
-                "hours", Map.of(
-                        "open", r.getHours().getOpen(),
-                        "close", r.getHours().getClose()
-                )
-        );
     }
 }
