@@ -16,8 +16,6 @@ public class InMemoryRestaurantRepositoryTest {
 
     private final String RESTAURANT_ID = "1";
 
-    private final String PROPRIETAIRE_ID = "1";
-
     private  Map<String, Restaurant> database;
 
     private InMemoryRestaurantRepository repository;
@@ -31,7 +29,7 @@ public class InMemoryRestaurantRepositoryTest {
 
         restaurant = new Restaurant(
                 RESTAURANT_ID,
-                new Proprietaire(PROPRIETAIRE_ID),
+                new Proprietaire("1"),
                 "Pizz",
                 2,
                 "11:00:00",
