@@ -15,6 +15,10 @@ public class InMemoryRestaurantRepository implements RestaurantRepository {
         database = new HashMap<>();
     }
 
+    public InMemoryRestaurantRepository(Map<String, Restaurant> database) {
+        this.database = database;
+    }
+
     @Override
     public void save(Restaurant restaurant) {
         this.database.put(restaurant.getId(), restaurant);

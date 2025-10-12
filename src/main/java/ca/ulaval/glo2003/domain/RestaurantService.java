@@ -45,6 +45,7 @@ public class RestaurantService {
     }
 
     public RestaurantDto getRestaurant(String idRestaurant, String proprietaireId) {
+
         Restaurant restaurant = restaurantRepository.get(idRestaurant).orElseThrow(
                 () -> new NotFoundException("")
         );

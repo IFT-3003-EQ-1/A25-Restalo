@@ -1,7 +1,6 @@
 package ca.ulaval.glo2003.entities.assemblers;
 
 
-import ca.ulaval.glo2003.entities.Proprietaire;
 import ca.ulaval.glo2003.entities.Restaurant;
 import ca.ulaval.glo2003.entities.exceptions.ParametreInvalideException;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,9 +1,7 @@
 package ca.ulaval.glo2003.api;
 
 import ca.ulaval.glo2003.AppContext;
-import ca.ulaval.glo2003.Main;
 import ca.ulaval.glo2003.api.assemblers.RestaurantDtoAssembler;
-import ca.ulaval.glo2003.domain.dtos.ProprietaireDto;
 import ca.ulaval.glo2003.domain.dtos.RestaurantDto;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.Application;
@@ -14,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 
 public class RestaurantEnd2EndTest extends JerseyTest {
@@ -25,16 +24,16 @@ public class RestaurantEnd2EndTest extends JerseyTest {
 
     @Test
     public void givenPostRestaurant_whenCorrectRequest_thenResponseIsCreated() {
-        // given
         RestaurantDto restaurantDto = RestaurantEnd2EndUtils.buildDefaultRestaurantDto();
 
         Map<String, Object> json =  (new RestaurantDtoAssembler()).versJson(restaurantDto);
-        // when
 
-        Response response = target("/restaurants").request().header("Owner", "1").post(Entity.json(json));
-        // expected
+        try (Response response = target("/restaurants").request().header("Owner", "1").post(Entity.json(json))) {
 
-        assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
+            assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
     }
 
     @Test
@@ -43,10 +42,13 @@ public class RestaurantEnd2EndTest extends JerseyTest {
         Map<String, Object> json =  (new RestaurantDtoAssembler()).versJson(restaurantDto);
         // when
 
-        Response response = target("/restaurants").request().post(Entity.json(json));
-        // expected
+        try (Response response = target("/restaurants").request().post(Entity.json(json))) {
+            // expected
 
-        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+            assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
     }
 
 
