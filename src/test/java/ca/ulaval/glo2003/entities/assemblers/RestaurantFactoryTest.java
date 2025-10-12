@@ -1,8 +1,10 @@
 package ca.ulaval.glo2003.entities.assemblers;
 
 
+import ca.ulaval.glo2003.entities.Proprietaire;
 import ca.ulaval.glo2003.entities.Restaurant;
 import ca.ulaval.glo2003.entities.exceptions.ParametreInvalideException;
+import ca.ulaval.glo2003.entities.exceptions.ParametreManquantException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,20 +12,30 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class RestaurantFactoryTest {
 
-    private RestaurantFactory restaurantFactory;
+    private Restaurant restaurant;
 
-    private ProprietaireFactory proprietaireFactory;
+    private Proprietaire proprietaire;
+
+    private RestaurantFactory restaurantFactory;
 
     @BeforeEach
     public void setUp() {
+        proprietaire = new Proprietaire("1");
+        restaurant = new Restaurant(
+                "1",
+                proprietaire,
+                "Pizz",
+                2,
+                "10:00:00",
+                "19:00:00"
+        );
         restaurantFactory = new RestaurantFactory();
-        proprietaireFactory = new ProprietaireFactory();
     }
 
     @Test
     public void givenCreateRestaurant_whenParametersValide_thenRestaurantIsReturned() {
         Restaurant restaurant = restaurantFactory.createRestaurant(
-            proprietaireFactory.createProprietaire("1"),
+            proprietaire,
                 "Pizz",
                 2,
                 "10:00:00",
@@ -34,15 +46,37 @@ public class RestaurantFactoryTest {
     }
 
     @Test
-    public void givenCreateRestaurant_whenProprietaireNull_thenParametreInvalideIsThrown() {
-
-        assertThrows(ParametreInvalideException.class, () -> restaurantFactory.createRestaurant(
+    public void givenCreateRestaurant_whenNomNull_thenParametreManquantExceptionIsThrown() {
+        assertThrows(ParametreManquantException.class, () -> restaurantFactory.createRestaurant(
+                proprietaire,
                 null,
-                "Pizz",
                 2,
                 "10:00:00",
                 "19:00:00"
         ));
+    }
+
+    @Test
+    public void givenCreateRestaurant_whenCapaciteIsZero_thenInvalidIsThrown() {
+        assertThrows(ParametreInvalideException.class, () -> restaurantFactory.createRestaurant(
+                proprietaire,
+                "Pizz",
+                0,
+                "10:00:00",
+                "19:00:00"
+        ));
+    }
+
+    @Test
+    public void givenCreateRestaurant_whenHoraireOuvertureIsBiggerThanHoraireFermeture_thenParameterInvalidIsThrown() {
+        assertThrows(ParametreInvalideException.class, () -> restaurantFactory.createRestaurant(
+                proprietaire,
+                "Pizz",
+                0,
+                "19:00:00",
+                "10:00:00"
+        ));
+
     }
 
 }

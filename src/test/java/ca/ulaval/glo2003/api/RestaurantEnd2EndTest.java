@@ -51,5 +51,31 @@ public class RestaurantEnd2EndTest extends JerseyTest {
         }
     }
 
+    @Test
+    public void givenGetRestaurant_whenCorrectRequest_thenResponseIsOk() {
+
+    }
+
+    @Test
+    public void givenGetRestaurant_whenNullRestaurantId_thenResponseIsError() {
+
+    }
+
+    @Test
+    public void givenGetRestaurant_whenNullProprietaireId_thenResponseIsError() {
+
+    }
+
+    @Test
+    public void givenGetRestaurants_whenCorrectRequest_thenResponseIsOk() {
+
+    }
+
+    @Test
+    public void givenGetRestaurants_whenNullProprietaireId_thenResponseIsError() {
+
+    }
+
+
 
 }
