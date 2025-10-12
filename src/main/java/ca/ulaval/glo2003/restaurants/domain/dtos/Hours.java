@@ -1,8 +1,8 @@
 package ca.ulaval.glo2003.restaurants.domain.dtos;
 
 public class Hours {
-        public String open;
-        public String close;
+        private String open;
+        private String close;
 
         public Hours() {}
 

@@ -1,5 +1,6 @@
 package ca.ulaval.glo2003.restaurants;
 
+import ca.ulaval.glo2003.restaurants.domain.dtos.Hours;
 import ca.ulaval.glo2003.restaurants.domain.dtos.Restaurant;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
@@ -29,28 +30,30 @@ public class RestaurantResource {
         if (restaurant == null) {
             return badRequest("MISSING_PARAMETER", "The body is required");
         }
-        if (restaurant.name == null || restaurant.hours == null) {
+        if (restaurant.getName() == null || restaurant.getHours() == null) {
             return badRequest("MISSING_PARAMETER", "name and hours are required");
         }
-        if (restaurant.hours.open == null || restaurant.hours.close == null) {
+        if (restaurant.getHours().getOpen() == null || restaurant.getHours().getClose() == null) {
             return badRequest("MISSING_PARAMETER", "`hours.open` et `hours.close` are required");
         }
 
         // Valeurs invalides
         // Le nom ne peut pas être vide
-        if (restaurant.name.isBlank()) {
+        if (restaurant.getName().isBlank()) {
             return badRequest("INVALID_PARAMETER", "The name must not be empty");
         }
         // Capacité minimale de 1 personne
-        if (restaurant.capacity < 1) {
+        if (restaurant.getCapacity() < 1) {
             return badRequest("INVALID_PARAMETER", "Capacity must be greater than zero");
         }
 
         // Validation des heures (format + bornes + ordre + durée >= 1h)
         LocalTime open, close;
+        Hours hours;
         try {
-            open = LocalTime.parse(restaurant.hours.open);   // "HH:mm:ss"
-            close = LocalTime.parse(restaurant.hours.close);
+            open = LocalTime.parse(restaurant.getHours().getOpen());   // "HH:mm:ss"
+            close = LocalTime.parse(restaurant.getHours().getClose());
+            hours = new Hours(open.toString(), close.toString());
         } catch (DateTimeParseException e) {
             return badRequest("INVALID_PARAMETER", "`hours.*` must be  HH:mm:ss");
         }
@@ -73,11 +76,11 @@ public class RestaurantResource {
         // Création + persistance en mémoire
         String restaurantId = UUID.randomUUID().toString().replace("-", ""); // L'id doit être unique
         Restaurant resto = new Restaurant();
-        resto.id    = restaurantId;
-        resto.ownerId = ownerId; // Le restaurant appartient à un propriétaire/restaurateur
-        resto.name            = restaurant.name;
-        resto.capacity       = restaurant.capacity;
-        resto.hours       = restaurant.hours;
+        resto.setId(restaurantId);
+        resto.setOwnerId(ownerId);
+        resto.setName(restaurant.getName());
+        resto.setCapacity(restaurant.getCapacity());
+        resto.setHours(hours);
         RestaurantRepository.save(resto);
 
         // 201 + Location: <host>/restaurants/<id>
@@ -103,7 +106,7 @@ public class RestaurantResource {
 
         var resto = opt.get();
         // Accès réservé au propriétaire (sinon 404, on ne révèle pas l'existence)
-        if (!ownerId.equals(resto.ownerId)) {
+        if (!ownerId.equals(resto.getOwnerId())) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
@@ -134,12 +137,12 @@ public class RestaurantResource {
     /** Formate la réponse sans exposer proprietaireId. */
     private Map<String, Object> toJson(Restaurant r) {
         return Map.of(
-                "id", r.id,
-                "name", r.name,
-                "capacity", r.capacity,
+                "id", r.getId(),
+                "name", r.getName(),
+                "capacity", r.getCapacity(),
                 "hours", Map.of(
-                        "open", r.hours.open,
-                        "close", r.hours.close
+                        "open", r.getHours().getOpen(),
+                        "close", r.getHours().getClose()
                 )
         );
     }

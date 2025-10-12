@@ -12,8 +12,8 @@ final class RestaurantRepository {
 
     /** Enregistre (ou remplace) un restaurant en mémoire. */
     static String save(Restaurant restaurant) {
-        restaurantsMap.put(restaurant.id, restaurant);
-        return restaurant.id;
+        restaurantsMap.put(restaurant.getId(), restaurant);
+        return restaurant.getId();
     }
 
     /** Retrouve un restaurant par identifiant. */
@@ -22,9 +22,9 @@ final class RestaurantRepository {
     }
 
     /** Liste les restaurants appartenant à un propriétaire donné. */
-    static List<Restaurant> listByOwner(String proprietaireId) {
+    static List<Restaurant> listByOwner(String ownerId) {
         return restaurantsMap.values().stream()
-                .filter(r -> Objects.equals(r.ownerId, proprietaireId))
+                .filter(r -> Objects.equals(r.getOwnerId(), ownerId))
                 .toList();
     }
 
