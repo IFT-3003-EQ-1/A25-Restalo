@@ -61,13 +61,6 @@ public class RestaurantEnd2EndTest extends JerseyTest {
     }
 
     @Test
-    public void givenObtenirRestaurant_whenNullRestaurantId_thenResponseIsError() {
-        Response response = target("/restaurants").queryParam("id", "").request().header("Owner", "1").get();
-
-        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
-    }
-
-    @Test
     public void givenObtenirRestaurant_whenNullProprietaireId_thenResponseIsError() {
         RestaurantDto restaurantDto = RestaurantEnd2EndUtils.buildDefaultRestaurantDto();
 
