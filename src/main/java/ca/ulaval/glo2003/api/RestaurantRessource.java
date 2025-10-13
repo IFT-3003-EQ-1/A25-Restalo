@@ -86,6 +86,6 @@ public class RestaurantRessource {
     @Path("/search/restaurants")
     public Response rechercherRestaurants(RestaurantDto champsRecherche) {
         List<RestaurantDto> restaurantDtos = restaurantService.searchRestaurants(champsRecherche);
-        return null;
+        return Response.ok(restaurantDtos.stream().map(restaurantDtoAssembler::versJson).toList()).build();
     }
 }

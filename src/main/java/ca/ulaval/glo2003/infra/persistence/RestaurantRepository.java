@@ -14,4 +14,6 @@ public interface RestaurantRepository {
     List<Restaurant> listParProprietaire(String proprietaireId);
 
     List<Restaurant> searchRestaurants(List<Filtre<Restaurant>> filtres);
+
+    List<Restaurant> getAll();
 }

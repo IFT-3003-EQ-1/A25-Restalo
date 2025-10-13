@@ -50,4 +50,9 @@ public class InMemoryRestaurantRepository implements RestaurantRepository {
         });
         return restaurants;
     }
+
+    @Override
+    public List<Restaurant> getAll() {
+        return database.values().stream().toList();
+    }
 }

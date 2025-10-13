@@ -27,8 +27,8 @@ public class FiltreRestaurantFactory {
 
         if (horaireFermeture != null && !horaireFermeture.isBlank()) {
             filtres.add(((restaurant) -> {
-                LocalTime to =  LocalTime.parse(horaireOuverture);
-                LocalTime actual = LocalTime.parse(restaurant.getHoraireOuverture());
+                LocalTime to =  LocalTime.parse(horaireFermeture);
+                LocalTime actual = LocalTime.parse(restaurant.getHoraireFermeture());
                 return to.isAfter(actual);
             }));
         }

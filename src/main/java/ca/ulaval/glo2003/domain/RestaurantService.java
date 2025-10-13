@@ -72,12 +72,20 @@ public class RestaurantService {
     public List<RestaurantDto> searchRestaurants(RestaurantDto searchValues) {
 
         List<Filtre<Restaurant>> filtres = filtreRestaurantFactory.createFiltres(searchValues.nom, searchValues.horaireOuverture, searchValues.horaireFermeture);
+        if (filtres.isEmpty()) {
+            return restaurantRepository
+                    .getAll()
+                    .stream()
+                    .map(restaurantAssembler::toDto)
+                    .toList();
+        } else {
+            return restaurantRepository
+                    .searchRestaurants(filtres)
+                    .stream()
+                    .map(restaurantAssembler::toDto)
+                    .toList();
+        }
 
-        return restaurantRepository
-                .searchRestaurants(filtres)
-                .stream()
-                .map(restaurantAssembler::toDto)
-                .toList();
     }
 
 
