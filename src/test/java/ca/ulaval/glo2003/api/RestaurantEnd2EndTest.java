@@ -23,7 +23,7 @@ public class RestaurantEnd2EndTest extends JerseyTest {
     }
 
     @Test
-    public void givenPostRestaurant_whenCorrectRequest_thenResponseIsCreated() {
+    public void givenCreerRestaurant_whenCorrectRequest_thenResponseIsCreated() {
         RestaurantDto restaurantDto = RestaurantEnd2EndUtils.buildDefaultRestaurantDto();
 
         Map<String, Object> json =  (new RestaurantDtoAssembler()).versJson(restaurantDto);
@@ -37,7 +37,7 @@ public class RestaurantEnd2EndTest extends JerseyTest {
     }
 
     @Test
-    public void givenPostRestaurant_whenNullProprietaireId_thenResponseIsError() {
+    public void givenCreerRestaurant_whenNullProprietaireId_thenResponseIsError() {
         RestaurantDto restaurantDto = RestaurantEnd2EndUtils.buildDefaultRestaurantDto();
         Map<String, Object> json =  (new RestaurantDtoAssembler()).versJson(restaurantDto);
         // when
@@ -52,27 +52,45 @@ public class RestaurantEnd2EndTest extends JerseyTest {
     }
 
     @Test
-    public void givenGetRestaurant_whenCorrectRequest_thenResponseIsOk() {
+    public void givenObtenirRestaurant_whenCorrectRequest_thenResponseIsOk() {
+        RestaurantDto restaurantDto = RestaurantEnd2EndUtils.buildDefaultRestaurantDto();
+
+        Response response = target("/restaurants").queryParam("id", restaurantDto.id).request().header("Owner", "1").get();
+
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void givenObtenirRestaurant_whenNullRestaurantId_thenResponseIsError() {
+        Response response = target("/restaurants").queryParam("id", "").request().header("Owner", "1").get();
+
+        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void givenObtenirRestaurant_whenNullProprietaireId_thenResponseIsError() {
+        RestaurantDto restaurantDto = RestaurantEnd2EndUtils.buildDefaultRestaurantDto();
+
+        Response response = target("/restaurants").queryParam("id", restaurantDto.id).request().get();
+
+        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void givenListerRestaurants_whenCorrectRequest_thenResponseIsOk() {
+
+        Response response = target("/restaurants").request().header("Owner", "1").get();
+
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
 
     }
 
     @Test
-    public void givenGetRestaurant_whenNullRestaurantId_thenResponseIsError() {
+    public void givenListerRestaurants_whenNullProprietaireId_thenResponseIsError() {
 
-    }
+        Response response = target("/restaurants").request().header("Owner", "").get();
 
-    @Test
-    public void givenGetRestaurant_whenNullProprietaireId_thenResponseIsError() {
-
-    }
-
-    @Test
-    public void givenGetRestaurants_whenCorrectRequest_thenResponseIsOk() {
-
-    }
-
-    @Test
-    public void givenGetRestaurants_whenNullProprietaireId_thenResponseIsError() {
+        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
 
     }
 
