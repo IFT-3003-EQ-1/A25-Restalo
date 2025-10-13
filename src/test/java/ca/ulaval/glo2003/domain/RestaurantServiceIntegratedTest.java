@@ -8,6 +8,7 @@ import ca.ulaval.glo2003.entities.assemblers.RestaurantFactory;
 import ca.ulaval.glo2003.entities.exceptions.AccessInterditException;
 import ca.ulaval.glo2003.entities.exceptions.NotFoundException;
 import ca.ulaval.glo2003.entities.exceptions.ParametreManquantException;
+import ca.ulaval.glo2003.entities.filtres.FiltreRestaurantFactory;
 import ca.ulaval.glo2003.infra.persistence.InMemoryRestaurantRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,8 @@ public class RestaurantServiceIntegratedTest {
                 new RestaurantFactory(),
                 new InMemoryRestaurantRepository(),
                 new ProprietaireFactory(),
-                new RestaurantAssembler()
+                new RestaurantAssembler(),
+                new FiltreRestaurantFactory()
         );
 
         proprietaireDto = new ProprietaireDto();
@@ -91,8 +93,7 @@ public class RestaurantServiceIntegratedTest {
 
     @Test
     public void givenGetRestaurants_whenProprietaireIdIsNull_thenEmptyListIsReturned() {
-        proprietaireDto.id = null;
-        assertTrue(restaurantService.getRestaurants(proprietaireDto.id).isEmpty());
+        assertTrue(restaurantService.getRestaurants(null).isEmpty());
 
     }
 

@@ -9,6 +9,8 @@ import ca.ulaval.glo2003.entities.assemblers.RestaurantAssembler;
 import ca.ulaval.glo2003.entities.assemblers.RestaurantFactory;
 import ca.ulaval.glo2003.entities.exceptions.AccessInterditException;
 import ca.ulaval.glo2003.entities.exceptions.NotFoundException;
+import ca.ulaval.glo2003.entities.filtres.Filtre;
+import ca.ulaval.glo2003.entities.filtres.FiltreRestaurantFactory;
 import ca.ulaval.glo2003.infra.persistence.RestaurantRepository;
 
 import java.util.List;
@@ -19,16 +21,18 @@ public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
     private final ProprietaireFactory proprietaireFactory;
     private final RestaurantAssembler restaurantAssembler;
+    private final FiltreRestaurantFactory filtreRestaurantFactory;
 
     public RestaurantService(
             RestaurantFactory restaurantFactory,
             RestaurantRepository restaurantRepository,
             ProprietaireFactory proprietaireFactory,
-            RestaurantAssembler restaurantAssembler) {
+            RestaurantAssembler restaurantAssembler, FiltreRestaurantFactory filtreRestaurantFactory) {
         this.restaurantFactory = restaurantFactory;
         this.restaurantRepository = restaurantRepository;
         this.proprietaireFactory = proprietaireFactory;
         this.restaurantAssembler = restaurantAssembler;
+        this.filtreRestaurantFactory = filtreRestaurantFactory;
     }
 
     public String createRestaurant(ProprietaireDto proprietaireDto, RestaurantDto restaurantDto) {
@@ -60,6 +64,17 @@ public class RestaurantService {
 
         return restaurantRepository
                 .listParProprietaire(proprietaireId)
+                .stream()
+                .map(restaurantAssembler::toDto)
+                .toList();
+    }
+
+    public List<RestaurantDto> searchRestaurants(RestaurantDto searchValues) {
+
+        List<Filtre<Restaurant>> filtres = filtreRestaurantFactory.createFiltres(searchValues.nom, searchValues.horaireOuverture, searchValues.horaireFermeture);
+
+        return restaurantRepository
+                .searchRestaurants(filtres)
                 .stream()
                 .map(restaurantAssembler::toDto)
                 .toList();

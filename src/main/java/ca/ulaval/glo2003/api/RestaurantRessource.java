@@ -47,7 +47,7 @@ public class RestaurantRessource {
         ProprietaireDto proprietaireDto = new ProprietaireDto();
         proprietaireDto.id = proprietaireId;
         String restaurantId = restaurantService.createRestaurant(proprietaireDto, entree);
-        // 201 + Location: <host>/restaurants/<id>
+
         URI location = infosUri.getBaseUriBuilder().path("restaurants").path(restaurantId).build();
         return Response.created(location).build();
 
@@ -80,5 +80,12 @@ public class RestaurantRessource {
                 .toList();
 
         return Response.ok(sortie).build();
+    }
+
+    @POST()
+    @Path("/search/restaurants")
+    public Response rechercherRestaurants(RestaurantDto champsRecherche) {
+        List<RestaurantDto> restaurantDtos = restaurantService.searchRestaurants(champsRecherche);
+        return null;
     }
 }
