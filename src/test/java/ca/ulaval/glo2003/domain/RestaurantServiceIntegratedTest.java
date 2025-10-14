@@ -13,6 +13,8 @@ import ca.ulaval.glo2003.infra.persistence.InMemoryRestaurantRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class RestaurantServiceIntegratedTest {
@@ -117,4 +119,32 @@ public class RestaurantServiceIntegratedTest {
         assertThrows(NotFoundException.class, () -> restaurantService.getRestaurant(restaurantDto.id, proprietaireDto.id));
     }
 
+    @Test
+    public void givenSearchRestaurants_whenNoParameterAreSpecified_thenReturnAllRestaurants() {
+        restaurantService.createRestaurant(proprietaireDto, restaurantDto);
+        restaurantService.createRestaurant(proprietaireDto, restaurantDto);
+        restaurantDto.id = "12345";
+        restaurantDto.nom = "Dejeuner";
+        restaurantDto.horaireOuverture = "06:00:00";
+        restaurantDto.horaireFermeture = "13:00:00";
+        restaurantService.createRestaurant(proprietaireDto, restaurantDto);
+
+        assertEquals(3, restaurantService.searchRestaurants(new RestaurantDto()).size());
+    }
+
+    @Test
+    public void givenSearchRestaurants_withParamaterName_thenReturnOnlyMatchingRestaurants() {
+        restaurantService.createRestaurant(proprietaireDto, restaurantDto);
+        restaurantService.createRestaurant(proprietaireDto, restaurantDto);
+        restaurantDto.id = "12345";
+        restaurantDto.nom = "Dejeuner";
+        restaurantDto.horaireOuverture = "06:00:00";
+        restaurantDto.horaireFermeture = "13:00:00";
+        restaurantService.createRestaurant(proprietaireDto, restaurantDto);
+
+        RestaurantDto searchParams = new RestaurantDto();
+        searchParams.nom = "Pizz";
+        assertEquals(2, restaurantService.searchRestaurants(searchParams).size());
+
+    }
 }

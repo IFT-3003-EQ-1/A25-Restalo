@@ -87,6 +87,10 @@ public class RestaurantEnd2EndTest extends JerseyTest {
 
     }
 
+    @Test
+    public void givenRechercherRestaurants_whenCorrectRequest_thenResponseIsOk() {
+        Response response = target("/restaurants").request().header("Owner", "1").get();
 
-
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+    }
 }
