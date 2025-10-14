@@ -82,13 +82,4 @@ public class RestaurantRessource {
         return Response.ok(sortie).build();
     }
 
-    @POST()
-    @Path("/search/restaurants")
-    public Response rechercherRestaurants(RestaurantDto champsRecherche) {
-        if (champsRecherche == null) {
-            champsRecherche = new  RestaurantDto();
-        }
-        List<RestaurantDto> restaurantDtos = restaurantService.searchRestaurants(champsRecherche);
-        return Response.ok(restaurantDtos.stream().map(restaurantDtoAssembler::versJson).toList()).build();
-    }
 }
