@@ -1,0 +1,29 @@
+package ca.ulaval.glo2003.infra.persistence;
+
+import ca.ulaval.glo2003.entities.Reservation;
+import ca.ulaval.glo2003.entities.Restaurant;
+
+import java.util.*;
+
+public class InMemoryReservationRepository implements ReservationRepository {
+    private final Map<String, Reservation> database;
+
+    public InMemoryReservationRepository() {
+        database = new HashMap<>();
+    }
+
+    public InMemoryReservationRepository(Map<String, Reservation> database) {
+        this.database = database;
+    }
+
+    @Override
+    public void save(Reservation reservation) {
+        this.database.put(reservation.getNumber(), reservation);
+    }
+
+    @Override
+    public Optional<Reservation> get(String id) {
+        System.out.println("database.size(): "+database.size());
+        return Optional.ofNullable(database.get(id));
+    }
+}
