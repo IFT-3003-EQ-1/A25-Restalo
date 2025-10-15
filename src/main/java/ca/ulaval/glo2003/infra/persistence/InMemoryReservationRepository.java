@@ -23,7 +23,6 @@ public class InMemoryReservationRepository implements ReservationRepository {
 
     @Override
     public Optional<Reservation> get(String id) {
-        System.out.println("database.size(): "+database.size());
         return Optional.ofNullable(database.get(id));
     }
 }

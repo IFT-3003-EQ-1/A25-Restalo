@@ -30,6 +30,7 @@ public class ReservationService {
         );
 
         Reservation reservation = reservationFactory.createReservation(createReservationDto, restaurant);
+        reservationRepository.save(reservation);
         return reservation.getNumber();
     }
 
