@@ -1,12 +1,12 @@
 package ca.ulaval.glo2003.entities;
 
 public class Restaurant {
-    private String id;
-    private Proprietaire proprietaire;
-    private String nom;
-    private int capacite;
-    private String horaireOuverture;
-    private String horaireFermeture;
+    private final String id;
+    private final Proprietaire proprietaire;
+    private final String nom;
+    private final int capacite;
+    private final String horaireOuverture;
+    private final String horaireFermeture;
 
     public String getId() {
         return id;

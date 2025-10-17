@@ -2,13 +2,12 @@ package ca.ulaval.glo2003.persistence.infra;
 
 import ca.ulaval.glo2003.entities.Proprietaire;
 import ca.ulaval.glo2003.entities.Restaurant;
+import ca.ulaval.glo2003.entities.filtres.Filtre;
 import ca.ulaval.glo2003.infra.persistence.InMemoryRestaurantRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,29 +19,20 @@ public class InMemoryRestaurantRepositoryTest {
 
     private InMemoryRestaurantRepository repository;
 
-    private Restaurant restaurant;
 
     @BeforeEach
     public void setUp() {
         database = new HashMap<>();
         repository = new InMemoryRestaurantRepository(database);
 
-        restaurant = new Restaurant(
-                RESTAURANT_ID,
-                new Proprietaire("1"),
-                "Pizz",
-                2,
-                "11:00:00",
-                "19:00:00"
-        );
     }
 
     @Test
     public void givenGet_whenIdIsValid_thenReturnRestaurant() {
-        repository.save(restaurant);
+        repository.save(InMemoryRestaurantRepositoryTestUtils.createRestaurant(RESTAURANT_ID));
 
         assertFalse(database.isEmpty());
-        assertEquals(database.get(restaurant.getId()).getId(), RESTAURANT_ID);
+        assertEquals(database.get(RESTAURANT_ID).getId(), RESTAURANT_ID);
     }
 
     @Test
@@ -54,25 +44,55 @@ public class InMemoryRestaurantRepositoryTest {
 
     @Test
     public void givenSave_whenParametersAreValid_thenRestaurantIsSaved() {
-        repository.save(restaurant);
+        repository.save(InMemoryRestaurantRepositoryTestUtils.createRestaurant(RESTAURANT_ID));
 
         assertFalse(database.isEmpty());
-        assertEquals(database.get(restaurant.getId()).getId(), RESTAURANT_ID);
+        assertEquals(database.get(RESTAURANT_ID).getId(), RESTAURANT_ID);
 
     }
 
     @Test
     public void givenListParProprietaire_whenParametersAreValid_thenListOfRestaurantsIsReturned() {
-        repository.save(restaurant);
-        repository.save(new Restaurant(
-                "2",
-                new Proprietaire("1"),
-                "Pizz",
-                2,
-                "11:00:00",
-                "19:00:00"
-        ));
+        String proprietaireId = InMemoryRestaurantRepositoryTestUtils.createRestaurant(RESTAURANT_ID).getProprietaire().getId();
+        repository.save(InMemoryRestaurantRepositoryTestUtils.createRestaurant(RESTAURANT_ID));
+        repository.save(InMemoryRestaurantRepositoryTestUtils.createRestaurant("2"));
 
-        assertEquals(2, repository.listParProprietaire(restaurant.getId()).size());
+        assertEquals(2, repository.listParProprietaire(proprietaireId).size());
+    }
+
+    @Test
+    public void givenGetAll_thenReturnAllRestaurants() {
+        repository.save(InMemoryRestaurantRepositoryTestUtils.createRestaurant(RESTAURANT_ID));
+        repository.save(InMemoryRestaurantRepositoryTestUtils.createRestaurant("2"));
+
+        assertEquals(2, repository.getAll().size());
+    }
+
+    @Test
+    public void givenSearchRestaurant_whenNoFiltres_thenReturnAllRestaurants() {
+        repository.save(InMemoryRestaurantRepositoryTestUtils.createRestaurant(RESTAURANT_ID));
+        repository.save(InMemoryRestaurantRepositoryTestUtils.createRestaurant("2"));
+
+        assertEquals(2, repository.searchRestaurants(new ArrayList<>()).size());
+    }
+
+    @Test
+    public void givenSearchRestaurant_whenMatchingFiltre_thenReturnMatchingRestaurants() {
+        repository.save(InMemoryRestaurantRepositoryTestUtils.createRestaurant(RESTAURANT_ID));
+        repository.save(InMemoryRestaurantRepositoryTestUtils.createRestaurant("2"));
+
+        Restaurant restaurant = new Restaurant(
+                "3",
+                new Proprietaire("1"),
+                "Dejeuner",
+                2,
+                "6:00:00",
+                "13:00:00"
+        );
+        repository.save(restaurant);
+        List<Filtre<Restaurant>> filtres = new ArrayList<>();
+        filtres.add(r -> r.getNom().equals("Pizz"));
+
+        assertEquals(2, repository.searchRestaurants(filtres).size());
     }
 }
