@@ -1,7 +1,9 @@
 package ca.ulaval.glo2003.api;
 
 import ca.ulaval.glo2003.api.assemblers.RestaurantDtoAssembler;
+import ca.ulaval.glo2003.domain.ReservationService;
 import ca.ulaval.glo2003.domain.RestaurantService;
+import ca.ulaval.glo2003.domain.dtos.CreateReservationDto;
 import ca.ulaval.glo2003.domain.dtos.ProprietaireDto;
 import ca.ulaval.glo2003.domain.dtos.RestaurantDto;
 import ca.ulaval.glo2003.entities.exceptions.ParametreManquantException;
@@ -27,11 +29,15 @@ import java.util.Map;
 public class RestaurantRessource {
     private  final RestaurantService restaurantService;
     private final RestaurantDtoAssembler restaurantDtoAssembler;
+    private final ReservationService reservationService;
 
     public RestaurantRessource(RestaurantService restaurantService,
-                               RestaurantDtoAssembler restaurantDtoAssembler) {
+                               RestaurantDtoAssembler restaurantDtoAssembler,
+                               ReservationService reservationService
+                               ) {
         this.restaurantService = restaurantService;
         this.restaurantDtoAssembler = restaurantDtoAssembler;
+        this.reservationService = reservationService;
     }
 
     @POST
@@ -82,4 +88,13 @@ public class RestaurantRessource {
         return Response.ok(sortie).build();
     }
 
+    @POST
+    @Path("/{id}/reservations")
+    public Response createReservation(@PathParam("id") String restaurantId,
+                                      CreateReservationDto createReservation,
+                                      @Context UriInfo infosUri) {
+        String reservationId = reservationService.addReservation(restaurantId, createReservation);
+        URI location = infosUri.getBaseUriBuilder().path("reservations").path(reservationId).build();
+        return Response.created(location).build();
+    }
 }

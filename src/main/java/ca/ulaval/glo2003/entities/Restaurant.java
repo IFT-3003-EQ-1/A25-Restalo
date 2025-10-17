@@ -1,5 +1,8 @@
 package ca.ulaval.glo2003.entities;
 
+import java.time.Duration;
+import java.time.LocalTime;
+
 public class Restaurant {
     private final String id;
     private final Proprietaire proprietaire;
@@ -46,5 +49,12 @@ public class Restaurant {
         this.capacite = capacite;
         this.horaireOuverture = horaireOuverture;
         this.horaireFermeture = horaireFermeture;
+    }
+
+    public int getReservationDuration() {
+        LocalTime openTime = LocalTime.parse(horaireOuverture);
+        LocalTime closeTime = LocalTime.parse(horaireFermeture);
+        // Calculer la durée totale d'ouverture en minutes
+        return (int) Duration.between(openTime, closeTime).toMinutes();
     }
 }

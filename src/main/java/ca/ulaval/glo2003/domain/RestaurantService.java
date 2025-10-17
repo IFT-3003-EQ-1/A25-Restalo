@@ -1,12 +1,10 @@
 package ca.ulaval.glo2003.domain;
 
-import ca.ulaval.glo2003.domain.dtos.ProprietaireDto;
-import ca.ulaval.glo2003.domain.dtos.RestaurantDto;
+import ca.ulaval.glo2003.domain.dtos.*;
 import ca.ulaval.glo2003.entities.Proprietaire;
+import ca.ulaval.glo2003.entities.Reservation;
 import ca.ulaval.glo2003.entities.Restaurant;
-import ca.ulaval.glo2003.entities.assemblers.ProprietaireFactory;
-import ca.ulaval.glo2003.entities.assemblers.RestaurantAssembler;
-import ca.ulaval.glo2003.entities.assemblers.RestaurantFactory;
+import ca.ulaval.glo2003.entities.assemblers.*;
 import ca.ulaval.glo2003.entities.exceptions.AccessInterditException;
 import ca.ulaval.glo2003.entities.exceptions.NotFoundException;
 import ca.ulaval.glo2003.entities.filtres.Filtre;
@@ -14,6 +12,7 @@ import ca.ulaval.glo2003.entities.filtres.FiltreRestaurantFactory;
 import ca.ulaval.glo2003.infra.persistence.RestaurantRepository;
 
 import java.util.List;
+import java.util.UUID;
 
 public class RestaurantService {
 
@@ -87,6 +86,4 @@ public class RestaurantService {
         }
 
     }
-
-
 }

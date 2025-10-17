@@ -1,0 +1,55 @@
+package ca.ulaval.glo2003.entities.assemblers;
+
+import ca.ulaval.glo2003.domain.dtos.ReservationTimeDto;
+import ca.ulaval.glo2003.entities.Restaurant;
+import ca.ulaval.glo2003.entities.exceptions.ParametreInvalideException;
+import ca.ulaval.glo2003.entities.exceptions.ParametreManquantException;
+import com.google.common.base.Strings;
+
+import java.time.LocalTime;
+
+public class ReservationTimeFactory {
+    public  ReservationTimeDto create(String startTime, Restaurant restaurant) {
+        if(Strings.isNullOrEmpty(startTime)) {
+            throw new ParametreManquantException("Reservation Start time");
+        }
+
+        ReservationTimeDto time = adjustAndValidateReservationTime(startTime,restaurant);
+        if(time == null) {
+            throw new ParametreInvalideException("Reservation Start time is too late");
+        }
+        return time;
+    }
+
+    private ReservationTimeDto adjustAndValidateReservationTime(
+            String startTime,
+            Restaurant restaurant
+    ) {
+        LocalTime requestedStartTime = LocalTime.parse(startTime);
+        LocalTime adjustedStartTime = adjustToNext15Minutes(requestedStartTime);
+        LocalTime endTime = adjustedStartTime.plusMinutes(restaurant.getReservationDuration());
+
+        LocalTime closingTime = LocalTime.parse(restaurant.getHoraireFermeture());
+        // Pour le moment on ne tient pas compte de la durée de reervation.
+        if (adjustedStartTime.isAfter(closingTime)) {
+            return null;
+        }
+        return new ReservationTimeDto(adjustedStartTime.toString(), endTime.toString());
+    }
+
+    private static LocalTime adjustToNext15Minutes(LocalTime time) {
+        int minute = time.getMinute();
+        int remainder = minute % 15;
+
+        if (remainder == 0) {
+            // Déjà à une tranche de 15 minutes
+            return time.withSecond(0).withNano(0);
+        }
+
+        // Calculer les minutes à ajouter
+        int minutesToAdd = 15 - remainder;
+
+        // Retourner l'heure ajustée (secondes et nanosecondes à zéro)
+        return time.plusMinutes(minutesToAdd).withSecond(0).withNano(0);
+    }
+}
