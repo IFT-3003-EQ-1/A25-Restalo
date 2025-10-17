@@ -2,10 +2,11 @@ package ca.ulaval.glo2003.entities.assemblers;
 
 import java.util.UUID;
 
-import ca.ulaval.glo2003.domain.dtos.CreateReservationDto;
-import ca.ulaval.glo2003.domain.dtos.CustomerDto;
+import ca.ulaval.glo2003.domain.dtos.ReservationDto;
 import ca.ulaval.glo2003.domain.dtos.ReservationTimeDto;
+import ca.ulaval.glo2003.entities.Customer;
 import ca.ulaval.glo2003.entities.Reservation;
+import ca.ulaval.glo2003.entities.ReservationTime;
 import ca.ulaval.glo2003.entities.Restaurant;
 import ca.ulaval.glo2003.entities.exceptions.ParametreInvalideException;
 import ca.ulaval.glo2003.entities.exceptions.ParametreManquantException;
@@ -23,29 +24,19 @@ public class ReservationFactory {
         this.reservationTimeFactory = reservationTimeFactory;
     }
 
-    public Reservation createReservation(CreateReservationDto reservationDto, Restaurant restaurant) {
+    public Reservation createReservation(ReservationDto reservationDto, Restaurant restaurant) {
 
-        if(reservationDto.getGroupSize() < 1){
+        if(reservationDto.groupSize < 1){
             throw new ParametreInvalideException("Group size must be at least 1");
         }
-        if(Strings.isNullOrEmpty(reservationDto.getDate())){
+        if(Strings.isNullOrEmpty(reservationDto.date)){
             throw new ParametreManquantException("Reservation date");
         }
 
-        CustomerDto customer = customerFactory.create(reservationDto.getCustomer());
-        System.out.println("In Reservation Factory-customer: "+ customer.toString());
-        ReservationTimeDto time = reservationTimeFactory.create(reservationDto.getStartTime(), restaurant);
-        System.out.println("In Reservation Factory-time: "+ time.toString());
+        Customer customer = customerFactory.create(reservationDto.customerDto);
+        ReservationTime time = reservationTimeFactory.create(reservationDto.startTime, restaurant);
         String reservationId = UUID.randomUUID().toString().replace("-", "");
 
-        Reservation reservation = new Reservation();
-        reservation.setNumber(reservationId);
-        reservation.setTime(time);
-        reservation.setRestaurant(restaurant);
-        reservation.setCustomer(customer);
-        reservation.setGroupSize(reservationDto.getGroupSize());
-        reservation.setDate(reservationDto.getDate());
-        System.out.println("In Reservation Factory-reservation: "+ reservation.toString());
-        return  reservation;
+        return new Reservation(reservationId, reservationDto.date, time, reservationDto.groupSize, customer, restaurant);
     }
 }

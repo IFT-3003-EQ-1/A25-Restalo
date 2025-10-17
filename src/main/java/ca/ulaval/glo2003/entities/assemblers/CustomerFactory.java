@@ -1,6 +1,7 @@
 package ca.ulaval.glo2003.entities.assemblers;
 
 import ca.ulaval.glo2003.domain.dtos.CustomerDto;
+import ca.ulaval.glo2003.entities.Customer;
 import ca.ulaval.glo2003.entities.exceptions.ParametreInvalideException;
 import ca.ulaval.glo2003.entities.exceptions.ParametreManquantException;
 import com.google.common.base.Strings;
@@ -9,26 +10,27 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CustomerFactory {
-    public static final String EMAIL_REGEX = "^[^@]+@[^@]+\\.[^@]+$";
-    public static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
-    public CustomerDto create(CustomerDto customer) {
-        if(customer == null) {
+    private static final String EMAIL_REGEX = "^[^@]+@[^@]+\\.[^@]+$";
+    private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
+
+    public Customer create(CustomerDto customerDto) {
+        if(customerDto == null) {
             throw new ParametreManquantException("Customer");
         }
 
-        if(Strings.isNullOrEmpty(customer.getName())) {
+        if(Strings.isNullOrEmpty(customerDto.name)) {
             throw new ParametreManquantException("Customer name");
         }
 
-        if(!isValidEmail(customer.getEmail())) {
+        if(!isValidEmail(customerDto.email)) {
             throw new ParametreInvalideException("Email");
         }
 
-        if(Strings.isNullOrEmpty(customer.getPhoneNumber()) || customer.getPhoneNumber().length() != 10) {
+        if(Strings.isNullOrEmpty(customerDto.phoneNumber) || customerDto.phoneNumber.length() != 10) {
             throw new ParametreInvalideException("Phone number");
         }
 
-        return customer;
+        return new Customer(customerDto.name, customerDto.email, customerDto.phoneNumber);
     }
 
     private static boolean isValidEmail(String email) {

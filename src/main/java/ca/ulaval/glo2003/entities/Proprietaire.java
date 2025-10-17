@@ -1,7 +1,7 @@
 package ca.ulaval.glo2003.entities;
 
 public class Proprietaire {
-    private String id;
+    private final String id;
 
     public String getId() {
         return id;

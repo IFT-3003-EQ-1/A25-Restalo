@@ -6,16 +6,20 @@ import ca.ulaval.glo2003.domain.dtos.ReservationTimeDto;
 public class Reservation {
     private String number;
    private String  date;
-   private ReservationTimeDto time;
+   private ReservationTime time;
    private int groupSize;
-   private CustomerDto customer;
+   private Customer customer;
    private Restaurant restaurant;
-   public Reservation(String date, ReservationTimeDto time, int groupSize, CustomerDto customer) {
-      this.date = date;
-      this.time = time;
-      this.groupSize = groupSize;
-      this.customer = customer;
-   }
+
+
+    public Reservation(String number, String date, ReservationTime time, int groupSize, Customer customer, Restaurant restaurant) {
+        this.number = number;
+        this.date = date;
+        this.time = time;
+        this.groupSize = groupSize;
+        this.customer = customer;
+        this.restaurant = restaurant;
+    }
 
     public Reservation() {
     }
@@ -24,49 +28,24 @@ public class Reservation {
         return date;
     }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-
     public int getGroupSize() {
         return groupSize;
     }
 
-    public void setGroupSize(int groupSize) {
-        this.groupSize = groupSize;
-    }
-
-    public CustomerDto getCustomer() {
+    public Customer getCustomer() {
         return customer;
-    }
-
-    public void setCustomer(CustomerDto customer) {
-        this.customer = customer;
     }
 
     public String getNumber() {
         return number;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    public ReservationTimeDto getTime() {
+    public ReservationTime getTime() {
         return time;
-    }
-
-    public void setTime(ReservationTimeDto time) {
-        this.time = time;
     }
 
     public Restaurant getRestaurant() {
         return restaurant;
-    }
-
-    public void setRestaurant(Restaurant restaurant) {
-        this.restaurant = restaurant;
     }
 
     @Override

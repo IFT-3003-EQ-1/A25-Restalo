@@ -3,7 +3,7 @@ package ca.ulaval.glo2003.api;
 import ca.ulaval.glo2003.api.assemblers.RestaurantDtoAssembler;
 import ca.ulaval.glo2003.domain.ReservationService;
 import ca.ulaval.glo2003.domain.RestaurantService;
-import ca.ulaval.glo2003.domain.dtos.CreateReservationDto;
+import ca.ulaval.glo2003.domain.dtos.ReservationDto;
 import ca.ulaval.glo2003.domain.dtos.ProprietaireDto;
 import ca.ulaval.glo2003.domain.dtos.RestaurantDto;
 import ca.ulaval.glo2003.entities.exceptions.ParametreManquantException;
@@ -49,7 +49,6 @@ public class RestaurantRessource {
             throw new ParametreManquantException("entree");
         }
 
-
         ProprietaireDto proprietaireDto = new ProprietaireDto();
         proprietaireDto.id = proprietaireId;
         String restaurantId = restaurantService.createRestaurant(proprietaireDto, entree);
@@ -91,7 +90,7 @@ public class RestaurantRessource {
     @POST
     @Path("/{id}/reservations")
     public Response createReservation(@PathParam("id") String restaurantId,
-                                      CreateReservationDto createReservation,
+                                      ReservationDto createReservation,
                                       @Context UriInfo infosUri) {
         String reservationId = reservationService.addReservation(restaurantId, createReservation);
         URI location = infosUri.getBaseUriBuilder().path("reservations").path(reservationId).build();
