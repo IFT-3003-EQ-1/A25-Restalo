@@ -8,6 +8,7 @@ import ca.ulaval.glo2003.entities.assemblers.RestaurantFactory;
 import ca.ulaval.glo2003.entities.exceptions.AccessInterditException;
 import ca.ulaval.glo2003.entities.exceptions.NotFoundException;
 import ca.ulaval.glo2003.entities.exceptions.ParametreManquantException;
+import ca.ulaval.glo2003.entities.filtres.FiltreRestaurantFactory;
 import ca.ulaval.glo2003.infra.persistence.InMemoryRestaurantRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,8 @@ public class RestaurantServiceIntegratedTest {
                 new RestaurantFactory(),
                 new InMemoryRestaurantRepository(),
                 new ProprietaireFactory(),
-                new RestaurantAssembler()
+                new RestaurantAssembler(),
+                new FiltreRestaurantFactory()
         );
 
         proprietaireDto = new ProprietaireDto();
@@ -91,8 +93,7 @@ public class RestaurantServiceIntegratedTest {
 
     @Test
     public void givenGetRestaurants_whenProprietaireIdIsNull_thenEmptyListIsReturned() {
-        proprietaireDto.id = null;
-        assertTrue(restaurantService.getRestaurants(proprietaireDto.id).isEmpty());
+        assertTrue(restaurantService.getRestaurants(null).isEmpty());
 
     }
 
@@ -116,4 +117,32 @@ public class RestaurantServiceIntegratedTest {
         assertThrows(NotFoundException.class, () -> restaurantService.getRestaurant(restaurantDto.id, proprietaireDto.id));
     }
 
+    @Test
+    public void givenSearchRestaurants_whenNoParameterAreSpecified_thenReturnAllRestaurants() {
+        restaurantService.createRestaurant(proprietaireDto, restaurantDto);
+        restaurantService.createRestaurant(proprietaireDto, restaurantDto);
+        restaurantDto.id = "12345";
+        restaurantDto.nom = "Dejeuner";
+        restaurantDto.horaireOuverture = "06:00:00";
+        restaurantDto.horaireFermeture = "13:00:00";
+        restaurantService.createRestaurant(proprietaireDto, restaurantDto);
+
+        assertEquals(3, restaurantService.searchRestaurants(new RestaurantDto()).size());
+    }
+
+    @Test
+    public void givenSearchRestaurants_withParamaterName_thenReturnOnlyMatchingRestaurants() {
+        restaurantService.createRestaurant(proprietaireDto, restaurantDto);
+        restaurantService.createRestaurant(proprietaireDto, restaurantDto);
+        restaurantDto.id = "12345";
+        restaurantDto.nom = "Dejeuner";
+        restaurantDto.horaireOuverture = "06:00:00";
+        restaurantDto.horaireFermeture = "13:00:00";
+        restaurantService.createRestaurant(proprietaireDto, restaurantDto);
+
+        RestaurantDto searchParams = new RestaurantDto();
+        searchParams.nom = "Pizz";
+        assertEquals(2, restaurantService.searchRestaurants(searchParams).size());
+
+    }
 }

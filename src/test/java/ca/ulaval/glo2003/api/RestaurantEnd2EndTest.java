@@ -24,7 +24,7 @@ public class RestaurantEnd2EndTest extends JerseyTest {
 
     @Test
     public void givenCreerRestaurant_whenCorrectRequest_thenResponseIsCreated() {
-        RestaurantDto restaurantDto = RestaurantEnd2EndUtils.buildDefaultRestaurantDto();
+        RestaurantDto restaurantDto = End2EndTestUtils.buildDefaultRestaurantDto();
 
         Map<String, Object> json =  (new RestaurantDtoAssembler()).versJson(restaurantDto);
 
@@ -38,12 +38,10 @@ public class RestaurantEnd2EndTest extends JerseyTest {
 
     @Test
     public void givenCreerRestaurant_whenNullProprietaireId_thenResponseIsError() {
-        RestaurantDto restaurantDto = RestaurantEnd2EndUtils.buildDefaultRestaurantDto();
+        RestaurantDto restaurantDto = End2EndTestUtils.buildDefaultRestaurantDto();
         Map<String, Object> json =  (new RestaurantDtoAssembler()).versJson(restaurantDto);
-        // when
 
         try (Response response = target("/restaurants").request().post(Entity.json(json))) {
-            // expected
 
             assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
         } catch (Exception e) {
@@ -53,7 +51,7 @@ public class RestaurantEnd2EndTest extends JerseyTest {
 
     @Test
     public void givenObtenirRestaurant_whenCorrectRequest_thenResponseIsOk() {
-        RestaurantDto restaurantDto = RestaurantEnd2EndUtils.buildDefaultRestaurantDto();
+        RestaurantDto restaurantDto = End2EndTestUtils.buildDefaultRestaurantDto();
 
         Response response = target("/restaurants").queryParam("id", restaurantDto.id).request().header("Owner", "1").get();
 
@@ -62,7 +60,7 @@ public class RestaurantEnd2EndTest extends JerseyTest {
 
     @Test
     public void givenObtenirRestaurant_whenNullProprietaireId_thenResponseIsError() {
-        RestaurantDto restaurantDto = RestaurantEnd2EndUtils.buildDefaultRestaurantDto();
+        RestaurantDto restaurantDto = End2EndTestUtils.buildDefaultRestaurantDto();
 
         Response response = target("/restaurants").queryParam("id", restaurantDto.id).request().get();
 
@@ -87,6 +85,28 @@ public class RestaurantEnd2EndTest extends JerseyTest {
 
     }
 
+    @Test
+    public void givenRechercherRestaurants_whenCorrectRequest_thenResponseIsOk() {
+        RestaurantDto restaurantDto = End2EndTestUtils.buildDefaultRestaurantDto();
+        Map<String, Object> json =  (new RestaurantDtoAssembler()).versJson(restaurantDto);
 
+        try (Response response = target("/search/restaurants").request().post(Entity.json(json))) {
 
+            assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+        }
+    }
+
+    @Test
+    public void givenRechercherRestaurants_whenMauvaisFormatHoraireOuverture_thenResponseIsError() {
+        End2EndTestUtils.postRestaurant(target("/restaurants"), End2EndTestUtils.buildDefaultRestaurantDto());
+
+        RestaurantDto restaurantDto = End2EndTestUtils.buildDefaultRestaurantDto();
+        restaurantDto.horaireFermeture = "-1";
+        Map<String, Object> json =  (new RestaurantDtoAssembler()).versJson(restaurantDto);
+
+        try (Response response = target("/search/restaurants").request().post(Entity.json(json))) {
+
+            assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+        }
+    }
 }
