@@ -4,9 +4,8 @@ import ca.ulaval.glo2003.api.assemblers.RestaurantDtoAssembler;
 import ca.ulaval.glo2003.domain.ReservationService;
 import ca.ulaval.glo2003.domain.RestaurantService;
 import ca.ulaval.glo2003.domain.dtos.ReservationDto;
-import ca.ulaval.glo2003.domain.dtos.restaurant.ProprietaireDto;
+import ca.ulaval.glo2003.domain.dtos.restaurant.OwnerDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
-import ca.ulaval.glo2003.entities.exceptions.ParametreManquantException;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
@@ -45,11 +44,7 @@ public class RestaurantRessource {
                                     RestaurantDto entree,
                                     @Context UriInfo infosUri) {
 
-        if (entree == null) {
-            throw new ParametreManquantException("entree");
-        }
-
-        ProprietaireDto proprietaireDto = new ProprietaireDto();
+        OwnerDto proprietaireDto = new OwnerDto();
         proprietaireDto.id = proprietaireId;
         String restaurantId = restaurantService.createRestaurant(proprietaireDto, entree);
 
@@ -62,9 +57,7 @@ public class RestaurantRessource {
     @Path("/{id}")
     public Response obtenirRestaurant(@HeaderParam("Owner") String proprietaireId,
                                       @PathParam("id") String identifiant) {
-        if (proprietaireId == null || proprietaireId.isBlank()) {
-            throw new  ParametreManquantException("Owner");
-        }
+
 
         RestaurantDto restaurantDto = restaurantService.getRestaurant(identifiant, proprietaireId);
 
@@ -74,9 +67,7 @@ public class RestaurantRessource {
 
     @GET
     public Response listerRestaurants(@HeaderParam("Owner") String proprietaireId) {
-        if (proprietaireId == null || proprietaireId.isBlank()) {
-            throw new  ParametreManquantException("Owner");
-        }
+
         List<RestaurantDto> restaurantDtos = restaurantService.getRestaurants(proprietaireId);
 
         List<Map<String, Object>> sortie = restaurantDtos

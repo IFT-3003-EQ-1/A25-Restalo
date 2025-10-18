@@ -2,8 +2,8 @@ package ca.ulaval.glo2003.entities.assemblers;
 
 import ca.ulaval.glo2003.domain.dtos.CustomerDto;
 import ca.ulaval.glo2003.entities.Customer;
-import ca.ulaval.glo2003.entities.exceptions.ParametreInvalideException;
-import ca.ulaval.glo2003.entities.exceptions.ParametreManquantException;
+import ca.ulaval.glo2003.entities.exceptions.InvalideParameterException;
+import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
 import com.google.common.base.Strings;
 
 import java.util.regex.Matcher;
@@ -15,19 +15,19 @@ public class CustomerFactory {
 
     public Customer create(CustomerDto customerDto) {
         if(customerDto == null) {
-            throw new ParametreManquantException("Customer");
+            throw new MissingParameterException("Customer");
         }
 
         if(Strings.isNullOrEmpty(customerDto.name)) {
-            throw new ParametreManquantException("Customer name");
+            throw new MissingParameterException("Customer name");
         }
 
         if(!isValidEmail(customerDto.email)) {
-            throw new ParametreInvalideException("Email");
+            throw new InvalideParameterException("Email");
         }
 
         if(Strings.isNullOrEmpty(customerDto.phoneNumber) || customerDto.phoneNumber.length() != 10) {
-            throw new ParametreInvalideException("Phone number");
+            throw new InvalideParameterException("Phone number");
         }
 
         return new Customer(customerDto.name, customerDto.email, customerDto.phoneNumber);

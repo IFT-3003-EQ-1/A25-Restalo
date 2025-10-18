@@ -1,7 +1,7 @@
 package ca.ulaval.glo2003.entities.filtres;
 
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
-import ca.ulaval.glo2003.entities.exceptions.ParametreInvalideException;
+import ca.ulaval.glo2003.entities.exceptions.InvalideParameterException;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
@@ -26,7 +26,7 @@ public class FiltreRestaurantFactory {
                     LocalTime actual = LocalTime.parse(restaurant.getHoraireOuverture());
                     return from.isBefore(actual);
                 } catch (DateTimeParseException e) {
-                    throw new ParametreInvalideException("`horaires.*` doivent respecter le format HH:mm:ss");
+                    throw new InvalideParameterException("`horaires.*` doivent respecter le format HH:mm:ss");
                 }
             }));
         }
@@ -39,7 +39,7 @@ public class FiltreRestaurantFactory {
                     return to.isAfter(actual);
 
                 } catch (DateTimeParseException e) {
-                    throw new ParametreInvalideException("`horaires.*` doivent respecter le format HH:mm:ss");
+                    throw new InvalideParameterException("`horaires.*` doivent respecter le format HH:mm:ss");
                 }
             }));
         }

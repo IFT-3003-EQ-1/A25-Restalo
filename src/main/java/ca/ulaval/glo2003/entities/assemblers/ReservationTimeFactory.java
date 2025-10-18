@@ -2,8 +2,8 @@ package ca.ulaval.glo2003.entities.assemblers;
 
 import ca.ulaval.glo2003.entities.ReservationTime;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
-import ca.ulaval.glo2003.entities.exceptions.ParametreInvalideException;
-import ca.ulaval.glo2003.entities.exceptions.ParametreManquantException;
+import ca.ulaval.glo2003.entities.exceptions.InvalideParameterException;
+import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
 import com.google.common.base.Strings;
 
 import java.time.LocalTime;
@@ -11,12 +11,12 @@ import java.time.LocalTime;
 public class ReservationTimeFactory {
     public ReservationTime create(String startTime, Restaurant restaurant) {
         if(Strings.isNullOrEmpty(startTime)) {
-            throw new ParametreManquantException("Reservation Start time");
+            throw new MissingParameterException("Reservation Start time");
         }
 
         ReservationTime time = adjustAndValidateReservationTime(startTime,restaurant);
         if(time == null) {
-            throw new ParametreInvalideException("Reservation Start time is too late");
+            throw new InvalideParameterException("Reservation Start time is too late");
         }
         return time;
     }

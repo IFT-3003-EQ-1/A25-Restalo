@@ -70,7 +70,6 @@ public class RestaurantEnd2EndTest extends JerseyTest {
         RestaurantDto restaurantDto = End2EndTestUtils.buildDefaultRestaurantDto();
 
         Response response = target("/restaurants").queryParam("id", restaurantDto.id).request().header("Owner", "1").get();
-
         assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
     }
 

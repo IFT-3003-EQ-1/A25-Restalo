@@ -5,11 +5,11 @@ import java.util.Objects;
 
 public class RestaurantDto {
     public String id;
-    public ProprietaireDto proprietaire;
+    public OwnerDto owner;
     public String nom;
-    public String horaireOuverture;
-    public String horaireFermeture;
-    public int capacite;
+    public String hoursOpen;
+    public String hoursClose;
+    public int capacity;
     public ConfigReservationDto configReservation;
 
     public RestaurantDto() {
@@ -17,30 +17,30 @@ public class RestaurantDto {
     }
 
     public RestaurantDto(String id,
-                         ProprietaireDto proprietaire,
+                         OwnerDto owner,
                          String nom,
-                         String horaireOuverture,
-                         String horaireFermeture,
-                         int capacite,
-                         ConfigReservationDto ConfigReservation) {
+                         String hoursOpen,
+                         String hoursClose,
+                         int capacity,
+                         ConfigReservationDto configReservation) {
         this.id = id;
-        this.proprietaire = proprietaire;
+        this.owner = owner;
         this.nom = nom;
-        this.horaireOuverture = horaireOuverture;
-        this.horaireFermeture = horaireFermeture;
-        this.capacite = capacite;
-        this.configReservation = ConfigReservation;
+        this.hoursOpen = hoursOpen;
+        this.hoursClose = hoursClose;
+        this.capacity = capacity;
+        this.configReservation = configReservation;
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         RestaurantDto that = (RestaurantDto) o;
-        return capacite == that.capacite && Objects.equals(id, that.id) && Objects.equals(proprietaire, that.proprietaire) && Objects.equals(nom, that.nom) && Objects.equals(horaireOuverture, that.horaireOuverture) && Objects.equals(horaireFermeture, that.horaireFermeture) && Objects.equals(configReservation, that.configReservation);
+        return capacity == that.capacity && Objects.equals(id, that.id) && Objects.equals(owner, that.owner) && Objects.equals(nom, that.nom) && Objects.equals(hoursOpen, that.hoursOpen) && Objects.equals(hoursClose, that.hoursClose) && Objects.equals(configReservation, that.configReservation);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, proprietaire, nom, horaireOuverture, horaireFermeture, capacite, configReservation);
+        return Objects.hash(id, owner, nom, hoursOpen, hoursClose, capacity, configReservation);
     }
 }

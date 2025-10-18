@@ -35,7 +35,7 @@ public class SearchRestaurantEnd2EndTest extends JerseyTest {
         End2EndTestUtils.postRestaurant(target("/restaurants"), End2EndTestUtils.buildDefaultRestaurantDto());
 
         RestaurantDto restaurantDto = End2EndTestUtils.buildDefaultRestaurantDto();
-        restaurantDto.horaireFermeture = "-1";
+        restaurantDto.hoursClose = "-1";
         Map<String, Object> json =  (new RestaurantDtoAssembler()).versJson(restaurantDto);
 
         try (Response response = target("/search/restaurants").request().post(Entity.json(json))) {

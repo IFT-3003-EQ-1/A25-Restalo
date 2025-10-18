@@ -3,21 +3,21 @@ package ca.ulaval.glo2003.domain.dtos.restaurant;
 
 import java.util.Objects;
 
-public class ProprietaireDto {
+public class OwnerDto {
     public String id;
 
-    public ProprietaireDto(String id) {
+    public OwnerDto(String id) {
         this.id = id;
     }
 
-    public ProprietaireDto() {
+    public OwnerDto() {
 
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        ProprietaireDto that = (ProprietaireDto) o;
+        OwnerDto that = (OwnerDto) o;
         return Objects.equals(id, that.id);
     }
 
@@ -28,7 +28,7 @@ public class ProprietaireDto {
 
     @Override
     public String toString() {
-        return "ProprietaireDto{" +
+        return "OwnerDto{" +
                 "id='" + id + '\'' +
                 '}';
     }

@@ -1,11 +1,12 @@
 package ca.ulaval.glo2003.domain;
 
-import ca.ulaval.glo2003.domain.dtos.restaurant.ProprietaireDto;
+import ca.ulaval.glo2003.domain.dtos.restaurant.OwnerDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
+import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.entities.restaurant.Proprietaire;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 import ca.ulaval.glo2003.entities.assemblers.*;
-import ca.ulaval.glo2003.entities.exceptions.AccessInterditException;
+import ca.ulaval.glo2003.entities.exceptions.ForbiddenAccessException;
 import ca.ulaval.glo2003.entities.exceptions.NotFoundException;
 import ca.ulaval.glo2003.entities.filtres.Filtre;
 import ca.ulaval.glo2003.entities.filtres.FiltreRestaurantFactory;
@@ -33,7 +34,7 @@ public class RestaurantService {
         this.filtreRestaurantFactory = filtreRestaurantFactory;
     }
 
-    public String createRestaurant(ProprietaireDto proprietaireDto, RestaurantDto restaurantDto) {
+    public String createRestaurant(OwnerDto proprietaireDto, RestaurantDto restaurantDto) {
         Proprietaire proprietaire = proprietaireFactory.createProprietaire(proprietaireDto.id);
         Restaurant restaurant = restaurantFactory.createRestaurant(
                 proprietaire,
@@ -45,12 +46,16 @@ public class RestaurantService {
 
     public RestaurantDto getRestaurant(String idRestaurant, String proprietaireId) {
 
+        if (proprietaireId == null || proprietaireId.isBlank()) {
+            throw new MissingParameterException("Owner");
+        }
+
         Restaurant restaurant = restaurantRepository.get(idRestaurant).orElseThrow(
                 () -> new NotFoundException("")
         );
 
         if (!restaurant.getProprietaire().getId().equals(proprietaireId)) {
-            throw new AccessInterditException("");
+            throw new ForbiddenAccessException("");
         }
         return restaurantAssembler.toDto(restaurant);
     }
@@ -66,7 +71,7 @@ public class RestaurantService {
 
     public List<RestaurantDto> searchRestaurants(RestaurantDto searchValues) {
 
-        List<Filtre<Restaurant>> filtres = filtreRestaurantFactory.createFiltres(searchValues.nom, searchValues.horaireOuverture, searchValues.horaireFermeture);
+        List<Filtre<Restaurant>> filtres = filtreRestaurantFactory.createFiltres(searchValues.nom, searchValues.hoursOpen, searchValues.hoursClose);
         if (filtres.isEmpty()) {
             return restaurantRepository
                     .getAll()

@@ -1,7 +1,7 @@
 package ca.ulaval.glo2003.api;
 
 import ca.ulaval.glo2003.api.assemblers.RestaurantDtoAssembler;
-import ca.ulaval.glo2003.domain.dtos.restaurant.ProprietaireDto;
+import ca.ulaval.glo2003.domain.dtos.restaurant.OwnerDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
@@ -17,15 +17,15 @@ public class End2EndTestUtils {
 
 
     public static RestaurantDto buildDefaultRestaurantDto() {
-        ProprietaireDto proprietaireDto = new ProprietaireDto();
+        OwnerDto proprietaireDto = new OwnerDto();
         proprietaireDto.id = "1";
 
         RestaurantDto  restaurantDto = new RestaurantDto();
-        restaurantDto.capacite = 2;
-        restaurantDto.horaireOuverture = "11:00:00";
-        restaurantDto.horaireFermeture = "19:00:00";
+        restaurantDto.capacity = 2;
+        restaurantDto.hoursOpen = "11:00:00";
+        restaurantDto.hoursClose = "19:00:00";
         restaurantDto.nom = "Pizz";
-        restaurantDto.proprietaire = proprietaireDto;
+        restaurantDto.owner = proprietaireDto;
         return restaurantDto;
     }
 

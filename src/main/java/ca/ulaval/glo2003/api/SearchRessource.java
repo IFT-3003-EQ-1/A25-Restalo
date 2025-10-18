@@ -15,13 +15,13 @@ import java.util.List;
 @Path("/search")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public class RechercheRessource {
+public class SearchRessource {
 
     private final RestaurantService restaurantService;
 
     private final RestaurantDtoAssembler restaurantDtoAssembler;
 
-    public RechercheRessource(RestaurantService restaurantService, RestaurantDtoAssembler restaurantDtoAssembler) {
+    public SearchRessource(RestaurantService restaurantService, RestaurantDtoAssembler restaurantDtoAssembler) {
         this.restaurantService = restaurantService;
         this.restaurantDtoAssembler = restaurantDtoAssembler;
     }
@@ -29,12 +29,12 @@ public class RechercheRessource {
 
     @POST
     @Path("/restaurants")
-    public Response rechercherRestaurants(RestaurantDto champsRecherche) {
-        if (champsRecherche == null) {
-            champsRecherche = new  RestaurantDto();
+    public Response searchRestaurants(RestaurantDto searchParameters) {
+        if (searchParameters == null) {
+            searchParameters = new  RestaurantDto();
         }
 
-        List<RestaurantDto> restaurantDtos = restaurantService.searchRestaurants(champsRecherche);
+        List<RestaurantDto> restaurantDtos = restaurantService.searchRestaurants(searchParameters);
         return Response.ok(restaurantDtos.stream().map(restaurantDtoAssembler::versJson).toList()).build();
     }
 }

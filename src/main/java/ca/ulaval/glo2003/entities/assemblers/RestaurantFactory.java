@@ -5,8 +5,8 @@ import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
 import ca.ulaval.glo2003.entities.restaurant.ConfigReservation;
 import ca.ulaval.glo2003.entities.restaurant.Proprietaire;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
-import ca.ulaval.glo2003.entities.exceptions.ParametreInvalideException;
-import ca.ulaval.glo2003.entities.exceptions.ParametreManquantException;
+import ca.ulaval.glo2003.entities.exceptions.InvalideParameterException;
+import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
 
 import java.time.Duration;
 import java.time.LocalTime;
@@ -22,45 +22,45 @@ public class RestaurantFactory {
 
     public Restaurant createRestaurant(Proprietaire proprietaire, RestaurantDto restaurantDto) {
         if (restaurantDto.nom == null) {
-            throw new ParametreManquantException("nom");
+            throw new MissingParameterException("nom");
         }
-        if (restaurantDto.horaireOuverture == null) {
-            throw new ParametreManquantException("horaireOuverture");
+        if (restaurantDto.hoursOpen == null) {
+            throw new MissingParameterException("horaireOuverture");
         }
-        if (restaurantDto.horaireFermeture == null) {
-            throw new  ParametreManquantException("horaireFermeture");
+        if (restaurantDto.hoursClose == null) {
+            throw new MissingParameterException("horaireFermeture");
         }
 
         if (restaurantDto.nom.isBlank()) {
-            throw new ParametreInvalideException("Le nom ne peut pas être vide");
+            throw new InvalideParameterException("Le nom ne peut pas être vide");
         }
 
-        if (restaurantDto.capacite < 1) {
-            throw new ParametreInvalideException("La capacité doit être au moins 1");
+        if (restaurantDto.capacity < 1) {
+            throw new InvalideParameterException("La capacité doit être au moins 1");
         }
 
         LocalTime ouverture;
         LocalTime fermeture;
         try {
-            ouverture = LocalTime.parse(restaurantDto.horaireOuverture);
-            fermeture = LocalTime.parse(restaurantDto.horaireFermeture);
+            ouverture = LocalTime.parse(restaurantDto.hoursOpen);
+            fermeture = LocalTime.parse(restaurantDto.hoursClose);
         } catch (DateTimeParseException e) {
-            throw new ParametreInvalideException("`horaires.*` doivent respecter le format HH:mm:ss");
+            throw new InvalideParameterException("`horaires.*` doivent respecter le format HH:mm:ss");
         }
 
         LocalTime min = LocalTime.MIDNIGHT;
         LocalTime max = LocalTime.of(23, 59, 59);
 
         if (!ouverture.isBefore(fermeture)) {
-            throw  new ParametreInvalideException("`ouverture` doit être strictement avant `fermeture`");
+            throw  new InvalideParameterException("`ouverture` doit être strictement avant `fermeture`");
         }
 
         if (ouverture.isBefore(min) || fermeture.isAfter(max)) {
-            throw new ParametreInvalideException("Les heures doivent être entre 00:00:00 et 23:59:59");
+            throw new InvalideParameterException("Les heures doivent être entre 00:00:00 et 23:59:59");
         }
 
         if (Duration.between(ouverture, fermeture).toMinutes() < 60) {
-            throw new ParametreInvalideException("Le restaurant doit être ouvert au moins 1 heure");
+            throw new InvalideParameterException("Le restaurant doit être ouvert au moins 1 heure");
         }
 
         String identifiant = UUID.randomUUID().toString().replace("-", "");
@@ -71,9 +71,9 @@ public class RestaurantFactory {
                 identifiant,
                 proprietaire,
                 restaurantDto.nom,
-                restaurantDto.capacite,
-                restaurantDto.horaireOuverture,
-                restaurantDto.horaireFermeture,
+                restaurantDto.capacity,
+                restaurantDto.hoursOpen,
+                restaurantDto.hoursClose,
                 config);
     }
 

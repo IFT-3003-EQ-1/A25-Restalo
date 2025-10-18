@@ -7,8 +7,8 @@ import ca.ulaval.glo2003.entities.Customer;
 import ca.ulaval.glo2003.entities.Reservation;
 import ca.ulaval.glo2003.entities.ReservationTime;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
-import ca.ulaval.glo2003.entities.exceptions.ParametreInvalideException;
-import ca.ulaval.glo2003.entities.exceptions.ParametreManquantException;
+import ca.ulaval.glo2003.entities.exceptions.InvalideParameterException;
+import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
 import com.google.common.base.Strings;
 
 
@@ -26,10 +26,10 @@ public class ReservationFactory {
     public Reservation createReservation(ReservationDto reservationDto, Restaurant restaurant) {
 
         if(reservationDto.groupSize < 1){
-            throw new ParametreInvalideException("Group size must be at least 1");
+            throw new InvalideParameterException("Group size must be at least 1");
         }
         if(Strings.isNullOrEmpty(reservationDto.date)){
-            throw new ParametreManquantException("Reservation date");
+            throw new MissingParameterException("Reservation date");
         }
 
         Customer customer = customerFactory.create(reservationDto.customer);
