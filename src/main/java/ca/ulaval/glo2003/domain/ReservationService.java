@@ -2,7 +2,7 @@ package ca.ulaval.glo2003.domain;
 
 import ca.ulaval.glo2003.domain.dtos.ReservationDto;
 import ca.ulaval.glo2003.entities.Reservation;
-import ca.ulaval.glo2003.entities.Restaurant;
+import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 import ca.ulaval.glo2003.entities.assemblers.ReservationFactory;
 import ca.ulaval.glo2003.entities.exceptions.NotFoundException;
 import ca.ulaval.glo2003.infra.persistence.ReservationRepository;

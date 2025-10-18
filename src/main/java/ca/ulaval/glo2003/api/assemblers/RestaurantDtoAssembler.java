@@ -1,6 +1,6 @@
 package ca.ulaval.glo2003.api.assemblers;
 
-import ca.ulaval.glo2003.domain.dtos.RestaurantDto;
+import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
 
 import java.util.Map;
 import java.util.Objects;
@@ -14,8 +14,10 @@ public class RestaurantDtoAssembler {
                 "horaireOuverture", restaurantDto.horaireOuverture,
                 "horaireFermeture", restaurantDto.horaireFermeture,
                 "proprietaire", Map.of(
-                        "id", restaurantDto.proprietaire.id,
-                        "nom", restaurantDto.proprietaire.nom
+                        "id", restaurantDto.proprietaire.id
+                ),
+                "reservation", Map.of(
+                        "duration", restaurantDto.configReservation.duration
                 )
         );
     }

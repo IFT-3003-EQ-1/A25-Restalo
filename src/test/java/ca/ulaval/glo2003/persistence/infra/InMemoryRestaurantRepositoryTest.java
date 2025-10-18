@@ -1,7 +1,8 @@
 package ca.ulaval.glo2003.persistence.infra;
 
-import ca.ulaval.glo2003.entities.Proprietaire;
-import ca.ulaval.glo2003.entities.Restaurant;
+import ca.ulaval.glo2003.entities.restaurant.ConfigReservation;
+import ca.ulaval.glo2003.entities.restaurant.Proprietaire;
+import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 import ca.ulaval.glo2003.entities.filtres.Filtre;
 import ca.ulaval.glo2003.infra.persistence.InMemoryRestaurantRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -80,16 +81,16 @@ public class InMemoryRestaurantRepositoryTest {
     public void givenSearchRestaurant_whenMatchingFiltre_thenReturnMatchingRestaurants() {
         repository.save(InMemoryRestaurantRepositoryTestUtils.createRestaurant(RESTAURANT_ID));
         repository.save(InMemoryRestaurantRepositoryTestUtils.createRestaurant("2"));
-
-        Restaurant restaurant = new Restaurant(
+        Restaurant restaurantWithDifferentName = new Restaurant(
                 "3",
                 new Proprietaire("1"),
                 "Dejeuner",
                 2,
                 "6:00:00",
-                "13:00:00"
+                "13:00:00",
+                new ConfigReservation(60)
         );
-        repository.save(restaurant);
+        repository.save(restaurantWithDifferentName);
         List<Filtre<Restaurant>> filtres = new ArrayList<>();
         filtres.add(r -> r.getNom().equals("Pizz"));
 

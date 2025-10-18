@@ -1,4 +1,4 @@
-package ca.ulaval.glo2003.entities;
+package ca.ulaval.glo2003.entities.restaurant;
 
 public class Proprietaire {
     private final String id;

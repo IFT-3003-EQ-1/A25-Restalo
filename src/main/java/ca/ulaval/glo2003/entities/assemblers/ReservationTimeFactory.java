@@ -1,7 +1,7 @@
 package ca.ulaval.glo2003.entities.assemblers;
 
 import ca.ulaval.glo2003.entities.ReservationTime;
-import ca.ulaval.glo2003.entities.Restaurant;
+import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 import ca.ulaval.glo2003.entities.exceptions.ParametreInvalideException;
 import ca.ulaval.glo2003.entities.exceptions.ParametreManquantException;
 import com.google.common.base.Strings;

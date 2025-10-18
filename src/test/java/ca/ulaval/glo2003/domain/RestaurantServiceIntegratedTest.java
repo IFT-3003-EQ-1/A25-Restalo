@@ -1,7 +1,7 @@
 package ca.ulaval.glo2003.domain;
 
-import ca.ulaval.glo2003.domain.dtos.ProprietaireDto;
-import ca.ulaval.glo2003.domain.dtos.RestaurantDto;
+import ca.ulaval.glo2003.domain.dtos.restaurant.ProprietaireDto;
+import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
 import ca.ulaval.glo2003.entities.assemblers.ProprietaireFactory;
 import ca.ulaval.glo2003.entities.assemblers.RestaurantAssembler;
 import ca.ulaval.glo2003.entities.assemblers.RestaurantFactory;
@@ -35,7 +35,6 @@ public class RestaurantServiceIntegratedTest {
 
         proprietaireDto = new ProprietaireDto();
         proprietaireDto.id = "1";
-        proprietaireDto.nom = "";
 
         restaurantDto = new RestaurantDto();
         restaurantDto.proprietaire = proprietaireDto;

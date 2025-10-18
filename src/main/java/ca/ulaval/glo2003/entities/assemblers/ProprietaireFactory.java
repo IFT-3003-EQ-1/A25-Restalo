@@ -1,6 +1,6 @@
 package ca.ulaval.glo2003.entities.assemblers;
 
-import ca.ulaval.glo2003.entities.Proprietaire;
+import ca.ulaval.glo2003.entities.restaurant.Proprietaire;
 import ca.ulaval.glo2003.entities.exceptions.ParametreManquantException;
 
 public class ProprietaireFactory {

@@ -1,6 +1,6 @@
 package ca.ulaval.glo2003.entities.filtres;
 
-import ca.ulaval.glo2003.entities.Restaurant;
+import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 import ca.ulaval.glo2003.entities.exceptions.ParametreInvalideException;
 
 import java.time.LocalTime;

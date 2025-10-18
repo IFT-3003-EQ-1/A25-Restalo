@@ -1,9 +1,9 @@
 package ca.ulaval.glo2003.domain;
 
-import ca.ulaval.glo2003.domain.dtos.*;
-import ca.ulaval.glo2003.entities.Proprietaire;
-import ca.ulaval.glo2003.entities.Reservation;
-import ca.ulaval.glo2003.entities.Restaurant;
+import ca.ulaval.glo2003.domain.dtos.restaurant.ProprietaireDto;
+import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
+import ca.ulaval.glo2003.entities.restaurant.Proprietaire;
+import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 import ca.ulaval.glo2003.entities.assemblers.*;
 import ca.ulaval.glo2003.entities.exceptions.AccessInterditException;
 import ca.ulaval.glo2003.entities.exceptions.NotFoundException;
@@ -12,7 +12,6 @@ import ca.ulaval.glo2003.entities.filtres.FiltreRestaurantFactory;
 import ca.ulaval.glo2003.infra.persistence.RestaurantRepository;
 
 import java.util.List;
-import java.util.UUID;
 
 public class RestaurantService {
 
@@ -38,10 +37,7 @@ public class RestaurantService {
         Proprietaire proprietaire = proprietaireFactory.createProprietaire(proprietaireDto.id);
         Restaurant restaurant = restaurantFactory.createRestaurant(
                 proprietaire,
-                restaurantDto.nom,
-                restaurantDto.capacite,
-                restaurantDto.horaireOuverture,
-                restaurantDto.horaireFermeture
+                restaurantDto
         );
         restaurantRepository.save(restaurant);
         return restaurant.getId();

@@ -2,7 +2,7 @@ package ca.ulaval.glo2003.api;
 
 import ca.ulaval.glo2003.api.assemblers.RestaurantDtoAssembler;
 import ca.ulaval.glo2003.domain.RestaurantService;
-import ca.ulaval.glo2003.domain.dtos.RestaurantDto;
+import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;

@@ -1,7 +1,6 @@
 package ca.ulaval.glo2003.entities;
 
-import ca.ulaval.glo2003.domain.dtos.CustomerDto;
-import ca.ulaval.glo2003.domain.dtos.ReservationTimeDto;
+import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 
 public class Reservation {
     private String number;
