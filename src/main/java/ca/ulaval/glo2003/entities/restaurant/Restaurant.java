@@ -1,10 +1,8 @@
 package ca.ulaval.glo2003.entities.restaurant;
 
-import ca.ulaval.glo2003.domain.dtos.restaurant.ConfigReservationDto;
 
 import java.time.Duration;
 import java.time.LocalTime;
-import java.util.Optional;
 
 public class Restaurant {
     private final String id;
@@ -13,7 +11,7 @@ public class Restaurant {
     private final int capacite;
     private final String horaireOuverture;
     private final String horaireFermeture;
-    private ConfigReservation configReservation;
+    private final ConfigReservation configReservation;
 
     public String getId() {
         return id;
