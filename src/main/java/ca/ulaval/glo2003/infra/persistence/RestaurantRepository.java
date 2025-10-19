@@ -1,7 +1,7 @@
 package ca.ulaval.glo2003.infra.persistence;
 
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
-import ca.ulaval.glo2003.entities.filtres.Filtre;
+import ca.ulaval.glo2003.entities.filters.Filter;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +13,7 @@ public interface RestaurantRepository {
 
     List<Restaurant> listParProprietaire(String proprietaireId);
 
-    List<Restaurant> searchRestaurants(List<Filtre<Restaurant>> filtres);
+    List<Restaurant> searchRestaurants(List<Filter<Restaurant>> filtres);
 
     List<Restaurant> getAll();
 }

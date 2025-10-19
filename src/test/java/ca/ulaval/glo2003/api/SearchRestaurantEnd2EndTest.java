@@ -20,7 +20,7 @@ public class SearchRestaurantEnd2EndTest extends JerseyTest {
     }
 
     @Test
-    public void givenRechercherRestaurants_whenCorrectRequest_thenResponseIsOk() {
+    public void givenSearchRestaurants_whenCorrectRequest_thenResponseIsOk() {
         RestaurantDto restaurantDto = End2EndTestUtils.buildDefaultRestaurantDto();
         Map<String, Object> json =  (new RestaurantDtoAssembler()).versJson(restaurantDto);
 
@@ -31,7 +31,7 @@ public class SearchRestaurantEnd2EndTest extends JerseyTest {
     }
 
     @Test
-    public void givenRechercherRestaurants_whenMauvaisFormatHoraireOuverture_thenResponseIsError() {
+    public void givenSearchRestaurants_whenWrongHourOpensFormat_thenResponseIsError() {
         End2EndTestUtils.postRestaurant(target("/restaurants"), End2EndTestUtils.buildDefaultRestaurantDto());
 
         RestaurantDto restaurantDto = End2EndTestUtils.buildDefaultRestaurantDto();

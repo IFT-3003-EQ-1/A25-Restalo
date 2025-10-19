@@ -1,10 +1,7 @@
-package ca.ulaval.glo2003.entities.assemblers;
+package ca.ulaval.glo2003.entities.restaurant;
 
 import ca.ulaval.glo2003.domain.dtos.restaurant.ConfigReservationDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
-import ca.ulaval.glo2003.entities.restaurant.ConfigReservation;
-import ca.ulaval.glo2003.entities.restaurant.Proprietaire;
-import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 import ca.ulaval.glo2003.entities.exceptions.InvalideParameterException;
 import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
 
@@ -20,7 +17,7 @@ public class RestaurantFactory {
     public RestaurantFactory() {
     }
 
-    public Restaurant createRestaurant(Proprietaire proprietaire, RestaurantDto restaurantDto) {
+    public Restaurant createRestaurant(Owner proprietaire, RestaurantDto restaurantDto) {
         if (restaurantDto.nom == null) {
             throw new MissingParameterException("nom");
         }

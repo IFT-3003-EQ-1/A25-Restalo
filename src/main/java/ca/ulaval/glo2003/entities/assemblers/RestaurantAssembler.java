@@ -10,11 +10,11 @@ public class RestaurantAssembler {
     public RestaurantDto toDto(Restaurant restaurant) {
         return new RestaurantDto(
                 restaurant.getId(),
-                new OwnerDto(restaurant.getProprietaire().getId()),
-                restaurant.getNom(),
-                restaurant.getHoraireOuverture(),
-                restaurant.getHoraireFermeture(),
-                restaurant.getCapacite(),
+                new OwnerDto(restaurant.getOwner().getId()),
+                restaurant.getName(),
+                restaurant.getHoursOpen(),
+                restaurant.getHoursClose(),
+                restaurant.getCapacity(),
                 toDto(restaurant.getConfigReservation())
         );
     }

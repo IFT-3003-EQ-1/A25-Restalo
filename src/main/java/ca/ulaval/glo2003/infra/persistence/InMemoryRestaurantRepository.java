@@ -1,7 +1,7 @@
 package ca.ulaval.glo2003.infra.persistence;
 
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
-import ca.ulaval.glo2003.entities.filtres.Filtre;
+import ca.ulaval.glo2003.entities.filters.Filter;
 
 import java.util.*;
 
@@ -29,22 +29,22 @@ public class InMemoryRestaurantRepository implements RestaurantRepository {
     @Override
     public List<Restaurant> listParProprietaire(String proprietaireId) {
         return database.values().stream()
-                .filter(r -> Objects.equals(r.getProprietaire().getId(), proprietaireId))
+                .filter(r -> Objects.equals(r.getOwner().getId(), proprietaireId))
                 .toList();
     }
 
     @Override
-    public List<Restaurant> searchRestaurants(List<Filtre<Restaurant>> filtres) {
+    public List<Restaurant> searchRestaurants(List<Filter<Restaurant>> filtres) {
         List<Restaurant> restaurants = new ArrayList<>();
         database.values().forEach(r -> {
-            boolean valide = true;
-            for (Filtre<Restaurant> filtre : filtres) {
-                if(!filtre.filtrer(r)) {
-                    valide = false;
+            boolean isValide = true;
+            for (Filter<Restaurant> filtre : filtres) {
+                if(!filtre.filter(r)) {
+                    isValide = false;
                 }
             }
 
-            if (valide) {
+            if (isValide) {
                 restaurants.add(r);
             }
         });

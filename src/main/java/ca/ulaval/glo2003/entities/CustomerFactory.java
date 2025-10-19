@@ -1,7 +1,6 @@
-package ca.ulaval.glo2003.entities.assemblers;
+package ca.ulaval.glo2003.entities;
 
 import ca.ulaval.glo2003.domain.dtos.CustomerDto;
-import ca.ulaval.glo2003.entities.Customer;
 import ca.ulaval.glo2003.entities.exceptions.InvalideParameterException;
 import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
 import com.google.common.base.Strings;

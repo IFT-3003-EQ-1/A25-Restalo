@@ -1,11 +1,10 @@
-package ca.ulaval.glo2003.entities.assemblers;
+package ca.ulaval.glo2003.entities.reservation;
 
 import java.util.UUID;
 
 import ca.ulaval.glo2003.domain.dtos.ReservationDto;
 import ca.ulaval.glo2003.entities.Customer;
-import ca.ulaval.glo2003.entities.Reservation;
-import ca.ulaval.glo2003.entities.ReservationTime;
+import ca.ulaval.glo2003.entities.CustomerFactory;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 import ca.ulaval.glo2003.entities.exceptions.InvalideParameterException;
 import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;

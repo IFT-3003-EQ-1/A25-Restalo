@@ -6,35 +6,35 @@ import java.time.LocalTime;
 
 public class Restaurant {
     private final String id;
-    private final Proprietaire proprietaire;
-    private final String nom;
-    private final int capacite;
-    private final String horaireOuverture;
-    private final String horaireFermeture;
+    private final Owner owner;
+    private final String name;
+    private final int capacity;
+    private final String hoursOpen;
+    private final String hoursClose;
     private final ConfigReservation configReservation;
 
     public String getId() {
         return id;
     }
 
-    public Proprietaire getProprietaire() {
-        return proprietaire;
+    public Owner getOwner() {
+        return owner;
     }
 
-    public String getNom() {
-        return nom;
+    public String getName() {
+        return name;
     }
 
-    public int getCapacite() {
-        return capacite;
+    public int getCapacity() {
+        return capacity;
     }
 
-    public String getHoraireOuverture() {
-        return horaireOuverture;
+    public String getHoursOpen() {
+        return hoursOpen;
     }
 
-    public String getHoraireFermeture() {
-        return horaireFermeture;
+    public String getHoursClose() {
+        return hoursClose;
     }
 
     public ConfigReservation getConfigReservation() {
@@ -42,19 +42,19 @@ public class Restaurant {
     }
 
 
-    public Restaurant(String id, Proprietaire proprietaire, String nom, int capacite, String horaireOuverture, String horaireFermeture, ConfigReservation configReservation) {
+    public Restaurant(String id, Owner owner, String name, int capacity, String hoursOpen, String hoursClose, ConfigReservation configReservation) {
         this.id = id;
-        this.proprietaire = proprietaire;
-        this.nom = nom;
-        this.capacite = capacite;
-        this.horaireOuverture = horaireOuverture;
-        this.horaireFermeture = horaireFermeture;
+        this.owner = owner;
+        this.name = name;
+        this.capacity = capacity;
+        this.hoursOpen = hoursOpen;
+        this.hoursClose = hoursClose;
         this.configReservation = configReservation;
     }
 
     public int getReservationDuration() {
-        LocalTime openTime = LocalTime.parse(horaireOuverture);
-        LocalTime closeTime = LocalTime.parse(horaireFermeture);
+        LocalTime openTime = LocalTime.parse(hoursOpen);
+        LocalTime closeTime = LocalTime.parse(hoursClose);
         // Calculer la durée totale d'ouverture en minutes
         return (int) Duration.between(openTime, closeTime).toMinutes();
     }

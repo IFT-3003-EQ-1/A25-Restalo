@@ -24,7 +24,7 @@ public class RestaurantEnd2EndTest extends JerseyTest {
     }
 
     @Test
-    public void givenCreerRestaurant_whenCorrectRequest_thenResponseIsCreated() {
+    public void givenCreateRestaurant_whenCorrectRequest_thenResponseIsCreated() {
         RestaurantDto restaurantDto = End2EndTestUtils.buildDefaultRestaurantDto();
 
         Map<String, Object> json =  (new RestaurantDtoAssembler()).versJson(restaurantDto);
@@ -38,7 +38,7 @@ public class RestaurantEnd2EndTest extends JerseyTest {
     }
 
     @Test
-    public void givenCreerRestaurant_whenNullProprietaireId_thenResponseIsError() {
+    public void givenCreateRestaurant_whenNullProprietaireId_thenResponseIsError() {
         RestaurantDto restaurantDto = End2EndTestUtils.buildDefaultRestaurantDto();
         Map<String, Object> json =  (new RestaurantDtoAssembler()).versJson(restaurantDto);
 
@@ -66,7 +66,7 @@ public class RestaurantEnd2EndTest extends JerseyTest {
     }
 
     @Test
-    public void givenObtenirRestaurant_whenCorrectRequest_thenResponseIsOk() {
+    public void givenGetRestaurant_whenCorrectRequest_thenResponseIsOk() {
         RestaurantDto restaurantDto = End2EndTestUtils.buildDefaultRestaurantDto();
 
         Response response = target("/restaurants").queryParam("id", restaurantDto.id).request().header("Owner", "1").get();
@@ -74,7 +74,7 @@ public class RestaurantEnd2EndTest extends JerseyTest {
     }
 
     @Test
-    public void givenObtenirRestaurant_whenNullProprietaireId_thenResponseIsError() {
+    public void givenGetRestaurant_whenNullOwnerId_thenResponseIsError() {
         RestaurantDto restaurantDto = End2EndTestUtils.buildDefaultRestaurantDto();
 
         Response response = target("/restaurants").queryParam("id", restaurantDto.id).request().get();
@@ -83,7 +83,7 @@ public class RestaurantEnd2EndTest extends JerseyTest {
     }
 
     @Test
-    public void givenListerRestaurants_whenCorrectRequest_thenResponseIsOk() {
+    public void givenListRestaurants_whenCorrectRequest_thenResponseIsOk() {
 
         Response response = target("/restaurants").request().header("Owner", "1").get();
 
@@ -92,7 +92,7 @@ public class RestaurantEnd2EndTest extends JerseyTest {
     }
 
     @Test
-    public void givenListerRestaurants_whenNullProprietaireId_thenResponseIsError() {
+    public void givenListerRestaurants_whenNullOwnerId_thenResponseIsError() {
 
         Response response = target("/restaurants").request().header("Owner", "").get();
 

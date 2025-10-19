@@ -1,6 +1,5 @@
-package ca.ulaval.glo2003.entities.assemblers;
+package ca.ulaval.glo2003.entities.reservation;
 
-import ca.ulaval.glo2003.entities.ReservationTime;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 import ca.ulaval.glo2003.entities.exceptions.InvalideParameterException;
 import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
@@ -29,7 +28,7 @@ public class ReservationTimeFactory {
         LocalTime adjustedStartTime = adjustToNext15Minutes(requestedStartTime);
         LocalTime endTime = adjustedStartTime.plusMinutes(restaurant.getReservationDuration());
 
-        LocalTime closingTime = LocalTime.parse(restaurant.getHoraireFermeture());
+        LocalTime closingTime = LocalTime.parse(restaurant.getHoursClose());
         // Pour le moment on ne tient pas compte de la durée de reervation.
         if (adjustedStartTime.isAfter(closingTime)) {
             return null;

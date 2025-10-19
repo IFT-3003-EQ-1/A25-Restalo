@@ -4,10 +4,12 @@ package ca.ulaval.glo2003.entities.assemblers;
 import ca.ulaval.glo2003.domain.dtos.restaurant.ConfigReservationDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.OwnerDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
-import ca.ulaval.glo2003.entities.restaurant.Proprietaire;
+import ca.ulaval.glo2003.entities.restaurant.Owner;
+import ca.ulaval.glo2003.entities.restaurant.OwnerFactory;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 import ca.ulaval.glo2003.entities.exceptions.InvalideParameterException;
 import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
+import ca.ulaval.glo2003.entities.restaurant.RestaurantFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,15 +19,15 @@ public class RestaurantFactoryTest {
 
     private RestaurantDto restaurantDto;
 
-    private Proprietaire proprietaire;
+    private Owner proprietaire;
 
-    private ProprietaireFactory proprietaireFactory;
+    private OwnerFactory proprietaireFactory;
 
     private RestaurantFactory restaurantFactory;
 
     @BeforeEach
     public void setUp() {
-        proprietaireFactory = new ProprietaireFactory();
+        proprietaireFactory = new OwnerFactory();
         restaurantFactory = new RestaurantFactory();
 
         restaurantDto = new RestaurantDto();
@@ -49,11 +51,11 @@ public class RestaurantFactoryTest {
         );
 
         assertNotNull(restaurant);
-        assertEquals(restaurantDto.nom, restaurant.getNom());
-        assertEquals(restaurantDto.capacity, restaurant.getCapacite());
-        assertEquals(restaurantDto.hoursOpen, restaurant.getHoraireOuverture());
-        assertEquals(restaurantDto.hoursClose, restaurant.getHoraireFermeture());
-        assertEquals(restaurantDto.owner.id, restaurant.getProprietaire().getId());
+        assertEquals(restaurantDto.nom, restaurant.getName());
+        assertEquals(restaurantDto.capacity, restaurant.getCapacity());
+        assertEquals(restaurantDto.hoursOpen, restaurant.getHoursOpen());
+        assertEquals(restaurantDto.hoursClose, restaurant.getHoursClose());
+        assertEquals(restaurantDto.owner.id, restaurant.getOwner().getId());
         assertEquals(restaurantDto.configReservation.duration, restaurant.getConfigReservation().getDuration());
     }
 

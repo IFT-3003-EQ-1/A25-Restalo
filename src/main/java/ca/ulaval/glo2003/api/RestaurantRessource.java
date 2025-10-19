@@ -40,13 +40,13 @@ public class RestaurantRessource {
     }
 
     @POST
-    public Response creerRestaurant(@HeaderParam("Owner") String proprietaireId,
-                                    RestaurantDto entree,
-                                    @Context UriInfo infosUri) {
+    public Response createRestaurant(@HeaderParam("Owner") String ownerId,
+                                     RestaurantDto restaurantDto,
+                                     @Context UriInfo infosUri) {
 
-        OwnerDto proprietaireDto = new OwnerDto();
-        proprietaireDto.id = proprietaireId;
-        String restaurantId = restaurantService.createRestaurant(proprietaireDto, entree);
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.id = ownerId;
+        String restaurantId = restaurantService.createRestaurant(ownerDto, restaurantDto);
 
         URI location = infosUri.getBaseUriBuilder().path("restaurants").path(restaurantId).build();
         return Response.created(location).build();
@@ -55,24 +55,24 @@ public class RestaurantRessource {
 
     @GET
     @Path("/{id}")
-    public Response obtenirRestaurant(@HeaderParam("Owner") String proprietaireId,
-                                      @PathParam("id") String identifiant) {
+    public Response getRestaurant(@HeaderParam("Owner") String ownerId,
+                                  @PathParam("id") String restaurantId) {
 
 
-        RestaurantDto restaurantDto = restaurantService.getRestaurant(identifiant, proprietaireId);
+        RestaurantDto restaurantDto = restaurantService.getRestaurant(restaurantId, ownerId);
 
 
         return Response.ok(restaurantDtoAssembler.versJson(restaurantDto)).build();
     }
 
     @GET
-    public Response listerRestaurants(@HeaderParam("Owner") String proprietaireId) {
+    public Response listRestaurants(@HeaderParam("Owner") String ownerId) {
 
-        List<RestaurantDto> restaurantDtos = restaurantService.getRestaurants(proprietaireId);
+        List<RestaurantDto> restaurantDtos = restaurantService.getRestaurants(ownerId);
 
         List<Map<String, Object>> sortie = restaurantDtos
                 .stream()
-                .map(restaurantDtoAssembler::versJson) // masque proprietaireId
+                .map(restaurantDtoAssembler::versJson)
                 .toList();
 
         return Response.ok(sortie).build();

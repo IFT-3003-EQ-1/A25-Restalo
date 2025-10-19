@@ -1,4 +1,4 @@
-package ca.ulaval.glo2003.entities;
+package ca.ulaval.glo2003.entities.reservation;
 
 public class ReservationTime {
     private final String start;

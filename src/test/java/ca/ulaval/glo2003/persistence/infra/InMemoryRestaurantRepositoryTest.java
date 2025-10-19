@@ -1,9 +1,9 @@
 package ca.ulaval.glo2003.persistence.infra;
 
 import ca.ulaval.glo2003.entities.restaurant.ConfigReservation;
-import ca.ulaval.glo2003.entities.restaurant.Proprietaire;
+import ca.ulaval.glo2003.entities.restaurant.Owner;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
-import ca.ulaval.glo2003.entities.filtres.Filtre;
+import ca.ulaval.glo2003.entities.filters.Filter;
 import ca.ulaval.glo2003.infra.persistence.InMemoryRestaurantRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,7 +54,7 @@ public class InMemoryRestaurantRepositoryTest {
 
     @Test
     public void givenListParProprietaire_whenParametersAreValid_thenListOfRestaurantsIsReturned() {
-        String proprietaireId = InMemoryRestaurantRepositoryTestUtils.createRestaurant(RESTAURANT_ID).getProprietaire().getId();
+        String proprietaireId = InMemoryRestaurantRepositoryTestUtils.createRestaurant(RESTAURANT_ID).getOwner().getId();
         repository.save(InMemoryRestaurantRepositoryTestUtils.createRestaurant(RESTAURANT_ID));
         repository.save(InMemoryRestaurantRepositoryTestUtils.createRestaurant("2"));
 
@@ -83,7 +83,7 @@ public class InMemoryRestaurantRepositoryTest {
         repository.save(InMemoryRestaurantRepositoryTestUtils.createRestaurant("2"));
         Restaurant restaurantWithDifferentName = new Restaurant(
                 "3",
-                new Proprietaire("1"),
+                new Owner("1"),
                 "Dejeuner",
                 2,
                 "6:00:00",
@@ -91,8 +91,8 @@ public class InMemoryRestaurantRepositoryTest {
                 new ConfigReservation(60)
         );
         repository.save(restaurantWithDifferentName);
-        List<Filtre<Restaurant>> filtres = new ArrayList<>();
-        filtres.add(r -> r.getNom().equals("Pizz"));
+        List<Filter<Restaurant>> filtres = new ArrayList<>();
+        filtres.add(r -> r.getName().equals("Pizz"));
 
         assertEquals(2, repository.searchRestaurants(filtres).size());
     }

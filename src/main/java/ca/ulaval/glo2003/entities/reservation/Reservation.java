@@ -1,5 +1,6 @@
-package ca.ulaval.glo2003.entities;
+package ca.ulaval.glo2003.entities.reservation;
 
+import ca.ulaval.glo2003.entities.Customer;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 
 public class Reservation {

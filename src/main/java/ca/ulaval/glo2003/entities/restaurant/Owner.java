@@ -1,13 +1,13 @@
 package ca.ulaval.glo2003.entities.restaurant;
 
-public class Proprietaire {
+public class Owner {
     private final String id;
 
     public String getId() {
         return id;
     }
 
-    public Proprietaire(String id) {
+    public Owner(String id) {
         this.id = id;
     }
 }
