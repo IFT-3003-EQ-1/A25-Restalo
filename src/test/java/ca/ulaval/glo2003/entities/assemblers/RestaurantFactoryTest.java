@@ -1,10 +1,15 @@
 package ca.ulaval.glo2003.entities.assemblers;
 
 
-import ca.ulaval.glo2003.entities.Proprietaire;
-import ca.ulaval.glo2003.entities.Restaurant;
-import ca.ulaval.glo2003.entities.exceptions.ParametreInvalideException;
-import ca.ulaval.glo2003.entities.exceptions.ParametreManquantException;
+import ca.ulaval.glo2003.domain.dtos.restaurant.ConfigReservationDto;
+import ca.ulaval.glo2003.domain.dtos.restaurant.OwnerDto;
+import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
+import ca.ulaval.glo2003.entities.restaurant.Owner;
+import ca.ulaval.glo2003.entities.restaurant.OwnerFactory;
+import ca.ulaval.glo2003.entities.restaurant.Restaurant;
+import ca.ulaval.glo2003.entities.exceptions.InvalideParameterException;
+import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
+import ca.ulaval.glo2003.entities.restaurant.RestaurantFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,71 +17,82 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class RestaurantFactoryTest {
 
-    private Restaurant restaurant;
+    private RestaurantDto restaurantDto;
 
-    private Proprietaire proprietaire;
+    private Owner proprietaire;
+
+    private OwnerFactory proprietaireFactory;
 
     private RestaurantFactory restaurantFactory;
 
     @BeforeEach
     public void setUp() {
-        proprietaire = new Proprietaire("1");
-        restaurant = new Restaurant(
-                "1",
-                proprietaire,
-                "Pizz",
-                2,
-                "10:00:00",
-                "19:00:00"
-        );
+        proprietaireFactory = new OwnerFactory();
         restaurantFactory = new RestaurantFactory();
+
+        restaurantDto = new RestaurantDto();
+        restaurantDto.owner = new OwnerDto();
+        restaurantDto.configReservation = new ConfigReservationDto();
+        restaurantDto.name = "Pizz";
+        restaurantDto.capacity = 2;
+        restaurantDto.hoursOpen = "10:00:00";
+        restaurantDto.hoursClose = "19:00:00";
+        restaurantDto.configReservation.duration = 90;
+        restaurantDto.owner.id = "1";
+
+        proprietaire = proprietaireFactory.createProprietaire("1");
+
     }
 
     @Test
     public void givenCreateRestaurant_whenParametersValide_thenRestaurantIsReturned() {
         Restaurant restaurant = restaurantFactory.createRestaurant(
-            proprietaire,
-                "Pizz",
-                2,
-                "10:00:00",
-                "19:00:00"
+            proprietaire, restaurantDto
         );
 
         assertNotNull(restaurant);
+        assertEquals(restaurantDto.name, restaurant.getName());
+        assertEquals(restaurantDto.capacity, restaurant.getCapacity());
+        assertEquals(restaurantDto.hoursOpen, restaurant.getHoursOpen());
+        assertEquals(restaurantDto.hoursClose, restaurant.getHoursClose());
+        assertEquals(restaurantDto.owner.id, restaurant.getOwner().getId());
+        assertEquals(restaurantDto.configReservation.duration, restaurant.getConfigReservation().getDuration());
     }
 
     @Test
     public void givenCreateRestaurant_whenNomNull_thenParametreManquantExceptionIsThrown() {
-        assertThrows(ParametreManquantException.class, () -> restaurantFactory.createRestaurant(
+        restaurantDto.name = null;
+
+        assertThrows(MissingParameterException.class, () -> restaurantFactory.createRestaurant(
                 proprietaire,
-                null,
-                2,
-                "10:00:00",
-                "19:00:00"
-        ));
+                restaurantDto));
     }
 
     @Test
     public void givenCreateRestaurant_whenCapaciteIsZero_thenInvalidIsThrown() {
-        assertThrows(ParametreInvalideException.class, () -> restaurantFactory.createRestaurant(
+        restaurantDto.capacity = 0;
+        assertThrows(InvalideParameterException.class, () -> restaurantFactory.createRestaurant(
                 proprietaire,
-                "Pizz",
-                0,
-                "10:00:00",
-                "19:00:00"
+                restaurantDto
         ));
     }
 
     @Test
     public void givenCreateRestaurant_whenHoraireOuvertureIsBiggerThanHoraireFermeture_thenParameterInvalidIsThrown() {
-        assertThrows(ParametreInvalideException.class, () -> restaurantFactory.createRestaurant(
+        restaurantDto.hoursOpen = "20:00:00";
+        restaurantDto.hoursClose = "19:00:00";
+        assertThrows(InvalideParameterException.class, () -> restaurantFactory.createRestaurant(
                 proprietaire,
-                "Pizz",
-                0,
-                "19:00:00",
-                "10:00:00"
+                restaurantDto
         ));
 
     }
 
+    @Test
+    public void givenCreateRestaurant_whenConfigReservationIsNull_thenDefaultConfigurationIsUsed() {
+        restaurantDto.configReservation = null;
+        Restaurant restaurant = restaurantFactory.createRestaurant(proprietaire, restaurantDto);
+
+        assertEquals(RestaurantFactory.DEFAULT_RESERVATION_DURATION, restaurant.getConfigReservation().getDuration());
+    }
 }

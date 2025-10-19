@@ -1,10 +1,10 @@
-package ca.ulaval.glo2003.domain.dtos;
+package ca.ulaval.glo2003.entities.reservation;
 
-public class ReservationTimeDto {
-    private String start; 
-    private String end; 
+public class ReservationTime {
+    private final String start;
+    private final String end;
 
-    public ReservationTimeDto(String start, String end) {
+    public ReservationTime(String start, String end) {
         this.start = start;
         this.end = end;
     }

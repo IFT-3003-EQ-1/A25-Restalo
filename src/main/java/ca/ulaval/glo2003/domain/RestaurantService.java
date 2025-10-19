@@ -1,32 +1,34 @@
 package ca.ulaval.glo2003.domain;
 
-import ca.ulaval.glo2003.domain.dtos.*;
-import ca.ulaval.glo2003.entities.Proprietaire;
-import ca.ulaval.glo2003.entities.Reservation;
-import ca.ulaval.glo2003.entities.Restaurant;
+import ca.ulaval.glo2003.domain.dtos.restaurant.OwnerDto;
+import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
+import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
+import ca.ulaval.glo2003.entities.restaurant.Owner;
+import ca.ulaval.glo2003.entities.restaurant.OwnerFactory;
+import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 import ca.ulaval.glo2003.entities.assemblers.*;
-import ca.ulaval.glo2003.entities.exceptions.AccessInterditException;
+import ca.ulaval.glo2003.entities.exceptions.ForbiddenAccessException;
 import ca.ulaval.glo2003.entities.exceptions.NotFoundException;
-import ca.ulaval.glo2003.entities.filtres.Filtre;
-import ca.ulaval.glo2003.entities.filtres.FiltreRestaurantFactory;
+import ca.ulaval.glo2003.entities.filters.Filter;
+import ca.ulaval.glo2003.entities.filters.FilterRestaurantFactory;
+import ca.ulaval.glo2003.entities.restaurant.RestaurantFactory;
 import ca.ulaval.glo2003.infra.persistence.RestaurantRepository;
 
 import java.util.List;
-import java.util.UUID;
 
 public class RestaurantService {
 
     private final RestaurantFactory restaurantFactory;
     private final RestaurantRepository restaurantRepository;
-    private final ProprietaireFactory proprietaireFactory;
+    private final OwnerFactory proprietaireFactory;
     private final RestaurantAssembler restaurantAssembler;
-    private final FiltreRestaurantFactory filtreRestaurantFactory;
+    private final FilterRestaurantFactory filtreRestaurantFactory;
 
     public RestaurantService(
             RestaurantFactory restaurantFactory,
             RestaurantRepository restaurantRepository,
-            ProprietaireFactory proprietaireFactory,
-            RestaurantAssembler restaurantAssembler, FiltreRestaurantFactory filtreRestaurantFactory) {
+            OwnerFactory proprietaireFactory,
+            RestaurantAssembler restaurantAssembler, FilterRestaurantFactory filtreRestaurantFactory) {
         this.restaurantFactory = restaurantFactory;
         this.restaurantRepository = restaurantRepository;
         this.proprietaireFactory = proprietaireFactory;
@@ -34,14 +36,11 @@ public class RestaurantService {
         this.filtreRestaurantFactory = filtreRestaurantFactory;
     }
 
-    public String createRestaurant(ProprietaireDto proprietaireDto, RestaurantDto restaurantDto) {
-        Proprietaire proprietaire = proprietaireFactory.createProprietaire(proprietaireDto.id);
+    public String createRestaurant(OwnerDto proprietaireDto, RestaurantDto restaurantDto) {
+        Owner proprietaire = proprietaireFactory.createProprietaire(proprietaireDto.id);
         Restaurant restaurant = restaurantFactory.createRestaurant(
                 proprietaire,
-                restaurantDto.nom,
-                restaurantDto.capacite,
-                restaurantDto.horaireOuverture,
-                restaurantDto.horaireFermeture
+                restaurantDto
         );
         restaurantRepository.save(restaurant);
         return restaurant.getId();
@@ -49,17 +48,25 @@ public class RestaurantService {
 
     public RestaurantDto getRestaurant(String idRestaurant, String proprietaireId) {
 
+        if (proprietaireId == null || proprietaireId.isBlank()) {
+            throw new MissingParameterException("Owner");
+        }
+
         Restaurant restaurant = restaurantRepository.get(idRestaurant).orElseThrow(
                 () -> new NotFoundException("")
         );
 
-        if (!restaurant.getProprietaire().getId().equals(proprietaireId)) {
-            throw new AccessInterditException("");
+        if (!restaurant.getOwner().getId().equals(proprietaireId)) {
+            throw new ForbiddenAccessException("");
         }
         return restaurantAssembler.toDto(restaurant);
     }
 
     public List<RestaurantDto> getRestaurants(String proprietaireId) {
+
+        if (proprietaireId == null || proprietaireId.isBlank()) {
+            throw new MissingParameterException("Owner");
+        }
 
         return restaurantRepository
                 .listParProprietaire(proprietaireId)
@@ -70,7 +77,7 @@ public class RestaurantService {
 
     public List<RestaurantDto> searchRestaurants(RestaurantDto searchValues) {
 
-        List<Filtre<Restaurant>> filtres = filtreRestaurantFactory.createFiltres(searchValues.nom, searchValues.horaireOuverture, searchValues.horaireFermeture);
+        List<Filter<Restaurant>> filtres = filtreRestaurantFactory.createFiltres(searchValues.name, searchValues.hoursOpen, searchValues.hoursClose);
         if (filtres.isEmpty()) {
             return restaurantRepository
                     .getAll()

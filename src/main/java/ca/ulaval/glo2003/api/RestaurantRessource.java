@@ -3,10 +3,9 @@ package ca.ulaval.glo2003.api;
 import ca.ulaval.glo2003.api.assemblers.RestaurantDtoAssembler;
 import ca.ulaval.glo2003.domain.ReservationService;
 import ca.ulaval.glo2003.domain.RestaurantService;
-import ca.ulaval.glo2003.domain.dtos.CreateReservationDto;
-import ca.ulaval.glo2003.domain.dtos.ProprietaireDto;
-import ca.ulaval.glo2003.domain.dtos.RestaurantDto;
-import ca.ulaval.glo2003.entities.exceptions.ParametreManquantException;
+import ca.ulaval.glo2003.domain.dtos.ReservationDto;
+import ca.ulaval.glo2003.domain.dtos.restaurant.OwnerDto;
+import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
@@ -41,18 +40,13 @@ public class RestaurantRessource {
     }
 
     @POST
-    public Response creerRestaurant(@HeaderParam("Owner") String proprietaireId,
-                                    RestaurantDto entree,
-                                    @Context UriInfo infosUri) {
+    public Response createRestaurant(@HeaderParam("Owner") String ownerId,
+                                     RestaurantDto restaurantDto,
+                                     @Context UriInfo infosUri) {
 
-        if (entree == null) {
-            throw new ParametreManquantException("entree");
-        }
-
-
-        ProprietaireDto proprietaireDto = new ProprietaireDto();
-        proprietaireDto.id = proprietaireId;
-        String restaurantId = restaurantService.createRestaurant(proprietaireDto, entree);
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.id = ownerId;
+        String restaurantId = restaurantService.createRestaurant(ownerDto, restaurantDto);
 
         URI location = infosUri.getBaseUriBuilder().path("restaurants").path(restaurantId).build();
         return Response.created(location).build();
@@ -61,28 +55,24 @@ public class RestaurantRessource {
 
     @GET
     @Path("/{id}")
-    public Response obtenirRestaurant(@HeaderParam("Owner") String proprietaireId,
-                                      @PathParam("id") String identifiant) {
-        if (proprietaireId == null || proprietaireId.isBlank()) {
-            throw new  ParametreManquantException("Owner");
-        }
+    public Response getRestaurant(@HeaderParam("Owner") String ownerId,
+                                  @PathParam("id") String restaurantId) {
 
-        RestaurantDto restaurantDto = restaurantService.getRestaurant(identifiant, proprietaireId);
+
+        RestaurantDto restaurantDto = restaurantService.getRestaurant(restaurantId, ownerId);
 
 
         return Response.ok(restaurantDtoAssembler.versJson(restaurantDto)).build();
     }
 
     @GET
-    public Response listerRestaurants(@HeaderParam("Owner") String proprietaireId) {
-        if (proprietaireId == null || proprietaireId.isBlank()) {
-            throw new  ParametreManquantException("Owner");
-        }
-        List<RestaurantDto> restaurantDtos = restaurantService.getRestaurants(proprietaireId);
+    public Response listRestaurants(@HeaderParam("Owner") String ownerId) {
+
+        List<RestaurantDto> restaurantDtos = restaurantService.getRestaurants(ownerId);
 
         List<Map<String, Object>> sortie = restaurantDtos
                 .stream()
-                .map(restaurantDtoAssembler::versJson) // masque proprietaireId
+                .map(restaurantDtoAssembler::versJson)
                 .toList();
 
         return Response.ok(sortie).build();
@@ -91,7 +81,7 @@ public class RestaurantRessource {
     @POST
     @Path("/{id}/reservations")
     public Response createReservation(@PathParam("id") String restaurantId,
-                                      CreateReservationDto createReservation,
+                                      ReservationDto createReservation,
                                       @Context UriInfo infosUri) {
         String reservationId = reservationService.addReservation(restaurantId, createReservation);
         URI location = infosUri.getBaseUriBuilder().path("reservations").path(reservationId).build();

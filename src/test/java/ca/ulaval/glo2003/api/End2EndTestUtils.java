@@ -1,8 +1,9 @@
 package ca.ulaval.glo2003.api;
 
 import ca.ulaval.glo2003.api.assemblers.RestaurantDtoAssembler;
-import ca.ulaval.glo2003.domain.dtos.ProprietaireDto;
-import ca.ulaval.glo2003.domain.dtos.RestaurantDto;
+import ca.ulaval.glo2003.domain.dtos.restaurant.ConfigReservationDto;
+import ca.ulaval.glo2003.domain.dtos.restaurant.OwnerDto;
+import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.Response;
@@ -17,16 +18,17 @@ public class End2EndTestUtils {
 
 
     public static RestaurantDto buildDefaultRestaurantDto() {
-        ProprietaireDto proprietaireDto = new ProprietaireDto();
-        proprietaireDto.nom = "Bob";
-        proprietaireDto.id = "1";
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.id = "1";
 
         RestaurantDto  restaurantDto = new RestaurantDto();
-        restaurantDto.capacite = 2;
-        restaurantDto.horaireOuverture = "11:00:00";
-        restaurantDto.horaireFermeture = "19:00:00";
-        restaurantDto.nom = "Pizz";
-        restaurantDto.proprietaire = proprietaireDto;
+        restaurantDto.capacity = 2;
+        restaurantDto.hoursOpen = "11:00:00";
+        restaurantDto.hoursClose = "19:00:00";
+        restaurantDto.name = "Pizz";
+        restaurantDto.owner = ownerDto;
+        restaurantDto.configReservation = new ConfigReservationDto();
+        restaurantDto.configReservation.duration = 60;
         return restaurantDto;
     }
 

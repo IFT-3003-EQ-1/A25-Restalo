@@ -1,9 +1,9 @@
 package ca.ulaval.glo2003.domain;
 
-import ca.ulaval.glo2003.domain.dtos.CreateReservationDto;
-import ca.ulaval.glo2003.entities.Reservation;
-import ca.ulaval.glo2003.entities.Restaurant;
-import ca.ulaval.glo2003.entities.assemblers.ReservationFactory;
+import ca.ulaval.glo2003.domain.dtos.ReservationDto;
+import ca.ulaval.glo2003.entities.reservation.Reservation;
+import ca.ulaval.glo2003.entities.restaurant.Restaurant;
+import ca.ulaval.glo2003.entities.reservation.ReservationFactory;
 import ca.ulaval.glo2003.entities.exceptions.NotFoundException;
 import ca.ulaval.glo2003.infra.persistence.ReservationRepository;
 import ca.ulaval.glo2003.infra.persistence.RestaurantRepository;
@@ -24,7 +24,7 @@ public class ReservationService {
         this.reservationRepository = reservationRepository;
     }
 
-    public String addReservation(String restaurantId, CreateReservationDto createReservationDto) {
+    public String addReservation(String restaurantId, ReservationDto createReservationDto) {
         Restaurant restaurant = restaurantRepository.get(restaurantId).orElseThrow(
                 () -> new NotFoundException("Restaurant not found")
         );

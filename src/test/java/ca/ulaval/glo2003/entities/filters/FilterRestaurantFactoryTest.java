@@ -1,17 +1,17 @@
-package ca.ulaval.glo2003.entities.filtres;
+package ca.ulaval.glo2003.entities.filters;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class FiltreRestaurantFactoryTest {
+public class FilterRestaurantFactoryTest {
 
-    private FiltreRestaurantFactory factory;
+    private FilterRestaurantFactory factory;
 
     @BeforeEach
     public void setUp() {
-        factory = new FiltreRestaurantFactory();
+        factory = new FilterRestaurantFactory();
     }
 
     @Test

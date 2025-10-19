@@ -1,27 +1,26 @@
-package ca.ulaval.glo2003.entities.assemblers;
+package ca.ulaval.glo2003.entities.reservation;
 
-import ca.ulaval.glo2003.domain.dtos.ReservationTimeDto;
-import ca.ulaval.glo2003.entities.Restaurant;
-import ca.ulaval.glo2003.entities.exceptions.ParametreInvalideException;
-import ca.ulaval.glo2003.entities.exceptions.ParametreManquantException;
+import ca.ulaval.glo2003.entities.restaurant.Restaurant;
+import ca.ulaval.glo2003.entities.exceptions.InvalideParameterException;
+import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
 import com.google.common.base.Strings;
 
 import java.time.LocalTime;
 
 public class ReservationTimeFactory {
-    public  ReservationTimeDto create(String startTime, Restaurant restaurant) {
+    public ReservationTime create(String startTime, Restaurant restaurant) {
         if(Strings.isNullOrEmpty(startTime)) {
-            throw new ParametreManquantException("Reservation Start time");
+            throw new MissingParameterException("Reservation Start time");
         }
 
-        ReservationTimeDto time = adjustAndValidateReservationTime(startTime,restaurant);
+        ReservationTime time = adjustAndValidateReservationTime(startTime,restaurant);
         if(time == null) {
-            throw new ParametreInvalideException("Reservation Start time is too late");
+            throw new InvalideParameterException("Reservation Start time is too late");
         }
         return time;
     }
 
-    private ReservationTimeDto adjustAndValidateReservationTime(
+    private ReservationTime adjustAndValidateReservationTime(
             String startTime,
             Restaurant restaurant
     ) {
@@ -29,12 +28,12 @@ public class ReservationTimeFactory {
         LocalTime adjustedStartTime = adjustToNext15Minutes(requestedStartTime);
         LocalTime endTime = adjustedStartTime.plusMinutes(restaurant.getReservationDuration());
 
-        LocalTime closingTime = LocalTime.parse(restaurant.getHoraireFermeture());
+        LocalTime closingTime = LocalTime.parse(restaurant.getHoursClose());
         // Pour le moment on ne tient pas compte de la durée de reervation.
         if (adjustedStartTime.isAfter(closingTime)) {
             return null;
         }
-        return new ReservationTimeDto(adjustedStartTime.toString(), endTime.toString());
+        return new ReservationTime(adjustedStartTime.toString(), endTime.toString());
     }
 
     private static LocalTime adjustToNext15Minutes(LocalTime time) {
