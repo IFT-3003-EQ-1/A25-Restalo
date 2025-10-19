@@ -9,15 +9,13 @@ public class RestaurantDtoAssembler {
     public Map<String, Object> versJson(RestaurantDto restaurantDto) {
         return Map.of(
                 "id", Objects.toString(restaurantDto.id, ""),
-                "name", restaurantDto.nom,
-                "capacity", restaurantDto.capacity,
-                "hours", Map.of(
-                        "open", restaurantDto.hoursOpen,
-                        "close", restaurantDto.hoursClose
-                        ),
                 "owner", Map.of(
                         "id", restaurantDto.owner.id
-                ),
+                        ),
+                "name", restaurantDto.name,
+                "capacity", restaurantDto.capacity,
+                "hoursOpen", restaurantDto.hoursOpen,
+                "hoursClose", restaurantDto.hoursClose,
                 "reservation", Map.of(
                         "duration", restaurantDto.configReservation.duration
                 )

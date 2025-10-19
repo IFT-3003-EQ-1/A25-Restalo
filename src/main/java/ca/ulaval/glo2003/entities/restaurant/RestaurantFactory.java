@@ -18,7 +18,7 @@ public class RestaurantFactory {
     }
 
     public Restaurant createRestaurant(Owner proprietaire, RestaurantDto restaurantDto) {
-        if (restaurantDto.nom == null) {
+        if (restaurantDto.name == null) {
             throw new MissingParameterException("nom");
         }
         if (restaurantDto.hoursOpen == null) {
@@ -28,7 +28,7 @@ public class RestaurantFactory {
             throw new MissingParameterException("horaireFermeture");
         }
 
-        if (restaurantDto.nom.isBlank()) {
+        if (restaurantDto.name.isBlank()) {
             throw new InvalideParameterException("Le nom ne peut pas être vide");
         }
 
@@ -67,7 +67,7 @@ public class RestaurantFactory {
         return new Restaurant(
                 identifiant,
                 proprietaire,
-                restaurantDto.nom,
+                restaurantDto.name,
                 restaurantDto.capacity,
                 restaurantDto.hoursOpen,
                 restaurantDto.hoursClose,

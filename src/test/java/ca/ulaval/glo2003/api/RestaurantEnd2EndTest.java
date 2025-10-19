@@ -92,12 +92,11 @@ public class RestaurantEnd2EndTest extends JerseyTest {
     }
 
     @Test
-    public void givenListerRestaurants_whenNullOwnerId_thenResponseIsError() {
+    public void givenListRestaurants_whenNullOwnerId_thenResponseIsError() {
 
         Response response = target("/restaurants").request().header("Owner", "").get();
 
         assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
-
     }
 
 

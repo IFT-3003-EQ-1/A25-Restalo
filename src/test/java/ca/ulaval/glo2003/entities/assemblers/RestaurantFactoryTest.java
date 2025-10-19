@@ -33,7 +33,7 @@ public class RestaurantFactoryTest {
         restaurantDto = new RestaurantDto();
         restaurantDto.owner = new OwnerDto();
         restaurantDto.configReservation = new ConfigReservationDto();
-        restaurantDto.nom = "Pizz";
+        restaurantDto.name = "Pizz";
         restaurantDto.capacity = 2;
         restaurantDto.hoursOpen = "10:00:00";
         restaurantDto.hoursClose = "19:00:00";
@@ -51,7 +51,7 @@ public class RestaurantFactoryTest {
         );
 
         assertNotNull(restaurant);
-        assertEquals(restaurantDto.nom, restaurant.getName());
+        assertEquals(restaurantDto.name, restaurant.getName());
         assertEquals(restaurantDto.capacity, restaurant.getCapacity());
         assertEquals(restaurantDto.hoursOpen, restaurant.getHoursOpen());
         assertEquals(restaurantDto.hoursClose, restaurant.getHoursClose());
@@ -61,7 +61,7 @@ public class RestaurantFactoryTest {
 
     @Test
     public void givenCreateRestaurant_whenNomNull_thenParametreManquantExceptionIsThrown() {
-        restaurantDto.nom = null;
+        restaurantDto.name = null;
 
         assertThrows(MissingParameterException.class, () -> restaurantFactory.createRestaurant(
                 proprietaire,
@@ -70,6 +70,7 @@ public class RestaurantFactoryTest {
 
     @Test
     public void givenCreateRestaurant_whenCapaciteIsZero_thenInvalidIsThrown() {
+        restaurantDto.capacity = 0;
         assertThrows(InvalideParameterException.class, () -> restaurantFactory.createRestaurant(
                 proprietaire,
                 restaurantDto
@@ -78,6 +79,8 @@ public class RestaurantFactoryTest {
 
     @Test
     public void givenCreateRestaurant_whenHoraireOuvertureIsBiggerThanHoraireFermeture_thenParameterInvalidIsThrown() {
+        restaurantDto.hoursOpen = "20:00:00";
+        restaurantDto.hoursClose = "19:00:00";
         assertThrows(InvalideParameterException.class, () -> restaurantFactory.createRestaurant(
                 proprietaire,
                 restaurantDto

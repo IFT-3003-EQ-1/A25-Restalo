@@ -51,7 +51,7 @@ public class AppContext extends ResourceConfig {
                 reservationService
         );
 
-        final SearchRessource rechercheRessource = new SearchRessource(
+        final SearchRessource searchRessource = new SearchRessource(
                 restaurantService,
                 restaurantDtoAssembler
         );
@@ -59,7 +59,7 @@ public class AppContext extends ResourceConfig {
         final ReservationResource reservationResource = new ReservationResource(reservationService);
 
         return new ResourceConfig()
-                .register(rechercheRessource)
+                .register(searchRessource)
                 .register(restaurantRessource)
                 .register(reservationResource)
                 .register(ForbiddenAccessExceptionMapper.class)

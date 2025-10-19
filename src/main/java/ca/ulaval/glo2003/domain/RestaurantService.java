@@ -64,6 +64,10 @@ public class RestaurantService {
 
     public List<RestaurantDto> getRestaurants(String proprietaireId) {
 
+        if (proprietaireId == null || proprietaireId.isBlank()) {
+            throw new MissingParameterException("Owner");
+        }
+
         return restaurantRepository
                 .listParProprietaire(proprietaireId)
                 .stream()
@@ -73,7 +77,7 @@ public class RestaurantService {
 
     public List<RestaurantDto> searchRestaurants(RestaurantDto searchValues) {
 
-        List<Filter<Restaurant>> filtres = filtreRestaurantFactory.createFiltres(searchValues.nom, searchValues.hoursOpen, searchValues.hoursClose);
+        List<Filter<Restaurant>> filtres = filtreRestaurantFactory.createFiltres(searchValues.name, searchValues.hoursOpen, searchValues.hoursClose);
         if (filtres.isEmpty()) {
             return restaurantRepository
                     .getAll()

@@ -17,13 +17,13 @@ public class OwnerDto {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        OwnerDto that = (OwnerDto) o;
-        return Objects.equals(id, that.id);
+        OwnerDto ownerDto = (OwnerDto) o;
+        return Objects.equals(id, ownerDto.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hashCode(id);
     }
 
     @Override
