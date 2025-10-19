@@ -1,6 +1,7 @@
 package ca.ulaval.glo2003.api;
 
 import ca.ulaval.glo2003.domain.ReservationService;
+import ca.ulaval.glo2003.domain.dtos.ReservationDto;
 import ca.ulaval.glo2003.entities.Reservation;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -18,7 +19,7 @@ public class ReservationResource {
     @GET
     @Path("/{id}")
     public Response getReservation(@PathParam("id") String reservationId) {
-        Reservation reservation =  reservationService.getReservation(reservationId);
+        ReservationDto reservation =  reservationService.getReservation(reservationId);
         return Response.ok(reservation).build();
     }
 }

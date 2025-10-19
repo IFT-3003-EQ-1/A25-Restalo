@@ -41,7 +41,8 @@ public class AppContext extends ResourceConfig {
                         new CustomerFactory(),
                         new ReservationTimeFactory()
                 ),
-                new InMemoryReservationRepository()
+                new InMemoryReservationRepository(),
+               new ReservationAssembler()
         );
 
         final RestaurantRessource restaurantRessource = new RestaurantRessource(

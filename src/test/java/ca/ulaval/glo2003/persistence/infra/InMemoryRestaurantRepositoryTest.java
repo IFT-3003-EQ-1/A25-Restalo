@@ -24,7 +24,6 @@ public class InMemoryRestaurantRepositoryTest {
     public void setUp() {
         database = new HashMap<>();
         repository = new InMemoryRestaurantRepository(database);
-
     }
 
     @Test

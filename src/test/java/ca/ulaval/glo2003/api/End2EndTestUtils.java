@@ -1,8 +1,7 @@
 package ca.ulaval.glo2003.api;
 
 import ca.ulaval.glo2003.api.assemblers.RestaurantDtoAssembler;
-import ca.ulaval.glo2003.domain.dtos.ProprietaireDto;
-import ca.ulaval.glo2003.domain.dtos.RestaurantDto;
+import ca.ulaval.glo2003.domain.dtos.*;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.Response;
@@ -25,9 +24,18 @@ public class End2EndTestUtils {
         restaurantDto.capacite = 2;
         restaurantDto.horaireOuverture = "11:00:00";
         restaurantDto.horaireFermeture = "19:00:00";
-        restaurantDto.nom = "Pizz";
         restaurantDto.proprietaire = proprietaireDto;
+        restaurantDto.nom = "Pizz";
         return restaurantDto;
+    }
+
+    public static CreateReservationDto buildReservationDto(){
+         CreateReservationDto createReservationDto = new CreateReservationDto();
+                              createReservationDto.setCustomer(new CustomerDto("testName","test@mail.com","5144151540"));
+                              createReservationDto.setDate("2025-10-18");
+                              createReservationDto.setGroupSize(2);
+                              createReservationDto.setStartTime("11:30:00");
+                              return createReservationDto;
     }
 
     public static void postRestaurant(WebTarget target, RestaurantDto restaurantDto) {
@@ -39,6 +47,5 @@ public class End2EndTestUtils {
         } catch (Exception e) {
             fail(e.getMessage());
         }
-
     }
 }
