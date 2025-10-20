@@ -1,7 +1,6 @@
 package ca.ulaval.glo2003.infra.persistence;
 
-import ca.ulaval.glo2003.entities.Reservation;
-import ca.ulaval.glo2003.entities.Restaurant;
+import ca.ulaval.glo2003.entities.reservation.Reservation;
 
 import java.util.*;
 

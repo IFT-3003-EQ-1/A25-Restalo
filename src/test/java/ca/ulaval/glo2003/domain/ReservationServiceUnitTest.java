@@ -1,11 +1,10 @@
 package ca.ulaval.glo2003.domain;
 
-import ca.ulaval.glo2003.domain.dtos.CreateReservationDto;
 import ca.ulaval.glo2003.domain.dtos.ReservationDto;
-import ca.ulaval.glo2003.entities.Reservation;
-import ca.ulaval.glo2003.entities.Restaurant;
+import ca.ulaval.glo2003.entities.reservation.Reservation;
+import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 import ca.ulaval.glo2003.entities.assemblers.ReservationAssembler;
-import ca.ulaval.glo2003.entities.assemblers.ReservationFactory;
+import ca.ulaval.glo2003.entities.reservation.ReservationFactory;
 import ca.ulaval.glo2003.infra.persistence.ReservationRepository;
 import ca.ulaval.glo2003.infra.persistence.RestaurantRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,7 +50,7 @@ public class ReservationServiceUnitTest {
     @Test
     public void addReservation_shouldCreateAndSaveReservation_whenRestaurantExists() {
         String restaurantId = "restaurant-123";
-        CreateReservationDto createDto = new CreateReservationDto();
+        ReservationDto createDto = new ReservationDto();
         
         Restaurant mockRestaurant = mock(Restaurant.class);
         Reservation mockReservation = mock(Reservation.class);
@@ -72,7 +71,7 @@ public class ReservationServiceUnitTest {
     @Test
     public void addReservation_shouldThrowNotFoundException_whenRestaurantDoesNotExist() {
         String restaurantId = "non-existent";
-        CreateReservationDto createDto = new CreateReservationDto();
+        ReservationDto createDto = new ReservationDto();
         
         when(restaurantRepository.get(restaurantId)).thenReturn(Optional.empty());
 

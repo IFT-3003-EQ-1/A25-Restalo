@@ -2,6 +2,11 @@ package ca.ulaval.glo2003.api;
 
 import ca.ulaval.glo2003.api.assemblers.RestaurantDtoAssembler;
 import ca.ulaval.glo2003.domain.dtos.*;
+import ca.ulaval.glo2003.domain.dtos.restaurant.ConfigReservationDto;
+import ca.ulaval.glo2003.domain.dtos.restaurant.HourDto;
+import ca.ulaval.glo2003.domain.dtos.restaurant.OwnerDto;
+import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
+import ca.ulaval.glo2003.entities.Customer;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.Response;
@@ -16,30 +21,33 @@ public class End2EndTestUtils {
 
 
     public static RestaurantDto buildDefaultRestaurantDto() {
-        ProprietaireDto proprietaireDto = new ProprietaireDto();
-        proprietaireDto.nom = "Bob";
-        proprietaireDto.id = "1";
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.id = "1";
 
         RestaurantDto  restaurantDto = new RestaurantDto();
-        restaurantDto.capacite = 2;
-        restaurantDto.horaireOuverture = "11:00:00";
-        restaurantDto.horaireFermeture = "19:00:00";
-        restaurantDto.proprietaire = proprietaireDto;
-        restaurantDto.nom = "Pizz";
+        restaurantDto.capacity = 2;
+        restaurantDto.hours= new HourDto("11:00:00","19:00:00");
+        restaurantDto.owner = ownerDto;
+        restaurantDto.name = "Pizz";
+        restaurantDto.hours.open = "11:00:00";
+        restaurantDto.hours.close = "19:00:00";
+        restaurantDto.name = "Pizz";
+        restaurantDto.configReservation = new ConfigReservationDto();
+        restaurantDto.configReservation.duration = 60;
         return restaurantDto;
     }
 
-    public static CreateReservationDto buildReservationDto(){
-         CreateReservationDto createReservationDto = new CreateReservationDto();
-                              createReservationDto.setCustomer(new CustomerDto("testName","test@mail.com","5144151540"));
-                              createReservationDto.setDate("2025-10-18");
-                              createReservationDto.setGroupSize(2);
-                              createReservationDto.setStartTime("11:30:00");
+    public static ReservationDto buildReservationDto(){
+         ReservationDto createReservationDto = new ReservationDto();
+                              createReservationDto.customer =(new Customer("testName","test@mail.com","5144151540"));
+                              createReservationDto.date= "2025-10-18";
+                              createReservationDto.groupSize = 2;
+                              createReservationDto.startTime="11:30:00";
                               return createReservationDto;
     }
 
     public static void postRestaurant(WebTarget target, RestaurantDto restaurantDto) {
-        Map<String, Object> json =  (new RestaurantDtoAssembler()).versJson(restaurantDto);
+        Map<String, Object> json =  (new RestaurantDtoAssembler()).toJson(restaurantDto);
 
         try (Response response = target.request().header("Owner", "1").post(Entity.json(json))) {
 

@@ -1,12 +1,16 @@
 package ca.ulaval.glo2003.entities.assemblers;
 
-import ca.ulaval.glo2003.domain.dtos.CreateReservationDto;
-import ca.ulaval.glo2003.domain.dtos.CustomerDto;
+import ca.ulaval.glo2003.domain.dtos.ReservationDto;
 import ca.ulaval.glo2003.domain.dtos.ReservationTimeDto;
-import ca.ulaval.glo2003.entities.Reservation;
-import ca.ulaval.glo2003.entities.Restaurant;
-import ca.ulaval.glo2003.entities.exceptions.ParametreInvalideException;
-import ca.ulaval.glo2003.entities.exceptions.ParametreManquantException;
+import ca.ulaval.glo2003.entities.Customer;
+import ca.ulaval.glo2003.entities.CustomerFactory;
+import ca.ulaval.glo2003.entities.reservation.Reservation;
+import ca.ulaval.glo2003.entities.reservation.ReservationFactory;
+import ca.ulaval.glo2003.entities.reservation.ReservationTime;
+import ca.ulaval.glo2003.entities.reservation.ReservationTimeFactory;
+import ca.ulaval.glo2003.entities.restaurant.Restaurant;
+import ca.ulaval.glo2003.entities.exceptions.InvalideParameterException;
+import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,42 +44,42 @@ class ReservationFactoryTest {
 
     @Test
     void createReservation_shouldCreateValidReservation_whenAllParametersAreValid() {
-        CreateReservationDto reservationDto = new CreateReservationDto();
-        reservationDto.setGroupSize(4);
-        reservationDto.setDate("2025-10-20");
-        reservationDto.setStartTime("18:00");
+        ReservationDto reservationDto = new ReservationDto();
+        reservationDto.groupSize = 4;
+        reservationDto.date = "2025-10-20";
+        reservationDto.startTime = "18:00";
         
-        CustomerDto mockCustomerDto = new CustomerDto();
-        mockCustomerDto.setName("John Doe");
+        Customer mockCustomer = new Customer();
+        mockCustomer.setName("John Doe");
         
-        ReservationTimeDto mockTimeDto = new ReservationTimeDto();
-        mockTimeDto.setStart("18:00:00");
+        ReservationTime mockTime = new ReservationTime("18:00:00","18:00:00");
+        //mockTimeDto.setStart("18:00:00");
         
-        when(customerFactory.create(reservationDto.getCustomer())).thenReturn(mockCustomerDto);
-        when(reservationTimeFactory.create(reservationDto.getStartTime(), restaurant)).thenReturn(mockTimeDto);
+        when(customerFactory.create(reservationDto.customer)).thenReturn(mockCustomer);
+        when(reservationTimeFactory.create(reservationDto.startTime, restaurant)).thenReturn(mockTime);
 
         Reservation result = reservationFactory.createReservation(reservationDto, restaurant);
 
         assertNotNull(result);
         assertNotNull(result.getNumber());
         assertFalse(result.getNumber().contains("-")); // UUID without dashes
-        assertEquals(mockTimeDto, result.getTime());
+        assertEquals(mockTime, result.getTime());
         assertEquals(restaurant, result.getRestaurant());
-        assertEquals(mockCustomerDto, result.getCustomer());
+        assertEquals(mockCustomer, result.getCustomer());
         assertEquals(4, result.getGroupSize());
         assertEquals("2025-10-20", result.getDate());
         
-        verify(customerFactory).create(reservationDto.getCustomer());
-        verify(reservationTimeFactory).create(reservationDto.getStartTime(), restaurant);
+        verify(customerFactory).create(reservationDto.customer);
+        verify(reservationTimeFactory).create(reservationDto.startTime, restaurant);
     }
 
     @Test
-    void createReservation_shouldThrowParametreInvalideException_whenGroupSizeIsZero() {
-        CreateReservationDto reservationDto = new CreateReservationDto();
-        reservationDto.setGroupSize(0);
-        reservationDto.setDate("2025-10-20");
+    void createReservation_shouldThrowInvalideParameterException_whenGroupSizeIsZero() {
+        ReservationDto reservationDto = new ReservationDto();
+        reservationDto.groupSize=0;
+        reservationDto.date = "2025-10-20";
 
-        ParametreInvalideException exception = assertThrows(ParametreInvalideException.class, () -> {
+        InvalideParameterException exception = assertThrows(InvalideParameterException.class, () -> {
             reservationFactory.createReservation(reservationDto, restaurant);
         });
         
@@ -85,12 +89,12 @@ class ReservationFactoryTest {
     }
 
     @Test
-    void createReservation_shouldThrowParametreInvalideException_whenGroupSizeIsNegative() {
-        CreateReservationDto reservationDto = new CreateReservationDto();
-        reservationDto.setGroupSize(-5);
-        reservationDto.setDate("2025-10-20");
+    void createReservation_shouldThrowInvalideParameterException_whenGroupSizeIsNegative() {
+        ReservationDto reservationDto = new ReservationDto();
+        reservationDto.groupSize=-5;
+        reservationDto.date="2025-10-20";
 
-        ParametreInvalideException exception = assertThrows(ParametreInvalideException.class, () -> {
+        InvalideParameterException exception = assertThrows(InvalideParameterException.class, () -> {
             reservationFactory.createReservation(reservationDto, restaurant);
         });
         
@@ -100,12 +104,12 @@ class ReservationFactoryTest {
     }
 
     @Test
-    void createReservation_shouldThrowParametreManquantException_whenDateIsNull() {
-        CreateReservationDto reservationDto = new CreateReservationDto();
-        reservationDto.setGroupSize(4);
-        reservationDto.setDate(null);
+    void createReservation_shouldThrowMissingParameterException_whenDateIsNull() {
+        ReservationDto reservationDto = new ReservationDto();
+        reservationDto.groupSize=4;
+        reservationDto.date =null;
 
-        ParametreManquantException exception = assertThrows(ParametreManquantException.class, () -> {
+        MissingParameterException exception = assertThrows(MissingParameterException.class, () -> {
             reservationFactory.createReservation(reservationDto, restaurant);
         });
         
@@ -115,12 +119,12 @@ class ReservationFactoryTest {
     }
 
     @Test
-    void createReservation_shouldThrowParametreManquantException_whenDateIsEmpty() {
-        CreateReservationDto reservationDto = new CreateReservationDto();
-        reservationDto.setGroupSize(4);
-        reservationDto.setDate("");
+    void createReservation_shouldThrowMissingParameterException_whenDateIsEmpty() {
+        ReservationDto reservationDto = new ReservationDto();
+        reservationDto.groupSize=4;
+        reservationDto.date="";
 
-        ParametreManquantException exception = assertThrows(ParametreManquantException.class, () -> {
+        MissingParameterException exception = assertThrows(MissingParameterException.class, () -> {
             reservationFactory.createReservation(reservationDto, restaurant);
         });
         
@@ -131,16 +135,16 @@ class ReservationFactoryTest {
 
     @Test
     void createReservation_shouldGenerateUniqueIds_forMultipleReservations() {
-        CreateReservationDto reservationDto = new CreateReservationDto();
-        reservationDto.setGroupSize(2);
-        reservationDto.setDate("2025-10-20");
-        reservationDto.setStartTime("18:00");
+        ReservationDto reservationDto = new ReservationDto();
+        reservationDto.groupSize=2;
+        reservationDto.date="2025-10-20";
+        reservationDto.startTime="18:00";
         
-        CustomerDto mockCustomerDto = new CustomerDto();
-        ReservationTimeDto mockTimeDto = new ReservationTimeDto();
+        Customer mockCustomer = new Customer();
+        ReservationTime mockTime = new ReservationTime("18:00","22:00");
         
-        when(customerFactory.create(any())).thenReturn(mockCustomerDto);
-        when(reservationTimeFactory.create(any(), any())).thenReturn(mockTimeDto);
+        when(customerFactory.create(any())).thenReturn(mockCustomer);
+        when(reservationTimeFactory.create(any(), any())).thenReturn(mockTime);
 
         Reservation reservation1 = reservationFactory.createReservation(reservationDto, restaurant);
         Reservation reservation2 = reservationFactory.createReservation(reservationDto, restaurant);
@@ -152,17 +156,17 @@ class ReservationFactoryTest {
 
     @Test
     void createReservation_shouldCallFactories_withCorrectParameters() {
-        CreateReservationDto reservationDto = new CreateReservationDto();
-        reservationDto.setGroupSize(3);
-        reservationDto.setDate("2025-10-20");
-        reservationDto.setStartTime("19:30");
+        ReservationDto reservationDto = new ReservationDto();
+        reservationDto.groupSize=3;
+        reservationDto.date="2025-10-20";
+        reservationDto.startTime="19:30";
         
-        CustomerDto customerDto = new CustomerDto();
+        Customer customerDto = new Customer();
         customerDto.setName("Jane Smith");
-        reservationDto.setCustomer(customerDto);
+        reservationDto.customer=customerDto;
         
-        CustomerDto mockCustomerDto = new CustomerDto();
-        ReservationTimeDto mockTimeDto = new ReservationTimeDto();
+        Customer mockCustomerDto = new Customer();
+        ReservationTime mockTimeDto = new ReservationTime("19:30","22:30:00");
         
         when(customerFactory.create(customerDto)).thenReturn(mockCustomerDto);
         when(reservationTimeFactory.create("19:30", restaurant)).thenReturn(mockTimeDto);

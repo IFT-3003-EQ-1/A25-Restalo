@@ -1,64 +1,33 @@
 package ca.ulaval.glo2003.domain.dtos;
 
-import ca.ulaval.glo2003.entities.Restaurant;
+import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
+import ca.ulaval.glo2003.entities.Customer;
 
 public class ReservationDto {
-    private String number;
-    private String  date;
-    private ReservationTimeDto time;
-    private int groupSize;
-    private CustomerDto customer;
-    private RestaurantDto restaurant;
+    public String number;
+    public String date;
+    public String startTime;
+    public int groupSize;
+    public Customer customer;
+    public RestaurantDto restaurant;
 
     public ReservationDto() {
     }
 
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
+    public ReservationDto(String date, String startTime, int groupSize, Customer customer) {
         this.date = date;
-    }
-
-
-    public int getGroupSize() {
-        return groupSize;
-    }
-
-    public void setGroupSize(int groupSize) {
+        this.startTime = startTime;
         this.groupSize = groupSize;
-    }
-
-    public CustomerDto getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(CustomerDto customer) {
         this.customer = customer;
     }
 
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    public ReservationTimeDto getTime() {
-        return time;
-    }
-
-    public void setTime(ReservationTimeDto time) {
-        this.time = time;
-    }
-
-    public RestaurantDto getRestaurant() {
-        return restaurant;
-    }
-
-    public void setRestaurant(RestaurantDto restaurant) {
-        this.restaurant = restaurant;
+    @Override
+    public String toString() {
+        return "CreateReservationDto{" +
+                "date='" + date + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", groupSize=" + groupSize +
+                ", customer=" + customer +
+                '}';
     }
 }

@@ -1,9 +1,9 @@
 package ca.ulaval.glo2003.entities.exceptions;
 
-public class ParametreManquantException extends RuntimeException {
+public class MissingParameterException extends RuntimeException {
     public String code;
 
-    public ParametreManquantException(String nomParam) {
+    public MissingParameterException(String nomParam) {
         super(nomParam + "  est requis");
         code = "MISSING_PARAMETER";
     }

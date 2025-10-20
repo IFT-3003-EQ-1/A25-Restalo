@@ -1,13 +1,12 @@
 package ca.ulaval.glo2003.api.assemblers;
 
-import ca.ulaval.glo2003.domain.dtos.ReservationDto;
-import ca.ulaval.glo2003.domain.dtos.RestaurantDto;
+import ca.ulaval.glo2003.entities.reservation.Reservation;
 
 import java.util.Map;
 import java.util.Objects;
 
 public class ReservationDtoAssembler {
-    public Map<String, Object> toJson(ReservationDto reservationDto) {
+    public Map<String, Object> toJson(Reservation reservationDto) {
         return Map.of(
                 "number", Objects.toString(reservationDto.getNumber(), ""),
                 "date", reservationDto.getDate(),

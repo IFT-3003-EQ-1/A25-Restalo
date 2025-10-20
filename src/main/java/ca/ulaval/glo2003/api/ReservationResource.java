@@ -2,7 +2,6 @@ package ca.ulaval.glo2003.api;
 
 import ca.ulaval.glo2003.domain.ReservationService;
 import ca.ulaval.glo2003.domain.dtos.ReservationDto;
-import ca.ulaval.glo2003.entities.Reservation;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;

@@ -1,19 +1,19 @@
 package ca.ulaval.glo2003.entities.assemblers;
 
-import ca.ulaval.glo2003.domain.dtos.ProprietaireDto;
 import ca.ulaval.glo2003.domain.dtos.ReservationDto;
-import ca.ulaval.glo2003.domain.dtos.RestaurantDto;
-import ca.ulaval.glo2003.entities.Reservation;
-import ca.ulaval.glo2003.entities.Restaurant;
+import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
+import ca.ulaval.glo2003.entities.reservation.Reservation;
+import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 
 public class ReservationAssembler {
     public ReservationDto toDto(Reservation reservation) {
         ReservationDto reservationDto = new ReservationDto();
-                       reservationDto.setNumber(reservation.getNumber());
-                       reservationDto.setDate(reservation.getDate());
-                       reservationDto.setCustomer(reservation.getCustomer());
-                       reservationDto.setRestaurant(new RestaurantAssembler().toDto(reservation.getRestaurant()));
-                       reservationDto.setTime(reservation.getTime());
+                       reservationDto.number = reservation.getNumber();
+                       reservationDto.date = reservation.getDate();
+                       reservationDto.customer = reservation.getCustomer();
+                       reservationDto.restaurant = new RestaurantAssembler().toPartialDto(reservation.getRestaurant());
+                       reservationDto.startTime= reservation.getTime().getStart();
                        return reservationDto;
     }
+
 }

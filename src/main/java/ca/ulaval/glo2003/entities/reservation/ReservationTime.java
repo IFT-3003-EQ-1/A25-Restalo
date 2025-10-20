@@ -1,15 +1,12 @@
-package ca.ulaval.glo2003.domain.dtos;
+package ca.ulaval.glo2003.entities.reservation;
 
-public class ReservationTimeDto {
-    private String start; 
-    private String end; 
+public class ReservationTime {
+    private final String start;
+    private final String end;
 
-    public ReservationTimeDto(String start, String end) {
+    public ReservationTime(String start, String end) {
         this.start = start;
         this.end = end;
-    }
-
-    public ReservationTimeDto() {
     }
 
     public String getStart() {
@@ -18,13 +15,6 @@ public class ReservationTimeDto {
 
     public String getEnd() {
         return end;
-    }
-
-    public void setStart(String start) {
-        this.start = start;
-    }
-    public void setEnd(String end) {
-        this.end = end;
     }
 
     @Override

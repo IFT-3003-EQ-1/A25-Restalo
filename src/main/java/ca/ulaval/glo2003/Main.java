@@ -1,13 +1,7 @@
 package ca.ulaval.glo2003;
 
-import ca.ulaval.glo2003.api.RestaurantRessource;
-import ca.ulaval.glo2003.api.response.exceptions.AccessInterditExceptionMapper;
-import ca.ulaval.glo2003.api.response.exceptions.NotFoundExceptionMapper;
-import ca.ulaval.glo2003.api.response.exceptions.ParametreInvalideExceptionMapper;
-import ca.ulaval.glo2003.api.response.exceptions.ParametreManquantExceptionMapper;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
-import org.glassfish.jersey.server.ResourceConfig;
 
 import java.net.URI;
 
@@ -26,9 +20,4 @@ public class Main {
         System.out.printf("Jersey app started with endpoints available at %s%n", BASE_URI);
     }
 
-    public static void stopServer() {
-        if (server != null) {
-            server.shutdownNow();
-        }
-    }
 }

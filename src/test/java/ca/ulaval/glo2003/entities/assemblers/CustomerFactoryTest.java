@@ -1,8 +1,9 @@
 package ca.ulaval.glo2003.entities.assemblers;
 
-import ca.ulaval.glo2003.domain.dtos.CustomerDto;
-import ca.ulaval.glo2003.entities.exceptions.ParametreInvalideException;
-import ca.ulaval.glo2003.entities.exceptions.ParametreManquantException;
+import ca.ulaval.glo2003.entities.Customer;
+import ca.ulaval.glo2003.entities.CustomerFactory;
+import ca.ulaval.glo2003.entities.exceptions.InvalideParameterException;
+import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,8 +23,8 @@ class CustomerFactoryTest {
 
     @Test
     void create_shouldReturnCustomer_whenAllFieldsAreValid() {
-       CustomerDto customer = createDummyCustomer();
-       CustomerDto result = customerFactory.create(customer);
+       Customer customer = createDummyCustomer();
+       Customer result = customerFactory.create(customer);
 
         assertNotNull(result);
         assertEquals("John Doe", result.getName());
@@ -34,7 +35,7 @@ class CustomerFactoryTest {
 
     @Test
     void create_shouldThrowParametreManquantException_whenCustomerIsNull() {
-        ParametreManquantException exception = assertThrows(ParametreManquantException.class, () -> {
+        MissingParameterException exception = assertThrows(MissingParameterException.class, () -> {
             customerFactory.create(null);
         });
 
@@ -43,10 +44,10 @@ class CustomerFactoryTest {
 
     @Test
     void create_shouldThrowParametreManquantException_whenNameIsNull() {
-        CustomerDto customer = createDummyCustomer();
+        Customer customer = createDummyCustomer();
                     customer.setName(null);
 
-        ParametreManquantException exception = assertThrows(ParametreManquantException.class, () -> {
+        MissingParameterException exception = assertThrows(MissingParameterException.class, () -> {
             customerFactory.create(customer);
         });
 
@@ -56,10 +57,10 @@ class CustomerFactoryTest {
     @Test
     void create_shouldThrowParametreManquantException_whenNameIsEmpty() {
 
-        CustomerDto customer = createDummyCustomer();
+        Customer customer = createDummyCustomer();
         customer.setName("");
 
-        ParametreManquantException exception = assertThrows(ParametreManquantException.class, () -> {
+        MissingParameterException exception = assertThrows(MissingParameterException.class, () -> {
             customerFactory.create(customer);
         });
 
@@ -68,10 +69,10 @@ class CustomerFactoryTest {
 
     @Test
     void create_shouldThrowParametreInvalideException_whenEmailIsNull() {
-        CustomerDto customer = createDummyCustomer();
+        Customer customer = createDummyCustomer();
         customer.setEmail(null);
 
-        ParametreInvalideException exception = assertThrows(ParametreInvalideException.class, () -> {
+        InvalideParameterException exception = assertThrows(InvalideParameterException.class, () -> {
             customerFactory.create(customer);
         });
 
@@ -80,10 +81,10 @@ class CustomerFactoryTest {
 
     @Test
     void create_shouldThrowParametreInvalideException_whenEmailIsEmpty() {
-        CustomerDto customer = createDummyCustomer();
+        Customer customer = createDummyCustomer();
         customer.setEmail("");
 
-        ParametreInvalideException exception = assertThrows(ParametreInvalideException.class, () -> {
+        InvalideParameterException exception = assertThrows(InvalideParameterException.class, () -> {
             customerFactory.create(customer);
         });
 
@@ -93,10 +94,10 @@ class CustomerFactoryTest {
     @Test
     void create_shouldThrowParametreInvalideException_whenEmailIsBlank() {
 
-        CustomerDto customer = createDummyCustomer();
+        Customer customer = createDummyCustomer();
         customer.setEmail(" ");
 
-        ParametreInvalideException exception = assertThrows(ParametreInvalideException.class, () -> {
+        InvalideParameterException exception = assertThrows(InvalideParameterException.class, () -> {
             customerFactory.create(customer);
         });
 
@@ -105,10 +106,10 @@ class CustomerFactoryTest {
 
     @Test
     void create_shouldThrowParametreInvalideException_whenEmailHasBadFormat() {
-        CustomerDto customer = createDummyCustomer();
+        Customer customer = createDummyCustomer();
         customer.setEmail("test.com");
 
-        ParametreInvalideException exception = assertThrows(ParametreInvalideException.class, () -> {
+        InvalideParameterException exception = assertThrows(InvalideParameterException.class, () -> {
             customerFactory.create(customer);
         });
 
@@ -117,11 +118,11 @@ class CustomerFactoryTest {
 
     @Test
     void create_shouldThrowParametreInvalideException_whenEmailHasMultipleAtSymbols() {
-        CustomerDto customer = new CustomerDto();
+        Customer customer = new Customer();
         customer.setName("Jane Doe");
         customer.setEmail("test@@example.com");
         customer.setPhoneNumber("5141234567");
-        ParametreInvalideException exception = assertThrows(ParametreInvalideException.class, () -> {
+        InvalideParameterException exception = assertThrows(InvalideParameterException.class, () -> {
             customerFactory.create(customer);
         });
 
@@ -130,9 +131,9 @@ class CustomerFactoryTest {
 
     @Test
     void create_shouldThrowParametreInvalideException_whenPhoneNumberIsNull() {
-        CustomerDto customer = createDummyCustomer();
+        Customer customer = createDummyCustomer();
         customer.setPhoneNumber(null);
-        ParametreInvalideException exception = assertThrows(ParametreInvalideException.class, () -> {
+        InvalideParameterException exception = assertThrows(InvalideParameterException.class, () -> {
             customerFactory.create(customer);
         });
         assertEquals("Phone number", exception.getMessage());
@@ -140,9 +141,9 @@ class CustomerFactoryTest {
 
     @Test
     void create_shouldThrowParametreInvalideException_whenPhoneNumberIsEmpty() {
-        CustomerDto customer = createDummyCustomer();
+        Customer customer = createDummyCustomer();
         customer.setPhoneNumber("");
-        ParametreInvalideException exception = assertThrows(ParametreInvalideException.class, () -> {
+        InvalideParameterException exception = assertThrows(InvalideParameterException.class, () -> {
             customerFactory.create(customer);
         });
 
@@ -151,10 +152,10 @@ class CustomerFactoryTest {
 
     @Test
     void create_shouldThrowParametreInvalideException_whenPhoneNumberIsTooShort() {
-        CustomerDto customer = createDummyCustomer();
+        Customer customer = createDummyCustomer();
         customer.setPhoneNumber("123456789"); // Moins de 10 caractères
 
-        ParametreInvalideException exception = assertThrows(ParametreInvalideException.class, () -> {
+        InvalideParameterException exception = assertThrows(InvalideParameterException.class, () -> {
             customerFactory.create(customer);
         });
 
@@ -164,10 +165,10 @@ class CustomerFactoryTest {
     @Test
     void create_shouldThrowParametreInvalideException_whenPhoneNumberIsTooLong() {
 
-        CustomerDto customer = createDummyCustomer();
+        Customer customer = createDummyCustomer();
         customer.setPhoneNumber("12345678901"); // 11 caractères
 
-        ParametreInvalideException exception = assertThrows(ParametreInvalideException.class, () -> {
+        InvalideParameterException exception = assertThrows(InvalideParameterException.class, () -> {
             customerFactory.create(customer);
         });
 
@@ -177,16 +178,16 @@ class CustomerFactoryTest {
     @Test
     void create_shouldAcceptPhoneNumber_whenExactly10Digits() {
 
-        CustomerDto customer = createDummyCustomer();
+        Customer customer = createDummyCustomer();
 
-        CustomerDto result = customerFactory.create(customer);
+        Customer result = customerFactory.create(customer);
 
         assertNotNull(result);
         assertEquals("5141234567", result.getPhoneNumber());
     }
 
-    private CustomerDto createDummyCustomer() {
-        CustomerDto customer = new CustomerDto();
+    private Customer createDummyCustomer() {
+        Customer customer = new Customer();
         customer.setName("John Doe");
         customer.setEmail("john.doe@example.com");
         customer.setPhoneNumber("5141234567");
