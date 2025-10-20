@@ -51,7 +51,7 @@ public class ReservationServiceUnitTest {
     @Test
     public void addReservation_shouldCreateAndSaveReservation_whenRestaurantExists() {
         String restaurantId = "restaurant-123";
-        CreateReservationDto createDto = new CreateReservationDto(/* params */);
+        CreateReservationDto createDto = new CreateReservationDto();
         
         Restaurant mockRestaurant = mock(Restaurant.class);
         Reservation mockReservation = mock(Reservation.class);
@@ -72,7 +72,7 @@ public class ReservationServiceUnitTest {
     @Test
     public void addReservation_shouldThrowNotFoundException_whenRestaurantDoesNotExist() {
         String restaurantId = "non-existent";
-        CreateReservationDto createDto = new CreateReservationDto(/* params */);
+        CreateReservationDto createDto = new CreateReservationDto();
         
         when(restaurantRepository.get(restaurantId)).thenReturn(Optional.empty());
 
@@ -92,7 +92,7 @@ public class ReservationServiceUnitTest {
     public void getReservation_shouldReturnReservationDto_whenReservationExists() {
         String reservationId = "reservation-789";
         Reservation mockReservation = mock(Reservation.class);
-        ReservationDto expectedDto = new ReservationDto(/* params */);
+        ReservationDto expectedDto = new ReservationDto();
         
         when(reservationRepository.get(reservationId)).thenReturn(Optional.of(mockReservation));
         when(reservationAssembler.toDto(mockReservation)).thenReturn(expectedDto);
