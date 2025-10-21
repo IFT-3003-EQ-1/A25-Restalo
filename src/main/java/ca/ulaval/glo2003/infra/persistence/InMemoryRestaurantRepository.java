@@ -27,19 +27,19 @@ public class InMemoryRestaurantRepository implements RestaurantRepository {
     }
 
     @Override
-    public List<Restaurant> listParProprietaire(String proprietaireId) {
+    public List<Restaurant> listByOwner(String ownerId) {
         return database.values().stream()
-                .filter(r -> Objects.equals(r.getOwner().getId(), proprietaireId))
+                .filter(r -> Objects.equals(r.getOwner().getId(), ownerId))
                 .toList();
     }
 
     @Override
-    public List<Restaurant> searchRestaurants(List<Filter<Restaurant>> filtres) {
+    public List<Restaurant> searchRestaurants(List<Filter<Restaurant>> filters) {
         List<Restaurant> restaurants = new ArrayList<>();
         database.values().forEach(r -> {
             boolean isValide = true;
-            for (Filter<Restaurant> filtre : filtres) {
-                if(!filtre.filter(r)) {
+            for (Filter<Restaurant> filter : filters) {
+                if(!filter.filter(r)) {
                     isValide = false;
                 }
             }

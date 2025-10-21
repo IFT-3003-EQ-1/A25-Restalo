@@ -22,33 +22,33 @@ public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
     private final OwnerFactory ownerFactory;
     private final RestaurantAssembler restaurantAssembler;
-    private final FilterRestaurantFactory filtreRestaurantFactory;
+    private final FilterRestaurantFactory filterRestaurantFactory;
 
     public RestaurantService(
             RestaurantFactory restaurantFactory,
             RestaurantRepository restaurantRepository,
-            OwnerFactory proprietaireFactory,
-            RestaurantAssembler restaurantAssembler, FilterRestaurantFactory filtreRestaurantFactory) {
+            OwnerFactory ownerFactory,
+            RestaurantAssembler restaurantAssembler, FilterRestaurantFactory filterRestaurantFactory) {
         this.restaurantFactory = restaurantFactory;
         this.restaurantRepository = restaurantRepository;
-        this.ownerFactory = proprietaireFactory;
+        this.ownerFactory = ownerFactory;
         this.restaurantAssembler = restaurantAssembler;
-        this.filtreRestaurantFactory = filtreRestaurantFactory;
+        this.filterRestaurantFactory = filterRestaurantFactory;
     }
 
-    public String createRestaurant(OwnerDto proprietaireDto, RestaurantDto restaurantDto) {
-        Owner proprietaire = ownerFactory.createProprietaire(proprietaireDto.id);
+    public String createRestaurant(OwnerDto ownerDto, RestaurantDto restaurantDto) {
+        Owner owner = ownerFactory.createOwner(ownerDto.id);
         Restaurant restaurant = restaurantFactory.createRestaurant(
-                proprietaire,
+                owner,
                 restaurantDto
         );
         restaurantRepository.save(restaurant);
         return restaurant.getId();
     }
 
-    public RestaurantDto getRestaurant(String idRestaurant, String proprietaireId) {
+    public RestaurantDto getRestaurant(String idRestaurant, String ownerId) {
 
-        if (proprietaireId == null || proprietaireId.isBlank()) {
+        if (ownerId == null || ownerId.isBlank()) {
             throw new MissingParameterException("Owner");
         }
 
@@ -56,20 +56,20 @@ public class RestaurantService {
                 () -> new NotFoundException("")
         );
 
-        if (!restaurant.getOwner().getId().equals(proprietaireId)) {
+        if (!restaurant.getOwner().getId().equals(ownerId)) {
             throw new ForbiddenAccessException("");
         }
         return restaurantAssembler.toDto(restaurant);
     }
 
-    public List<RestaurantDto> getRestaurants(String proprietaireId) {
+    public List<RestaurantDto> getRestaurants(String ownerId) {
 
-        if (proprietaireId == null || proprietaireId.isBlank()) {
+        if (ownerId == null || ownerId.isBlank()) {
             throw new MissingParameterException("Owner");
         }
 
         return restaurantRepository
-                .listParProprietaire(proprietaireId)
+                .listByOwner(ownerId)
                 .stream()
                 .map(restaurantAssembler::toDto)
                 .toList();
@@ -77,7 +77,7 @@ public class RestaurantService {
 
     public List<RestaurantDto> searchRestaurants(RestaurantDto searchValues) {
 
-        List<Filter<Restaurant>> filtres = filtreRestaurantFactory.createFiltres(searchValues.name, searchValues.hours.open, searchValues.hours.close);
+        List<Filter<Restaurant>> filtres = filterRestaurantFactory.createFilters(searchValues.name, searchValues.hours.open, searchValues.hours.close);
         if (filtres.isEmpty()) {
             return restaurantRepository
                     .getAll()

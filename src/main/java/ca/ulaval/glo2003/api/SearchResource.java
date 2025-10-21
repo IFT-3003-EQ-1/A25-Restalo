@@ -15,13 +15,13 @@ import java.util.List;
 @Path("/search")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public class SearchRessource {
+public class SearchResource {
 
     private final RestaurantService restaurantService;
 
     private final RestaurantDtoAssembler restaurantDtoAssembler;
 
-    public SearchRessource(RestaurantService restaurantService, RestaurantDtoAssembler restaurantDtoAssembler) {
+    public SearchResource(RestaurantService restaurantService, RestaurantDtoAssembler restaurantDtoAssembler) {
         this.restaurantService = restaurantService;
         this.restaurantDtoAssembler = restaurantDtoAssembler;
     }

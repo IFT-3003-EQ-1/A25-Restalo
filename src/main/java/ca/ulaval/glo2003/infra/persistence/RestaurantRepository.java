@@ -11,9 +11,9 @@ public interface RestaurantRepository {
 
     Optional<Restaurant> get(String id);
 
-    List<Restaurant> listParProprietaire(String proprietaireId);
+    List<Restaurant> listByOwner(String ownerId);
 
-    List<Restaurant> searchRestaurants(List<Filter<Restaurant>> filtres);
+    List<Restaurant> searchRestaurants(List<Filter<Restaurant>> filters);
 
     List<Restaurant> getAll();
 }

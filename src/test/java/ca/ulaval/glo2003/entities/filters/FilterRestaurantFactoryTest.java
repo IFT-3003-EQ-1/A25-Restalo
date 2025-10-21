@@ -16,17 +16,17 @@ public class FilterRestaurantFactoryTest {
 
     @Test
     public void givenCreateFiltreRestaurant_whenNoParametreValide_thenReturnEmptyList() {
-        assertEquals(0, factory.createFiltres(null,null,null).size());
+        assertEquals(0, factory.createFilters(null,null,null).size());
     }
 
     @Test
     public void givenCreateFiltreRestaurant_whenNomValide_thenReturnOneFiltre() {
-        assertEquals(1, factory.createFiltres("Pizz",null,null).size());
+        assertEquals(1, factory.createFilters("Pizz",null,null).size());
     }
 
     @Test
     public void givenCreateFiltreRestaurant_whenAllParametreValide_thenReturnListWithThreeFiltres() {
-        assertEquals(3, factory.createFiltres("Pizz","19:00:00","19:00:00").size());
+        assertEquals(3, factory.createFilters("Pizz","19:00:00","19:00:00").size());
 
     }
 

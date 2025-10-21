@@ -1,8 +1,8 @@
 package ca.ulaval.glo2003;
 
 import ca.ulaval.glo2003.api.ReservationResource;
-import ca.ulaval.glo2003.api.SearchRessource;
-import ca.ulaval.glo2003.api.RestaurantRessource;
+import ca.ulaval.glo2003.api.SearchResource;
+import ca.ulaval.glo2003.api.RestaurantResource;
 import ca.ulaval.glo2003.api.assemblers.RestaurantDtoAssembler;
 import ca.ulaval.glo2003.api.response.exceptions.ForbiddenAccessExceptionMapper;
 import ca.ulaval.glo2003.api.response.exceptions.NotFoundExceptionMapper;
@@ -47,13 +47,13 @@ public class AppContext extends ResourceConfig {
                new ReservationAssembler()
         );
 
-        final RestaurantRessource restaurantRessource = new RestaurantRessource(
+        final RestaurantResource restaurantRessource = new RestaurantResource(
                 restaurantService,
                 restaurantDtoAssembler,
                 reservationService
         );
 
-        final SearchRessource searchRessource = new SearchRessource(
+        final SearchResource searchRessource = new SearchResource(
                 restaurantService,
                 restaurantDtoAssembler
         );

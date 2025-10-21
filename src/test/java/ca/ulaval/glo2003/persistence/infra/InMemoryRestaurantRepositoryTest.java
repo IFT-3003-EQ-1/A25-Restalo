@@ -58,7 +58,7 @@ public class InMemoryRestaurantRepositoryTest {
         repository.save(InMemoryRestaurantRepositoryTestUtils.createRestaurant(RESTAURANT_ID));
         repository.save(InMemoryRestaurantRepositoryTestUtils.createRestaurant("2"));
 
-        assertEquals(2, repository.listParProprietaire(proprietaireId).size());
+        assertEquals(2, repository.listByOwner(proprietaireId).size());
     }
 
     @Test

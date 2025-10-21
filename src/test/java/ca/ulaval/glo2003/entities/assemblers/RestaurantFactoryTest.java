@@ -40,7 +40,7 @@ public class RestaurantFactoryTest {
         restaurantDto.reservation.duration = 90;
         restaurantDto.owner.id = "1";
 
-        proprietaire = proprietaireFactory.createProprietaire("1");
+        proprietaire = proprietaireFactory.createOwner("1");
 
     }
 
