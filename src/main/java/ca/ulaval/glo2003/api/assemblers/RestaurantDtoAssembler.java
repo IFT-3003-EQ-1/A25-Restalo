@@ -13,7 +13,7 @@ public class RestaurantDtoAssembler {
                 "capacity", restaurantDto.capacity,
                 "hours", restaurantDto.hours,
                 "reservation", Map.of(
-                        "duration", restaurantDto.configReservation.duration
+                        "duration", restaurantDto.reservation.duration
                 )
         );
     }

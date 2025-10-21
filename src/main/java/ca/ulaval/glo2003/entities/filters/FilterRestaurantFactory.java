@@ -23,7 +23,7 @@ public class FilterRestaurantFactory {
             filtres.add(((restaurant) -> {
                 try {
                     LocalTime from =  LocalTime.parse(hoursOpen);
-                    LocalTime actual = LocalTime.parse(restaurant.getHours().open);
+                    LocalTime actual = LocalTime.parse(restaurant.getHours().getOpen());
                     return from.isBefore(actual);
                 } catch (DateTimeParseException e) {
                     throw new InvalideParameterException("`horaires.*` doivent respecter le format HH:mm:ss");
@@ -35,7 +35,7 @@ public class FilterRestaurantFactory {
             filtres.add(((restaurant) -> {
                 try {
                     LocalTime to =  LocalTime.parse(hoursClose);
-                    LocalTime actual = LocalTime.parse(restaurant.getHours().close);
+                    LocalTime actual = LocalTime.parse(restaurant.getHours().getClose());
                     return to.isAfter(actual);
 
                 } catch (DateTimeParseException e) {

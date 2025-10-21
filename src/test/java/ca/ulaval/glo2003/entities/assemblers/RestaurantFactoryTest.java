@@ -33,11 +33,11 @@ public class RestaurantFactoryTest {
 
         restaurantDto = new RestaurantDto();
         restaurantDto.owner = new OwnerDto();
-        restaurantDto.configReservation = new ConfigReservationDto();
+        restaurantDto.reservation = new ConfigReservationDto();
         restaurantDto.name = "Pizz";
         restaurantDto.capacity = 2;
         restaurantDto.hours = new HourDto("10:00:00","19:00:00");
-        restaurantDto.configReservation.duration = 90;
+        restaurantDto.reservation.duration = 90;
         restaurantDto.owner.id = "1";
 
         proprietaire = proprietaireFactory.createProprietaire("1");
@@ -54,7 +54,7 @@ public class RestaurantFactoryTest {
         assertEquals(restaurantDto.name, restaurant.getName());
         assertEquals(restaurantDto.capacity, restaurant.getCapacity());
         assertEquals(restaurantDto.owner.id, restaurant.getOwner().getId());
-        assertEquals(restaurantDto.configReservation.duration, restaurant.getConfigReservation().getDuration());
+        assertEquals(restaurantDto.reservation.duration, restaurant.getConfigReservation().getDuration());
     }
 
     @Test
@@ -88,7 +88,7 @@ public class RestaurantFactoryTest {
 
     @Test
     public void givenCreateRestaurant_whenConfigReservationIsNull_thenDefaultConfigurationIsUsed() {
-        restaurantDto.configReservation = null;
+        restaurantDto.reservation = null;
         Restaurant restaurant = restaurantFactory.createRestaurant(proprietaire, restaurantDto);
 
         assertEquals(RestaurantFactory.DEFAULT_RESERVATION_DURATION, restaurant.getConfigReservation().getDuration());

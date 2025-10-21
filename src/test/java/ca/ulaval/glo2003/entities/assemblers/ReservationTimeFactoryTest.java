@@ -1,6 +1,5 @@
 package ca.ulaval.glo2003.entities.assemblers;
 
-import ca.ulaval.glo2003.domain.dtos.ReservationTimeDto;
 import ca.ulaval.glo2003.entities.reservation.ReservationTime;
 import ca.ulaval.glo2003.entities.reservation.ReservationTimeFactory;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
@@ -9,7 +8,6 @@ import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,13 +16,20 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class ReservationTimeFactoryTest {
 
-    @Mock
     private Restaurant restaurant;
 
     private ReservationTimeFactory reservationTimeFactory;
 
     @BeforeEach
     void setUp() {
+        restaurant = new Restaurant(
+                "",
+                null,
+                null,
+                0,
+                null,
+                null
+        );
         reservationTimeFactory = new ReservationTimeFactory();
     }
 
@@ -32,7 +37,7 @@ class ReservationTimeFactoryTest {
     void create_shouldCreateValidReservationTime_whenStartTimeIsValid() {
         String startTime = "18:00";
         when(restaurant.getReservationDuration()).thenReturn(120); // 2 hours
-        when(restaurant.getHours().close).thenReturn("22:00");
+        when(restaurant.getHours().getClose()).thenReturn("22:00");
 
         ReservationTime result = reservationTimeFactory.create(startTime, restaurant);
 
@@ -45,7 +50,7 @@ class ReservationTimeFactoryTest {
     void create_shouldAdjustToNext15Minutes_whenStartTimeIsNotOn15MinuteInterval() {
         String startTime = "18:07";
         when(restaurant.getReservationDuration()).thenReturn(90); // 1.5 hours
-        when(restaurant.getHours().close).thenReturn("23:00");
+        when(restaurant.getHours().getClose()).thenReturn("23:00");
 
         ReservationTime result = reservationTimeFactory.create(startTime, restaurant);
 
@@ -58,7 +63,7 @@ class ReservationTimeFactoryTest {
     void create_shouldAdjustToNext15Minutes_whenMinutesAre1() {
         String startTime = "19:01";
         when(restaurant.getReservationDuration()).thenReturn(60);
-        when(restaurant.getHours().close).thenReturn("23:00");
+        when(restaurant.getHours().getClose()).thenReturn("23:00");
 
         ReservationTime result = reservationTimeFactory.create(startTime, restaurant);
 
@@ -70,7 +75,7 @@ class ReservationTimeFactoryTest {
     void create_shouldAdjustToNext15Minutes_whenMinutesAre14() {
         String startTime = "17:14";
         when(restaurant.getReservationDuration()).thenReturn(90);
-        when(restaurant.getHours().close).thenReturn("23:00");
+        when(restaurant.getHours().getClose()).thenReturn("23:00");
 
         ReservationTime result = reservationTimeFactory.create(startTime, restaurant);
 
@@ -83,7 +88,7 @@ class ReservationTimeFactoryTest {
 
         String startTime = "18:30";
         when(restaurant.getReservationDuration()).thenReturn(120);
-        when(restaurant.getHours().close).thenReturn("23:00");
+        when(restaurant.getHours().getClose()).thenReturn("23:00");
 
         ReservationTime result = reservationTimeFactory.create(startTime, restaurant);
 
@@ -95,7 +100,7 @@ class ReservationTimeFactoryTest {
     void create_shouldHandleAllValid15MinuteIntervals() {
 
         when(restaurant.getReservationDuration()).thenReturn(60);
-        when(restaurant.getHours().close).thenReturn("23:00");
+        when(restaurant.getHours().getClose()).thenReturn("23:00");
 
         ReservationTime result1 = reservationTimeFactory.create("18:00", restaurant);
         assertEquals("18:00", result1.getStart());
@@ -115,7 +120,7 @@ class ReservationTimeFactoryTest {
 
         String startTime = "22:30";
         when(restaurant.getReservationDuration()).thenReturn(60);
-        when(restaurant.getHours().close).thenReturn("22:00");
+        when(restaurant.getHours().getClose()).thenReturn("22:00");
 
         InvalideParameterException exception = assertThrows(InvalideParameterException.class, () -> {
             reservationTimeFactory.create(startTime, restaurant);
@@ -129,7 +134,7 @@ class ReservationTimeFactoryTest {
 
         String startTime = "21:50"; // Will be adjusted to 22:00
         when(restaurant.getReservationDuration()).thenReturn(60);
-        when(restaurant.getHours().close).thenReturn("21:45");
+        when(restaurant.getHours().getClose()).thenReturn("21:45");
 
         InvalideParameterException exception = assertThrows(InvalideParameterException.class, () -> {
             reservationTimeFactory.create(startTime, restaurant);
@@ -166,7 +171,7 @@ class ReservationTimeFactoryTest {
 
     @Test
     void create_shouldCalculateCorrectEndTime_withDifferentDurations() {
-        when(restaurant.getHours().close).thenReturn("23:00");
+        when(restaurant.getHours().getClose()).thenReturn("23:00");
 
         when(restaurant.getReservationDuration()).thenReturn(30);
         ReservationTime result1 = reservationTimeFactory.create("18:00", restaurant);
@@ -184,11 +189,9 @@ class ReservationTimeFactoryTest {
     void create_shouldNotAcceptStartTime_whenExactlyAtClosingTime() {
         String startTime = "22:00";
         when(restaurant.getReservationDuration()).thenReturn(60);
-        when(restaurant.getHours().close).thenReturn("22:00");
+        when(restaurant.getHours().getClose()).thenReturn("22:00");
 
-        InvalideParameterException exception = assertThrows(InvalideParameterException.class, () -> {
-            reservationTimeFactory.create(startTime, restaurant);
-        });
+        InvalideParameterException exception = assertThrows(InvalideParameterException.class, () -> reservationTimeFactory.create(startTime, restaurant));
 
         assertEquals("Reservation Start time is too late", exception.getMessage());
     }
@@ -197,7 +200,7 @@ class ReservationTimeFactoryTest {
     void create_shouldAcceptStartTime_whenJustBeforeClosingTime() {
         String startTime = "21:45";
         when(restaurant.getReservationDuration()).thenReturn(60);
-        when(restaurant.getHours().close).thenReturn("22:00");
+        when(restaurant.getHours().getClose()).thenReturn("22:00");
 
         ReservationTime result = reservationTimeFactory.create(startTime, restaurant);
 
@@ -211,7 +214,7 @@ class ReservationTimeFactoryTest {
 
         String startTime = "18:07:30"; // With seconds
         when(restaurant.getReservationDuration()).thenReturn(60);
-        when(restaurant.getHours().close).thenReturn("23:00");
+        when(restaurant.getHours().getClose()).thenReturn("23:00");
 
         ReservationTime result = reservationTimeFactory.create(startTime, restaurant);
 
@@ -224,7 +227,7 @@ class ReservationTimeFactoryTest {
 
         String startTime = "18:53"; // Should adjust to 19:00
         when(restaurant.getReservationDuration()).thenReturn(60);
-        when(restaurant.getHours().close).thenReturn("23:00");
+        when(restaurant.getHours().getClose()).thenReturn("23:00");
 
         ReservationTime result = reservationTimeFactory.create(startTime, restaurant);
 

@@ -2,10 +2,10 @@ package ca.ulaval.glo2003.entities.assemblers;
 
 import ca.ulaval.glo2003.domain.dtos.ReservationDto;
 import ca.ulaval.glo2003.domain.dtos.ReservationTimeDto;
-import ca.ulaval.glo2003.domain.dtos.restaurant.HourDto;
 import ca.ulaval.glo2003.entities.Customer;
 import ca.ulaval.glo2003.entities.reservation.ReservationTime;
 import ca.ulaval.glo2003.entities.restaurant.ConfigReservation;
+import ca.ulaval.glo2003.entities.restaurant.Hours;
 import ca.ulaval.glo2003.entities.restaurant.Owner;
 import ca.ulaval.glo2003.entities.reservation.Reservation;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
@@ -30,9 +30,6 @@ class ReservationAssemblerTest {
     void toDto_shouldConvertReservationToDto_whenReservationIsValid() {
         ReservationDto result = reservationAssembler.toDto(createDummyReservation());
         assertNotNull(result);
-       // assertNotNull(result.getRestaurant());
-       // assertEquals("restaurant-123", result.getRestaurant().id);
-        //assertEquals("Hot pizza", result.getRestaurant().nom);
     }
 
     @Test
@@ -42,10 +39,6 @@ class ReservationAssemblerTest {
         reservation.setGroupSize(2);
         ReservationDto result = reservationAssembler.toDto(reservation);
         assertNotNull(result);
-        //assertEquals("RES123456", result.getNumber());
-       // assertEquals("2025-10-20", result.getDate());
-       // assertNotNull(result.getRestaurant());
-       // assertEquals("restaurant-123", result.getRestaurant().id);
     }
 
     @Test
@@ -59,13 +52,10 @@ class ReservationAssemblerTest {
         reservation.setDate("2025-11-15");
         reservation.setCustomer(null);
         reservation.setRestaurant(restaurant);
-       // reservation.setTime(timeDto);
 
         ReservationDto result = reservationAssembler.toDto(reservation);
 
         assertNotNull(result);
-       // assertNull(result.getCustomer());
-       // assertEquals("RES111", result.getNumber());
     }
 
     @Test
@@ -94,7 +84,7 @@ class ReservationAssemblerTest {
                 new Owner("1"),
                 "Hot pizza",
                 20,
-                new HourDto("10:00:00","22:00:00"),
+                new Hours("10:00:00","22:00:00"),
                 new ConfigReservation(60)
         );
     }

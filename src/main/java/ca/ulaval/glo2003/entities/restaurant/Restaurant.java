@@ -1,8 +1,6 @@
 package ca.ulaval.glo2003.entities.restaurant;
 
 
-import ca.ulaval.glo2003.domain.dtos.restaurant.HourDto;
-
 import java.time.Duration;
 import java.time.LocalTime;
 
@@ -11,7 +9,7 @@ public class Restaurant {
     private final Owner owner;
     private final String name;
     private final int capacity;
-    private final HourDto hours;
+    private final Hours hours;
     private final ConfigReservation configReservation;
 
     public String getId() {
@@ -30,7 +28,7 @@ public class Restaurant {
         return capacity;
     }
 
-    public HourDto getHours() {
+    public Hours getHours() {
         return hours;
     }
 
@@ -39,7 +37,7 @@ public class Restaurant {
     }
 
 
-    public Restaurant(String id, Owner owner, String name, int capacity, HourDto hours, ConfigReservation configReservation) {
+    public Restaurant(String id, Owner owner, String name, int capacity, Hours hours, ConfigReservation configReservation) {
         this.id = id;
         this.owner = owner;
         this.name = name;
@@ -49,8 +47,8 @@ public class Restaurant {
     }
 
     public int getReservationDuration() {
-        LocalTime openTime = LocalTime.parse(hours.open);
-        LocalTime closeTime = LocalTime.parse(hours.close);
+        LocalTime openTime = LocalTime.parse(hours.getOpen());
+        LocalTime closeTime = LocalTime.parse(hours.getClose());
         // Calculer la durée totale d'ouverture en minutes
         return (int) Duration.between(openTime, closeTime).toMinutes();
     }

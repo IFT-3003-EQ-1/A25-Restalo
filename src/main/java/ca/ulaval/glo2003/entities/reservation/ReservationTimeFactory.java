@@ -28,7 +28,7 @@ public class ReservationTimeFactory {
         LocalTime adjustedStartTime = adjustToNext15Minutes(requestedStartTime);
         LocalTime endTime = adjustedStartTime.plusMinutes(restaurant.getReservationDuration());
 
-        LocalTime closingTime = LocalTime.parse(restaurant.getHours().close);
+        LocalTime closingTime = LocalTime.parse(restaurant.getHours().getClose());
         // Pour le moment on ne tient pas compte de la durée de reervation.
         if (adjustedStartTime.isAfter(closingTime) ||  adjustedStartTime.equals(closingTime)) {
             return null;

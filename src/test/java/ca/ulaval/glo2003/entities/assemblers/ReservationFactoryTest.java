@@ -1,7 +1,7 @@
 package ca.ulaval.glo2003.entities.assemblers;
 
+import ca.ulaval.glo2003.domain.dtos.CustomerDto;
 import ca.ulaval.glo2003.domain.dtos.ReservationDto;
-import ca.ulaval.glo2003.domain.dtos.ReservationTimeDto;
 import ca.ulaval.glo2003.entities.Customer;
 import ca.ulaval.glo2003.entities.CustomerFactory;
 import ca.ulaval.glo2003.entities.reservation.Reservation;
@@ -161,9 +161,9 @@ class ReservationFactoryTest {
         reservationDto.date="2025-10-20";
         reservationDto.startTime="19:30";
         
-        Customer customerDto = new Customer();
-        customerDto.setName("Jane Smith");
-        reservationDto.customer=customerDto;
+        CustomerDto customerDto = new CustomerDto();
+        customerDto.name = "Jane Smith";
+        reservationDto.customer = customerDto;
         
         Customer mockCustomerDto = new Customer();
         ReservationTime mockTimeDto = new ReservationTime("19:30","22:30:00");

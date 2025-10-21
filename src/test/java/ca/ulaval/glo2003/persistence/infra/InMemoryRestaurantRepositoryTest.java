@@ -1,7 +1,7 @@
 package ca.ulaval.glo2003.persistence.infra;
 
-import ca.ulaval.glo2003.domain.dtos.restaurant.HourDto;
 import ca.ulaval.glo2003.entities.restaurant.ConfigReservation;
+import ca.ulaval.glo2003.entities.restaurant.Hours;
 import ca.ulaval.glo2003.entities.restaurant.Owner;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 import ca.ulaval.glo2003.entities.filters.Filter;
@@ -86,8 +86,7 @@ public class InMemoryRestaurantRepositoryTest {
                 new Owner("1"),
                 "Dejeuner",
                 2,
-                new HourDto( "6:00:00",
-                        "13:00:00"),
+                new Hours( "6:00:00", "13:00:00"),
                 new ConfigReservation(60)
         );
         repository.save(restaurantWithDifferentName);

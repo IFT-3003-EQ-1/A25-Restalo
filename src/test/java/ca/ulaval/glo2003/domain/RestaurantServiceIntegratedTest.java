@@ -43,8 +43,8 @@ public class RestaurantServiceIntegratedTest {
         restaurantDto.name = "Pizz";
         restaurantDto.hours = new HourDto("11:00:00","19:00:00");
         restaurantDto.capacity = 2;
-        restaurantDto.configReservation = new ConfigReservationDto();
-        restaurantDto.configReservation.duration = 60;
+        restaurantDto.reservation = new ConfigReservationDto();
+        restaurantDto.reservation.duration = 60;
     }
 
     @Test
@@ -131,7 +131,7 @@ public class RestaurantServiceIntegratedTest {
         restaurantService.createRestaurant(ownerDto, restaurantDto);
         restaurantDto.id = "12345";
         restaurantDto.name = "Dejeuner";
-        restaurantDto.hours.close = "06:00:00";
+        restaurantDto.hours.close = "18:00:00";
         restaurantDto.hours.open = "13:00:00";
         restaurantService.createRestaurant(ownerDto, restaurantDto);
 

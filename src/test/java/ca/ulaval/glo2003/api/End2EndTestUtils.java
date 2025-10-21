@@ -18,8 +18,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public class End2EndTestUtils {
 
-
-
     public static RestaurantDto buildDefaultRestaurantDto() {
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.id = "1";
@@ -32,14 +30,14 @@ public class End2EndTestUtils {
         restaurantDto.hours.open = "11:00:00";
         restaurantDto.hours.close = "19:00:00";
         restaurantDto.name = "Pizz";
-        restaurantDto.configReservation = new ConfigReservationDto();
-        restaurantDto.configReservation.duration = 60;
+        restaurantDto.reservation = new ConfigReservationDto();
+        restaurantDto.reservation.duration = 60;
         return restaurantDto;
     }
 
     public static ReservationDto buildReservationDto(){
          ReservationDto createReservationDto = new ReservationDto();
-                              createReservationDto.customer =(new Customer("testName","test@mail.com","5144151540"));
+                              createReservationDto.customer =(new CustomerDto("testName","test@mail.com","5144151540"));
                               createReservationDto.date= "2025-10-18";
                               createReservationDto.groupSize = 2;
                               createReservationDto.startTime="11:30:00";
