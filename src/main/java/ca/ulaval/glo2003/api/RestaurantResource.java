@@ -50,7 +50,6 @@ public class RestaurantResource {
 
         URI location = infosUri.getBaseUriBuilder().path("restaurants").path(restaurantId).build();
         return Response.created(location).build();
-
     }
 
     @GET
@@ -74,7 +73,6 @@ public class RestaurantResource {
                 .stream()
                 .map(restaurantDtoAssembler::toJson)
                 .toList();
-
         return Response.ok(sortie).build();
     }
 

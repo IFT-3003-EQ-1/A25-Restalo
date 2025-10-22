@@ -6,13 +6,12 @@ import ca.ulaval.glo2003.domain.dtos.restaurant.ConfigReservationDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.Application;
-import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.test.JerseyTest;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
@@ -48,7 +47,7 @@ public class RestaurantEnd2EndTest extends JerseyTest {
     }
 
     @Test
-    public void givenCreateRestaurant_whenNullProprietaireId_thenResponseIsBadRequest() {
+    public void givenCreateRestaurant_whenNullOwnerId_thenResponseIsBadRequest() {
         RestaurantDto restaurantDto = End2EndTestUtils.buildDefaultRestaurantDto();
         Map<String, Object> json =  assembler.toJson(restaurantDto);
 
@@ -71,6 +70,18 @@ public class RestaurantEnd2EndTest extends JerseyTest {
 
         try (Response response = target("/restaurants").request().header("Owner", "1").post(Entity.json(json))) {
             assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
+            URI location = response.getLocation();
+            assertNotNull(location, "Location header should be present");
+
+            String locationPath = location.getPath();
+            assertTrue(locationPath.startsWith("/restaurants/"),
+                    "Location should start with /restaurants/");
+            String restaurantId = extractIdFromLocation(response);
+            assertNotNull(restaurantId, "Restaurant ID should be present");
+            assertFalse(restaurantId.isEmpty(), "Restaurant ID should not be empty");
+
+            assertFalse(response.hasEntity(),
+                    "Response body should be empty for 201 CREATED");
         } catch (Exception e) {
             fail(e.getMessage());
         }
@@ -90,6 +101,7 @@ public class RestaurantEnd2EndTest extends JerseyTest {
         assertEquals(restaurantDto.hours.close, content.hours.close);
         assertEquals(restaurantDto.hours.open, content.hours.open);
         assertEquals(restaurantDto.reservation.duration, content.reservation.duration);
+
     }
 
     @Test
@@ -121,6 +133,12 @@ public class RestaurantEnd2EndTest extends JerseyTest {
         Response response = target("/restaurants").request().header("Owner", "").get();
 
         assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+    }
+
+    private String extractIdFromLocation(Response response) {
+        URI location = response.getLocation();
+        String path = location.getPath();
+        return path.substring(path.lastIndexOf('/') + 1);
     }
 
 }
