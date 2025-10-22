@@ -2,9 +2,9 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ "**" ]  # Le CI est declenché quand on pousse une branche
+    branches: [ "**" ]
   pull_request:
-    branches: [ "main", "master", "develop" ]
+    branches: [ "main"]
 
 jobs:
   build:
@@ -26,6 +26,8 @@ jobs:
 
       - name: Run tests
         run: mvn -B test
+      - name: Run Checkstyle
+        run: mvn checkstyle:check
 
       - name: Package application
         run: mvn -B package -DskipTests
