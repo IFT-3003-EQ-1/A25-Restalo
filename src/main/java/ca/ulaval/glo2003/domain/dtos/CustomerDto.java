@@ -1,9 +1,9 @@
 package ca.ulaval.glo2003.domain.dtos;
 
 public class CustomerDto {
-   public String name;
-   public String email;
-   public String phoneNumber;
+    public  String name;
+    public  String email;
+    public  String phoneNumber;
 
     public CustomerDto() {
     }
@@ -12,14 +12,5 @@ public class CustomerDto {
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
-    }
-
-    @Override
-    public String toString() {
-        return "Customer{" +
-                "name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                '}';
     }
 }

@@ -1,10 +1,14 @@
 package ca.ulaval.glo2003.domain.dtos;
 
+import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
+
 public class ReservationDto {
-    public String date; // date without time
-    public String startTime; // time without timezone
-    public int groupSize; // entier positif
+    public String number;
+    public String date;
+    public String startTime;
+    public int groupSize;
     public CustomerDto customer;
+    public RestaurantDto restaurant;
 
     public ReservationDto() {
     }

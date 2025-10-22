@@ -12,24 +12,24 @@ public class CustomerFactory {
     private static final String EMAIL_REGEX = "^[^@]+@[^@]+\\.[^@]+$";
     private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
 
-    public Customer create(CustomerDto customerDto) {
-        if(customerDto == null) {
+    public Customer create(CustomerDto customer) {
+        if(customer == null) {
             throw new MissingParameterException("Customer");
         }
 
-        if(Strings.isNullOrEmpty(customerDto.name)) {
+        if(Strings.isNullOrEmpty(customer.name)) {
             throw new MissingParameterException("Customer name");
         }
 
-        if(!isValidEmail(customerDto.email)) {
+        if(!isValidEmail(customer.email)) {
             throw new InvalideParameterException("Email");
         }
 
-        if(Strings.isNullOrEmpty(customerDto.phoneNumber) || customerDto.phoneNumber.length() != 10) {
+        if(Strings.isNullOrEmpty(customer.phoneNumber) || customer.phoneNumber.length() != 10) {
             throw new InvalideParameterException("Phone number");
         }
 
-        return new Customer(customerDto.name, customerDto.email, customerDto.phoneNumber);
+        return new Customer(customer.name, customer.email, customer.phoneNumber);
     }
 
     private static boolean isValidEmail(String email) {

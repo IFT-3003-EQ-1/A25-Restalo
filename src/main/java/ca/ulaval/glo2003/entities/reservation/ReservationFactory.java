@@ -32,7 +32,7 @@ public class ReservationFactory {
         }
 
         Customer customer = customerFactory.create(reservationDto.customer);
-        ReservationTime time = reservationTimeFactory.create(reservationDto.startTime, restaurant);
+        ReservationTime time = reservationTimeFactory.create(reservationDto.startTime, restaurant.getHours().getClose(),restaurant.getReservationDuration());
         String reservationId = UUID.randomUUID().toString().replace("-", "");
 
         return new Reservation(reservationId, reservationDto.date, time, reservationDto.groupSize, customer, restaurant);

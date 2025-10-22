@@ -2,6 +2,7 @@ package ca.ulaval.glo2003.entities.assemblers;
 
 
 import ca.ulaval.glo2003.domain.dtos.restaurant.ConfigReservationDto;
+import ca.ulaval.glo2003.domain.dtos.restaurant.HourDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.OwnerDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
 import ca.ulaval.glo2003.entities.restaurant.Owner;
@@ -32,15 +33,14 @@ public class RestaurantFactoryTest {
 
         restaurantDto = new RestaurantDto();
         restaurantDto.owner = new OwnerDto();
-        restaurantDto.configReservation = new ConfigReservationDto();
+        restaurantDto.reservation = new ConfigReservationDto();
         restaurantDto.name = "Pizz";
         restaurantDto.capacity = 2;
-        restaurantDto.hoursOpen = "10:00:00";
-        restaurantDto.hoursClose = "19:00:00";
-        restaurantDto.configReservation.duration = 90;
+        restaurantDto.hours = new HourDto("10:00:00","19:00:00");
+        restaurantDto.reservation.duration = 90;
         restaurantDto.owner.id = "1";
 
-        proprietaire = proprietaireFactory.createProprietaire("1");
+        proprietaire = proprietaireFactory.createOwner("1");
 
     }
 
@@ -53,10 +53,8 @@ public class RestaurantFactoryTest {
         assertNotNull(restaurant);
         assertEquals(restaurantDto.name, restaurant.getName());
         assertEquals(restaurantDto.capacity, restaurant.getCapacity());
-        assertEquals(restaurantDto.hoursOpen, restaurant.getHoursOpen());
-        assertEquals(restaurantDto.hoursClose, restaurant.getHoursClose());
         assertEquals(restaurantDto.owner.id, restaurant.getOwner().getId());
-        assertEquals(restaurantDto.configReservation.duration, restaurant.getConfigReservation().getDuration());
+        assertEquals(restaurantDto.reservation.duration, restaurant.getConfigReservation().getDuration());
     }
 
     @Test
@@ -79,8 +77,8 @@ public class RestaurantFactoryTest {
 
     @Test
     public void givenCreateRestaurant_whenHoraireOuvertureIsBiggerThanHoraireFermeture_thenParameterInvalidIsThrown() {
-        restaurantDto.hoursOpen = "20:00:00";
-        restaurantDto.hoursClose = "19:00:00";
+        restaurantDto.hours.open = "20:00:00";
+        restaurantDto.hours.close = "19:00:00";
         assertThrows(InvalideParameterException.class, () -> restaurantFactory.createRestaurant(
                 proprietaire,
                 restaurantDto
@@ -90,7 +88,7 @@ public class RestaurantFactoryTest {
 
     @Test
     public void givenCreateRestaurant_whenConfigReservationIsNull_thenDefaultConfigurationIsUsed() {
-        restaurantDto.configReservation = null;
+        restaurantDto.reservation = null;
         Restaurant restaurant = restaurantFactory.createRestaurant(proprietaire, restaurantDto);
 
         assertEquals(RestaurantFactory.DEFAULT_RESERVATION_DURATION, restaurant.getConfigReservation().getDuration());

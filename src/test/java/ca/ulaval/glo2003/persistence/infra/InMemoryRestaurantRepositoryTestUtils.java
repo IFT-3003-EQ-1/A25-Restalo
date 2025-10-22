@@ -1,6 +1,7 @@
 package ca.ulaval.glo2003.persistence.infra;
 
 import ca.ulaval.glo2003.entities.restaurant.ConfigReservation;
+import ca.ulaval.glo2003.entities.restaurant.Hours;
 import ca.ulaval.glo2003.entities.restaurant.Owner;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 
@@ -12,8 +13,7 @@ public class InMemoryRestaurantRepositoryTestUtils {
                 new Owner("1"),
                 "Pizz",
                 2,
-                "11:00:00",
-                "19:00:00",
+                new Hours( "11:00:00", "19:00:00"),
                 new ConfigReservation(60)
         );
     }

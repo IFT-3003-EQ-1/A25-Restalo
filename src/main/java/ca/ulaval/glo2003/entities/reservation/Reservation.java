@@ -4,12 +4,12 @@ import ca.ulaval.glo2003.entities.Customer;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 
 public class Reservation {
-    private final String number;
-    private final String  date;
-    private final ReservationTime time;
-    private final int groupSize;
-    private final Customer customer;
-    private final Restaurant restaurant;
+    private  String number;
+    private  String  date;
+    private  ReservationTime time;
+    private  int groupSize;
+    private  Customer customer;
+    private  Restaurant restaurant;
 
 
     public Reservation(String number, String date, ReservationTime time, int groupSize, Customer customer, Restaurant restaurant) {
@@ -19,6 +19,9 @@ public class Reservation {
         this.groupSize = groupSize;
         this.customer = customer;
         this.restaurant = restaurant;
+    }
+
+    public Reservation() {
     }
 
     public String getDate() {
@@ -43,6 +46,31 @@ public class Reservation {
 
     public Restaurant getRestaurant() {
         return restaurant;
+    }
+
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setTime(ReservationTime time) {
+        this.time = time;
+    }
+
+    public void setGroupSize(int groupSize) {
+        this.groupSize = groupSize;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
     }
 
     @Override

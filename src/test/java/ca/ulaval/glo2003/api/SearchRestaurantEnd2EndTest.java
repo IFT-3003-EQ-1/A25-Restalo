@@ -26,7 +26,7 @@ public class SearchRestaurantEnd2EndTest extends JerseyTest {
     @Test
     public void givenSearchRestaurants_whenCorrectRequest_thenResponseIsOk() {
         RestaurantDto restaurantDto = End2EndTestUtils.buildDefaultRestaurantDto();
-        Map<String, Object> json =  assembler.versJson(restaurantDto);
+        Map<String, Object> json =  assembler.toJson(restaurantDto);
 
         try (Response response = target("/search/restaurants").request().post(Entity.json(json))) {
 
@@ -39,8 +39,8 @@ public class SearchRestaurantEnd2EndTest extends JerseyTest {
         End2EndTestUtils.postRestaurant(target("/restaurants"), End2EndTestUtils.buildDefaultRestaurantDto());
 
         RestaurantDto restaurantDto = End2EndTestUtils.buildDefaultRestaurantDto();
-        restaurantDto.hoursClose = "-1";
-        Map<String, Object> json =  assembler.versJson(restaurantDto);
+        restaurantDto.hours.close = "-1";
+        Map<String, Object> json =  assembler.toJson(restaurantDto);
 
         try (Response response = target("/search/restaurants").request().post(Entity.json(json))) {
 

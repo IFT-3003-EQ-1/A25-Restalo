@@ -25,14 +25,14 @@ import java.util.Map;
 @Path("/restaurants")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public class RestaurantRessource {
+public class RestaurantResource {
     private  final RestaurantService restaurantService;
     private final RestaurantDtoAssembler restaurantDtoAssembler;
     private final ReservationService reservationService;
 
-    public RestaurantRessource(RestaurantService restaurantService,
-                               RestaurantDtoAssembler restaurantDtoAssembler,
-                               ReservationService reservationService
+    public RestaurantResource(RestaurantService restaurantService,
+                              RestaurantDtoAssembler restaurantDtoAssembler,
+                              ReservationService reservationService
                                ) {
         this.restaurantService = restaurantService;
         this.restaurantDtoAssembler = restaurantDtoAssembler;
@@ -62,7 +62,7 @@ public class RestaurantRessource {
         RestaurantDto restaurantDto = restaurantService.getRestaurant(restaurantId, ownerId);
 
 
-        return Response.ok(restaurantDtoAssembler.versJson(restaurantDto)).build();
+        return Response.ok(restaurantDtoAssembler.toJson(restaurantDto)).build();
     }
 
     @GET
@@ -72,7 +72,7 @@ public class RestaurantRessource {
 
         List<Map<String, Object>> sortie = restaurantDtos
                 .stream()
-                .map(restaurantDtoAssembler::versJson)
+                .map(restaurantDtoAssembler::toJson)
                 .toList();
 
         return Response.ok(sortie).build();

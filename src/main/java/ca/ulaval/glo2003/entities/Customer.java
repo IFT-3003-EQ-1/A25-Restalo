@@ -1,9 +1,9 @@
 package ca.ulaval.glo2003.entities;
 
 public class Customer {
-    private final String name;
-    private final String email;
-    private final String phoneNumber;
+    private  String name;
+    private  String email;
+    private  String phoneNumber;
 
     public String getName() {
         return name;
@@ -16,6 +16,22 @@ public class Customer {
     public String getPhoneNumber() {
         return phoneNumber;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Customer() {
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+
 
     public Customer(String name, String email, String phoneNumber) {
         this.name = name;

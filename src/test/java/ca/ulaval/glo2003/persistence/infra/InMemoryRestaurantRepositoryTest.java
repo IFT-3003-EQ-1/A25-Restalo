@@ -1,6 +1,7 @@
 package ca.ulaval.glo2003.persistence.infra;
 
 import ca.ulaval.glo2003.entities.restaurant.ConfigReservation;
+import ca.ulaval.glo2003.entities.restaurant.Hours;
 import ca.ulaval.glo2003.entities.restaurant.Owner;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 import ca.ulaval.glo2003.entities.filters.Filter;
@@ -25,7 +26,6 @@ public class InMemoryRestaurantRepositoryTest {
     public void setUp() {
         database = new HashMap<>();
         repository = new InMemoryRestaurantRepository(database);
-
     }
 
     @Test
@@ -58,7 +58,7 @@ public class InMemoryRestaurantRepositoryTest {
         repository.save(InMemoryRestaurantRepositoryTestUtils.createRestaurant(RESTAURANT_ID));
         repository.save(InMemoryRestaurantRepositoryTestUtils.createRestaurant("2"));
 
-        assertEquals(2, repository.listParProprietaire(proprietaireId).size());
+        assertEquals(2, repository.listByOwner(proprietaireId).size());
     }
 
     @Test
@@ -86,8 +86,7 @@ public class InMemoryRestaurantRepositoryTest {
                 new Owner("1"),
                 "Dejeuner",
                 2,
-                "6:00:00",
-                "13:00:00",
+                new Hours( "6:00:00", "13:00:00"),
                 new ConfigReservation(60)
         );
         repository.save(restaurantWithDifferentName);

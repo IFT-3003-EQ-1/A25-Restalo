@@ -1,6 +1,7 @@
 package ca.ulaval.glo2003.domain;
 
 import ca.ulaval.glo2003.domain.dtos.restaurant.ConfigReservationDto;
+import ca.ulaval.glo2003.domain.dtos.restaurant.HourDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.OwnerDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
 import ca.ulaval.glo2003.entities.restaurant.OwnerFactory;
@@ -22,7 +23,7 @@ public class RestaurantServiceIntegratedTest {
 
     private RestaurantDto restaurantDto;
 
-    private OwnerDto proprietaireDto;
+    private OwnerDto ownerDto;
 
     @BeforeEach
     public void setUp() {
@@ -34,22 +35,21 @@ public class RestaurantServiceIntegratedTest {
                 new FilterRestaurantFactory()
         );
 
-        proprietaireDto = new OwnerDto();
-        proprietaireDto.id = "1";
+        ownerDto = new OwnerDto();
+        ownerDto.id = "1";
 
         restaurantDto = new RestaurantDto();
-        restaurantDto.owner = proprietaireDto;
+        restaurantDto.owner = ownerDto;
         restaurantDto.name = "Pizz";
-        restaurantDto.hoursOpen = "11:00:00";
-        restaurantDto.hoursClose = "19:00:00";
+        restaurantDto.hours = new HourDto("11:00:00","19:00:00");
         restaurantDto.capacity = 2;
-        restaurantDto.configReservation = new ConfigReservationDto();
-        restaurantDto.configReservation.duration = 60;
+        restaurantDto.reservation = new ConfigReservationDto();
+        restaurantDto.reservation.duration = 60;
     }
 
     @Test
     public void givenCreateRestaurant_whenParameterAreValide_thenRestaurantIsCreated() {
-        String restaurantId = restaurantService.createRestaurant(proprietaireDto, restaurantDto);
+        String restaurantId = restaurantService.createRestaurant(ownerDto, restaurantDto);
 
         assertNotNull(restaurantId);
     }
@@ -58,83 +58,82 @@ public class RestaurantServiceIntegratedTest {
     public void givenCreateRestaurant_whenProprietaireIsNull_thenParameterManquantExceptionIsThrown() {
         restaurantDto.owner.id = null;
 
-        assertThrows(MissingParameterException.class, () -> restaurantService.createRestaurant(proprietaireDto, restaurantDto));
+        assertThrows(MissingParameterException.class, () -> restaurantService.createRestaurant(ownerDto, restaurantDto));
     }
 
     @Test
     public void givenCreateRestaurant_whenNomIsNull_thenParameterManquantExceptionIsThrown() {
         restaurantDto.name = null;
 
-        assertThrows(MissingParameterException.class, () -> restaurantService.createRestaurant(proprietaireDto, restaurantDto));
+        assertThrows(MissingParameterException.class, () -> restaurantService.createRestaurant(ownerDto, restaurantDto));
     }
 
     @Test
     public void givenCreateRestaurant_whenHoraireFermetureIsNull_thenParameterManquantExceptionIsThrown() {
-        restaurantDto.hoursClose = null;
+        restaurantDto.hours.close = null;
 
-        assertThrows(MissingParameterException.class, () -> restaurantService.createRestaurant(proprietaireDto, restaurantDto));
+        assertThrows(MissingParameterException.class, () -> restaurantService.createRestaurant(ownerDto, restaurantDto));
     }
 
     @Test
     public void givenCreateRestaurant_whenHoraireOuvertureIsNull_thenParameterManquantExceptionIsThrown() {
-        restaurantDto.hoursOpen = null;
+        restaurantDto.hours.open = null;
 
-        assertThrows(MissingParameterException.class, () -> restaurantService.createRestaurant(proprietaireDto, restaurantDto));
+        assertThrows(MissingParameterException.class, () -> restaurantService.createRestaurant(ownerDto, restaurantDto));
     }
 
     @Test
     public void givenGetRestaurants_whenParameterAreValid_thenListRestaurantsIsReturned() {
-        String proprietaireCible = proprietaireDto.id;
-        restaurantService.createRestaurant(proprietaireDto, restaurantDto);
-        restaurantService.createRestaurant(proprietaireDto, restaurantDto);
-        proprietaireDto.id = "12345";
-        restaurantService.createRestaurant(proprietaireDto, restaurantDto);
+        String proprietaireCible = ownerDto.id;
+        restaurantService.createRestaurant(ownerDto, restaurantDto);
+        restaurantService.createRestaurant(ownerDto, restaurantDto);
+        ownerDto.id = "12345";
+        restaurantService.createRestaurant(ownerDto, restaurantDto);
 
         assertEquals(2, restaurantService.getRestaurants(proprietaireCible).size());
     }
 
     @Test
     public void givenGetRestaurant_whenParameterAreValid_thenRestaurantIsReturned() {
-        restaurantDto.id = restaurantService.createRestaurant(proprietaireDto, restaurantDto);
-        RestaurantDto dto = restaurantService.getRestaurant(restaurantDto.id, proprietaireDto.id);
-        assertEquals(restaurantDto , dto);
+        restaurantDto.id = restaurantService.createRestaurant(ownerDto, restaurantDto);
+        RestaurantDto dto = restaurantService.getRestaurant(restaurantDto.id, ownerDto.id);
+        assertEquals(restaurantDto.id , dto.id);
     }
 
     @Test
     public void givenGetRestaurant_whenProprietaireIdIsInvalid_thenAccessInterditExceptionIsThrown() {
-        restaurantDto.id = restaurantService.createRestaurant(proprietaireDto, restaurantDto);
+        restaurantDto.id = restaurantService.createRestaurant(ownerDto, restaurantDto);
         assertThrows(ForbiddenAccessException.class, () -> restaurantService.getRestaurant(restaurantDto.id, "1234546"));
     }
 
     @Test
     public void givenGetRestaurant_whenRestaurantDoesntExist_thenNotFoundExceptionIsThrown() {
-        restaurantService.createRestaurant(proprietaireDto, restaurantDto);
+        restaurantService.createRestaurant(ownerDto, restaurantDto);
         restaurantDto.id = "12345";
-        assertThrows(NotFoundException.class, () -> restaurantService.getRestaurant(restaurantDto.id, proprietaireDto.id));
+        assertThrows(NotFoundException.class, () -> restaurantService.getRestaurant(restaurantDto.id, ownerDto.id));
     }
 
     @Test
     public void givenSearchRestaurants_whenNoParameterAreSpecified_thenReturnAllRestaurants() {
-        restaurantService.createRestaurant(proprietaireDto, restaurantDto);
-        restaurantService.createRestaurant(proprietaireDto, restaurantDto);
+        restaurantService.createRestaurant(ownerDto, restaurantDto);
+        restaurantService.createRestaurant(ownerDto, restaurantDto);
         restaurantDto.id = "12345";
         restaurantDto.name = "Dejeuner";
-        restaurantDto.hoursOpen = "06:00:00";
-        restaurantDto.hoursClose = "13:00:00";
-        restaurantService.createRestaurant(proprietaireDto, restaurantDto);
+        restaurantDto.hours = new HourDto("11:00:00","19:00:00");
+        restaurantService.createRestaurant(ownerDto, restaurantDto);
 
         assertEquals(3, restaurantService.searchRestaurants(new RestaurantDto()).size());
     }
 
     @Test
     public void givenSearchRestaurants_withParamaterName_thenReturnOnlyMatchingRestaurants() {
-        restaurantService.createRestaurant(proprietaireDto, restaurantDto);
-        restaurantService.createRestaurant(proprietaireDto, restaurantDto);
+        restaurantService.createRestaurant(ownerDto, restaurantDto);
+        restaurantService.createRestaurant(ownerDto, restaurantDto);
         restaurantDto.id = "12345";
         restaurantDto.name = "Dejeuner";
-        restaurantDto.hoursOpen = "06:00:00";
-        restaurantDto.hoursClose = "13:00:00";
-        restaurantService.createRestaurant(proprietaireDto, restaurantDto);
+        restaurantDto.hours.close = "18:00:00";
+        restaurantDto.hours.open = "13:00:00";
+        restaurantService.createRestaurant(ownerDto, restaurantDto);
 
         RestaurantDto searchParams = new RestaurantDto();
         searchParams.name = "Pizz";

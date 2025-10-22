@@ -1,8 +1,8 @@
 package ca.ulaval.glo2003;
 
 import ca.ulaval.glo2003.api.ReservationResource;
-import ca.ulaval.glo2003.api.SearchRessource;
-import ca.ulaval.glo2003.api.RestaurantRessource;
+import ca.ulaval.glo2003.api.SearchResource;
+import ca.ulaval.glo2003.api.RestaurantResource;
 import ca.ulaval.glo2003.api.assemblers.RestaurantDtoAssembler;
 import ca.ulaval.glo2003.api.response.exceptions.ForbiddenAccessExceptionMapper;
 import ca.ulaval.glo2003.api.response.exceptions.NotFoundExceptionMapper;
@@ -11,6 +11,7 @@ import ca.ulaval.glo2003.api.response.exceptions.MissingParameterExceptionMapper
 import ca.ulaval.glo2003.domain.ReservationService;
 import ca.ulaval.glo2003.domain.RestaurantService;
 import ca.ulaval.glo2003.entities.CustomerFactory;
+import ca.ulaval.glo2003.entities.assemblers.ReservationAssembler;
 import ca.ulaval.glo2003.entities.reservation.ReservationFactory;
 import ca.ulaval.glo2003.entities.reservation.ReservationTimeFactory;
 import ca.ulaval.glo2003.infra.persistence.InMemoryReservationRepository;
@@ -42,16 +43,17 @@ public class AppContext extends ResourceConfig {
                         new CustomerFactory(),
                         new ReservationTimeFactory()
                 ),
-                new InMemoryReservationRepository()
+                new InMemoryReservationRepository(),
+               new ReservationAssembler()
         );
 
-        final RestaurantRessource restaurantRessource = new RestaurantRessource(
+        final RestaurantResource restaurantRessource = new RestaurantResource(
                 restaurantService,
                 restaurantDtoAssembler,
                 reservationService
         );
 
-        final SearchRessource searchRessource = new SearchRessource(
+        final SearchResource searchRessource = new SearchResource(
                 restaurantService,
                 restaurantDtoAssembler
         );
