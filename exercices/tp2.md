@@ -2,6 +2,9 @@
 
 ## Architecture
 
+Voicie un extrait non exhaustif de notre architecture.
+
+![GET architecture](./images/TP2/architecture.png)
 
 
 ## Rétrospective
