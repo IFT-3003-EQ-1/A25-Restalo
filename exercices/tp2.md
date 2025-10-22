@@ -39,38 +39,58 @@ Nous avons utilisé l'outil de synthèse de Google (AI overview) pour simplifier
 
 ## Planification
 
+VOicie un résumé de notre utilisation des outils de gestion de projet de Github
+
 ### Github Project
+
+Notre Kanban
 
 ![GET kanban](./images/TP2/kanban.png)
 
 
 ### Milestone
 
+Milestone du TP2
+
 ![GET milestone](./images/TP2/milestone.png)
 
 
 ### Issues
 
+Issue 1:
+
 ![GET issue_1](./images/TP2/issue_1.png)
 
+Issue 2:
+
 ![GET issue_2](./images/TP2/issue_2.png)
+
+Issue 3:
 
 ![GET issue_1](./images/TP2/issue_3.png)
 
 
 ### Pull requests
 
-![GET pr_1](./images/TP2/pr_1.png)
+Pull request 1:
 
-![GET pr_2_1](./images/TP2/pr_2_1.png)
+![GET pr_1](./images/TP2/PR_1.png)
 
-![GET pr_2_1](./images/TP2/pr_2_2.png)
+Pull request 2:
 
-![GET pr_3_1](./images/TP2/pr_3_1.png)
+![GET pr_2_1](./images/TP2/PR_2_1.png)
 
-![GET pr_3_1](./images/TP2/pr_3_2.png)
+![GET pr_2_1](./images/TP2/PR_2_2.png)
+
+Pull request 3:
+
+![GET pr_3_1](./images/TP2/PR_3_1.png)
+
+![GET pr_3_1](./images/TP2/PR_3_2.png)
 
 
 ### Arbre de commits
+
+Notre arbre de commit. Notez que certaines branches ont été supprimées :
 
 ![GET commit_tree](./images/TP2/commit_tree.png)
