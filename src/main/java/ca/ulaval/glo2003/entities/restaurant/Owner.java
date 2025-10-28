@@ -1,7 +1,13 @@
 package ca.ulaval.glo2003.entities.restaurant;
 
+import dev.morphia.annotations.Entity;
+
+@Entity
 public class Owner {
-    private final String id;
+    public Owner() {
+    }
+
+    private String id;
 
     public String getId() {
         return id;

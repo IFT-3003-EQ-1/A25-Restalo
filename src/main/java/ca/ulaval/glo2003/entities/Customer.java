@@ -1,5 +1,8 @@
 package ca.ulaval.glo2003.entities;
 
+import dev.morphia.annotations.Entity;
+
+@Entity
 public class Customer {
     private  String name;
     private  String email;

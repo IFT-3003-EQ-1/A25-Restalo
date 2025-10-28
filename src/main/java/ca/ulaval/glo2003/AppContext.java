@@ -14,19 +14,20 @@ import ca.ulaval.glo2003.entities.CustomerFactory;
 import ca.ulaval.glo2003.entities.assemblers.ReservationAssembler;
 import ca.ulaval.glo2003.entities.reservation.ReservationFactory;
 import ca.ulaval.glo2003.entities.reservation.ReservationTimeFactory;
-import ca.ulaval.glo2003.infra.persistence.InMemoryReservationRepository;
+import ca.ulaval.glo2003.infra.persistence.*;
 import ca.ulaval.glo2003.entities.restaurant.OwnerFactory;
 import ca.ulaval.glo2003.entities.assemblers.RestaurantAssembler;
 import ca.ulaval.glo2003.entities.restaurant.RestaurantFactory;
 import ca.ulaval.glo2003.entities.filters.FilterRestaurantFactory;
-import ca.ulaval.glo2003.infra.persistence.InMemoryRestaurantRepository;
-import ca.ulaval.glo2003.infra.persistence.RestaurantRepository;
 import org.glassfish.jersey.server.ResourceConfig;
 
 public class AppContext extends ResourceConfig {
 
     public static ResourceConfig getRessources() {
-       final RestaurantRepository restaurantRepository = new InMemoryRestaurantRepository();
+        var databaseFactory = new DatabaseFactory();
+       final RestaurantRepository restaurantRepository = databaseFactory.createRestaurantRepository();
+       final ReservationRepository reservationRepository = databaseFactory.createReservationRepository();
+
        final  RestaurantDtoAssembler restaurantDtoAssembler = new RestaurantDtoAssembler();
 
        final RestaurantService restaurantService = new RestaurantService(
@@ -43,7 +44,7 @@ public class AppContext extends ResourceConfig {
                         new CustomerFactory(),
                         new ReservationTimeFactory()
                 ),
-                new InMemoryReservationRepository(),
+               reservationRepository,
                new ReservationAssembler()
         );
 
