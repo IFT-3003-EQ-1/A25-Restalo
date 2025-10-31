@@ -1,7 +1,8 @@
-package ca.ulaval.glo2003.infra.persistence;
+package ca.ulaval.glo2003.infra.persistence.mongoDB;
 
 import ca.ulaval.glo2003.entities.filters.Filter;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
+import ca.ulaval.glo2003.infra.persistence.RestaurantRepository;
 import dev.morphia.Datastore;
 import dev.morphia.query.filters.Filters;
 
@@ -10,10 +11,6 @@ import java.util.Optional;
 
 public class MongoRestaurantRepository implements RestaurantRepository {
     private final Datastore datastore;
-
-    public MongoRestaurantRepository() {
-        this.datastore = MongoDBConnection.getInstance().getDatastore();
-    }
 
     public MongoRestaurantRepository(Datastore datastore) {
         this.datastore = datastore;
@@ -42,13 +39,12 @@ public class MongoRestaurantRepository implements RestaurantRepository {
 
     @Override
     public List<Restaurant> searchRestaurants(List<Filter<Restaurant>> filters) {
-        // Get all restaurants first
-        List<Restaurant> allRestaurants = getAll();
-
         // Apply each filter in sequence
-        return allRestaurants.stream()
-                .filter(restaurant -> filters.stream()
-                        .allMatch(filter -> filter.filter(restaurant)))
+        return datastore.find(Restaurant.class).stream()
+                .filter(restaurant -> filters.stream().allMatch(
+                        filter -> filter.filter(restaurant)
+                        )
+                )
                 .toList();
     }
 

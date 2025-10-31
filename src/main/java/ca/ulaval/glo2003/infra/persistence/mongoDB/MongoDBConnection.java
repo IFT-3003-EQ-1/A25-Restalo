@@ -1,4 +1,4 @@
-package ca.ulaval.glo2003.infra.persistence;
+package ca.ulaval.glo2003.infra.persistence.mongoDB;
 
 import ca.ulaval.glo2003.entities.reservation.Reservation;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
@@ -9,11 +9,13 @@ import com.mongodb.client.MongoClients;
 import dev.morphia.Datastore;
 import dev.morphia.Morphia;
 
+
 public class MongoDBConnection {
     private static MongoDBConnection instance;
     private final Datastore datastore;
     private static final String  CONNECTION_STRING = "mongodb://root:example@localhost:27017";
-    
+    private static final String  DATABASE_NAME = "restaloDB";
+
     private MongoDBConnection() {
         try {
             MongoClientSettings settings = MongoClientSettings.builder()
@@ -22,7 +24,7 @@ public class MongoDBConnection {
             
             MongoClient mongoClient = MongoClients.create(settings);
 
-            datastore = Morphia.createDatastore(mongoClient, "restaloDB");
+            datastore = Morphia.createDatastore(mongoClient, DATABASE_NAME);
             datastore.getMapper().getEntityModel(Restaurant.class);
             datastore.getMapper().getEntityModel(Reservation.class);
 
@@ -34,18 +36,12 @@ public class MongoDBConnection {
         }
     }
     
-    public static MongoDBConnection getInstance() {
+    public static Datastore getDatastore() {
         if (instance == null) {
             synchronized (MongoDBConnection.class) {
-                if (instance == null) {
-                    instance = new MongoDBConnection();
-                }
+                instance = new MongoDBConnection();
             }
         }
-        return instance;
-    }
-    
-    public Datastore getDatastore() {
-        return datastore;
+        return instance.datastore;
     }
 }

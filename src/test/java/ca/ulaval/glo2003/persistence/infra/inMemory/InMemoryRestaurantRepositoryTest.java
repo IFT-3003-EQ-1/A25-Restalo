@@ -1,11 +1,11 @@
-package ca.ulaval.glo2003.persistence.infra;
+package ca.ulaval.glo2003.persistence.infra.inMemory;
 
 import ca.ulaval.glo2003.entities.restaurant.ConfigReservation;
 import ca.ulaval.glo2003.entities.restaurant.Hours;
 import ca.ulaval.glo2003.entities.restaurant.Owner;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 import ca.ulaval.glo2003.entities.filters.Filter;
-import ca.ulaval.glo2003.infra.persistence.InMemoryRestaurantRepository;
+import ca.ulaval.glo2003.infra.persistence.inMemory.InMemoryRestaurantRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -38,7 +38,7 @@ public class InMemoryRestaurantRepositoryTest {
 
     @Test
     public void givenGet_whenIdIsNotValid_thenReturnEmptyOptional() {
-        Optional<Restaurant> restaurantObtenu = repository.get(RESTAURANT_ID);
+        Optional<Restaurant> restaurantObtenu = repository.get(null);
 
         assertFalse(restaurantObtenu.isPresent());
     }

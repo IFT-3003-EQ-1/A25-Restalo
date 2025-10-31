@@ -1,6 +1,7 @@
-package ca.ulaval.glo2003.infra.persistence;
+package ca.ulaval.glo2003.infra.persistence.mongoDB;
 
 import ca.ulaval.glo2003.entities.reservation.Reservation;
+import ca.ulaval.glo2003.infra.persistence.ReservationRepository;
 import dev.morphia.Datastore;
 import dev.morphia.query.filters.Filters;
 
@@ -8,8 +9,9 @@ import java.util.Optional;
 
 public class MongoReservationRepository implements ReservationRepository {
     private final Datastore datastore;
-    public MongoReservationRepository() {
-        datastore = MongoDBConnection.getInstance().getDatastore();
+
+    public MongoReservationRepository(Datastore datastore) {
+        this.datastore = datastore;
     }
 
     @Override

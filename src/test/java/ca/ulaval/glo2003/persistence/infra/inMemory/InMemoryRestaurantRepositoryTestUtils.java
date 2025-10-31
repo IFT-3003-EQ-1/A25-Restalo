@@ -1,4 +1,4 @@
-package ca.ulaval.glo2003.persistence.infra;
+package ca.ulaval.glo2003.persistence.infra.inMemory;
 
 import ca.ulaval.glo2003.entities.restaurant.ConfigReservation;
 import ca.ulaval.glo2003.entities.restaurant.Hours;

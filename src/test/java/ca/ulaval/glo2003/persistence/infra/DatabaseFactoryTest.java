@@ -1,6 +1,10 @@
 package ca.ulaval.glo2003.persistence.infra;
 
 import ca.ulaval.glo2003.infra.persistence.*;
+import ca.ulaval.glo2003.infra.persistence.inMemory.InMemoryReservationRepository;
+import ca.ulaval.glo2003.infra.persistence.inMemory.InMemoryRestaurantRepository;
+import ca.ulaval.glo2003.infra.persistence.mongoDB.MongoReservationRepository;
+import ca.ulaval.glo2003.infra.persistence.mongoDB.MongoRestaurantRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
