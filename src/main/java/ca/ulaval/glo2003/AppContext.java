@@ -24,7 +24,7 @@ import org.glassfish.jersey.server.ResourceConfig;
 public class AppContext extends ResourceConfig {
 
     public static ResourceConfig getRessources() {
-        var databaseFactory = new DatabaseFactory();
+        var databaseFactory = new DatabaseFactory(System.getProperty("persistence", "inmemory"));
        final RestaurantRepository restaurantRepository = databaseFactory.createRestaurantRepository();
        final ReservationRepository reservationRepository = databaseFactory.createReservationRepository();
 

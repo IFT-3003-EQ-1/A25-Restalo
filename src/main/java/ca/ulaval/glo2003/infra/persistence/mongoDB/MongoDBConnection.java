@@ -9,6 +9,8 @@ import com.mongodb.client.MongoClients;
 import dev.morphia.Datastore;
 import dev.morphia.Morphia;
 
+import java.util.concurrent.TimeUnit;
+
 
 public class MongoDBConnection {
     private static MongoDBConnection instance;
@@ -19,6 +21,9 @@ public class MongoDBConnection {
     private MongoDBConnection() {
         try {
             MongoClientSettings settings = MongoClientSettings.builder()
+                    .applyToClusterSettings(
+                            builder -> builder.serverSelectionTimeout(10, TimeUnit.SECONDS)
+                    )
                     .applyConnectionString(new ConnectionString(CONNECTION_STRING))
                     .build();
             

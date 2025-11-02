@@ -14,10 +14,6 @@ public class DatabaseFactory {
         this.persistenceType = persistenceType != null ? persistenceType : "inmemory";
     }
 
-    public DatabaseFactory() {
-        this(System.getProperty("persistence", "inmemory"));
-    }
-
     public RestaurantRepository createRestaurantRepository() {
         return switch (persistenceType.toLowerCase()) {
             case "mongo" -> new MongoRestaurantRepository(MongoDBConnection.getDatastore());

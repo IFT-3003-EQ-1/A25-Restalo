@@ -95,7 +95,7 @@ class DatabaseFactoryTest {
     @Test
     void defaultConstructor_WithNoSystemProperty_UsesInMemoryAsFallback() {
         System.clearProperty("persistence");
-        DatabaseFactory factory = new DatabaseFactory();
+        DatabaseFactory factory = new DatabaseFactory("inmemory");
         RestaurantRepository repository = factory.createRestaurantRepository();
         assertNotNull(repository);
         assertInstanceOf(InMemoryRestaurantRepository.class, repository);
@@ -104,7 +104,7 @@ class DatabaseFactoryTest {
     @Test
     void defaultConstructor_WithMongoSystemProperty_CreatesMongoRepository() {
         System.setProperty("persistence", "mongo");
-        DatabaseFactory factory = new DatabaseFactory();
+        DatabaseFactory factory = new DatabaseFactory("mongo");
         RestaurantRepository repository = factory.createRestaurantRepository();
         assertNotNull(repository);
         assertInstanceOf(MongoRestaurantRepository.class, repository);
@@ -113,7 +113,7 @@ class DatabaseFactoryTest {
     @Test
     void defaultConstructor_WithInMemorySystemProperty_CreatesInMemoryRepository() {
         System.setProperty("persistence", "inmemory");
-        DatabaseFactory factory = new DatabaseFactory();
+        DatabaseFactory factory = new DatabaseFactory("inmemory");
         RestaurantRepository repository = factory.createRestaurantRepository();
         assertNotNull(repository);
         assertInstanceOf(InMemoryRestaurantRepository.class, repository);
