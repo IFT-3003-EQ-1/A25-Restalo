@@ -20,7 +20,7 @@ public class SearchRestaurantEnd2EndTest extends JerseyTest {
     private RestaurantDtoAssembler assembler = new RestaurantDtoAssembler();
 
     protected Application configure() {
-        return AppContext.getRessources();
+        return new AppContext();
     }
 
     @Test

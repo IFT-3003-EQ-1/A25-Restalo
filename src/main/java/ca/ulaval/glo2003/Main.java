@@ -11,7 +11,8 @@ public class Main {
     private static HttpServer server;
 
     public static HttpServer startServer() {
-        server = GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), AppContext.getRessources());
+        AppContext context = new AppContext();
+        server = GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), context.getRessources());
         return server;
     }
 

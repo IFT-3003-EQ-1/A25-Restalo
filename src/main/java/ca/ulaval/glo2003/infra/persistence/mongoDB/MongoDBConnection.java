@@ -2,6 +2,7 @@ package ca.ulaval.glo2003.infra.persistence.mongoDB;
 
 import ca.ulaval.glo2003.entities.reservation.Reservation;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
+import ca.ulaval.glo2003.infra.persistence.DBConfig;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
@@ -13,23 +14,34 @@ import java.util.concurrent.TimeUnit;
 
 
 public class MongoDBConnection {
-    private static MongoDBConnection instance;
-    private final Datastore datastore;
-    private static final String  CONNECTION_STRING = "mongodb://root:example@localhost:27017";
-    private static final String  DATABASE_NAME = "restaloDB";
+    private MongoClient mongoClient;
+    private Datastore datastore;
+    private DBConfig config;
 
-    private MongoDBConnection() {
+
+    public MongoDBConnection(DBConfig config) {
+        this.config = config;
+
+    }
+    
+    public  Datastore getDatastore() {
+        return datastore;
+    }
+
+    public void openConnection() {
+        if (mongoClient != null)
+            throw new IllegalStateException("MongoDB connection already open");
         try {
             MongoClientSettings settings = MongoClientSettings.builder()
                     .applyToClusterSettings(
                             builder -> builder.serverSelectionTimeout(10, TimeUnit.SECONDS)
                     )
-                    .applyConnectionString(new ConnectionString(CONNECTION_STRING))
+                    .applyConnectionString(new ConnectionString(config.getConnectionString()))
                     .build();
-            
-            MongoClient mongoClient = MongoClients.create(settings);
 
-            datastore = Morphia.createDatastore(mongoClient, DATABASE_NAME);
+            mongoClient = MongoClients.create(settings);
+
+            datastore = Morphia.createDatastore(mongoClient, config.getDatabaseName());
             datastore.getMapper().getEntityModel(Restaurant.class);
             datastore.getMapper().getEntityModel(Reservation.class);
 
@@ -40,13 +52,11 @@ public class MongoDBConnection {
             throw new RuntimeException("MongoDB connection failed", e);
         }
     }
-    
-    public static Datastore getDatastore() {
-        if (instance == null) {
-            synchronized (MongoDBConnection.class) {
-                instance = new MongoDBConnection();
-            }
-        }
-        return instance.datastore;
+
+    public void closeConnection() {
+        if (mongoClient == null)
+            throw new IllegalStateException("MongoDB connection has to be open");
+        mongoClient.close();
     }
+
 }

@@ -12,7 +12,7 @@ import ca.ulaval.glo2003.entities.exceptions.NotFoundException;
 import ca.ulaval.glo2003.entities.filters.Filter;
 import ca.ulaval.glo2003.entities.filters.FilterRestaurantFactory;
 import ca.ulaval.glo2003.entities.restaurant.RestaurantFactory;
-import ca.ulaval.glo2003.infra.persistence.RestaurantRepository;
+import ca.ulaval.glo2003.entities.RestaurantRepository;
 
 import java.util.List;
 

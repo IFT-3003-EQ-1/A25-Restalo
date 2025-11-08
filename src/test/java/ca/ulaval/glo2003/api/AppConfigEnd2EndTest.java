@@ -8,7 +8,7 @@ public class AppConfigEnd2EndTest {
 
     @Test
     public void givenAppContext_whenTestAppIsLaunched_thenLocalMongoDbIsUsed() {
-        String mongoDBmode = "mongo";
-        assertEquals(mongoDBmode,System.getProperty("persistence"), "End2EndTest should be configured to use mongoDB");
+        String mongoDBmode = "inmemory";
+        assertEquals(mongoDBmode,System.getProperty("persistence"), "End2EndTest should be configured to use the inmemory DB");
     }
 }

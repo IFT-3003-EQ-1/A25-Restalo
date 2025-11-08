@@ -2,7 +2,7 @@ package ca.ulaval.glo2003.infra.persistence.inMemory;
 
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 import ca.ulaval.glo2003.entities.filters.Filter;
-import ca.ulaval.glo2003.infra.persistence.RestaurantRepository;
+import ca.ulaval.glo2003.entities.RestaurantRepository;
 
 import java.util.*;
 

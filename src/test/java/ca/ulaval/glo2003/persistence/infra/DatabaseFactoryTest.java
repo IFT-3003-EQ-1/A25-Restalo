@@ -1,5 +1,7 @@
 package ca.ulaval.glo2003.persistence.infra;
 
+import ca.ulaval.glo2003.entities.ReservationRepository;
+import ca.ulaval.glo2003.entities.RestaurantRepository;
 import ca.ulaval.glo2003.infra.persistence.*;
 import ca.ulaval.glo2003.infra.persistence.inMemory.InMemoryReservationRepository;
 import ca.ulaval.glo2003.infra.persistence.inMemory.InMemoryRestaurantRepository;
@@ -12,118 +14,85 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class DatabaseFactoryTest {
 
-    private String originalPersistenceProperty;
-
-    @BeforeEach
-    void setUp() {
-        originalPersistenceProperty = System.getProperty("persistence");
-    }
-
-    @AfterEach
-    void tearDown() {
-        if (originalPersistenceProperty == null) {
-            System.clearProperty("persistence");
-        } else {
-            System.setProperty("persistence", originalPersistenceProperty);
-        }
-    }
-
     @Test
-    void createRestaurantRepository_WithMongoType_ReturnsMongoRepository() {
-        DatabaseFactory factory = new DatabaseFactory("mongo");
-        RestaurantRepository repository = factory.createRestaurantRepository();
+    void getRestaurantRepository_WithMongoType_ReturnsMongoRepository() {
+        DBConfig config = new DBConfig(
+                DBConfig.DEFAULT_HOST,
+                DBConfig.DEFAULT_PORT,
+                DBConfig.DEFAULT_DATABASE_NAME,
+                DBConfig.PersistenceType.MONGO_DB
+        );
+
+        DatabaseFactory factory = new DatabaseFactory(config);
+        RestaurantRepository repository = factory.getRestaurantRepository();
         assertNotNull(repository);
         assertInstanceOf(MongoRestaurantRepository.class, repository);
     }
 
     @Test
-    void createRestaurantRepository_WithInMemoryType_ReturnsInMemoryRepository() {
-        DatabaseFactory factory = new DatabaseFactory("inmemory");
-        RestaurantRepository repository = factory.createRestaurantRepository();
+    void getRestaurantRepository_WithInMemoryType_ReturnsInMemoryRepository() {
+        DBConfig config = new DBConfig(
+                DBConfig.DEFAULT_HOST,
+                DBConfig.DEFAULT_PORT,
+                DBConfig.DEFAULT_DATABASE_NAME,
+                DBConfig.PersistenceType.IN_MEMORY
+        );
+
+        DatabaseFactory factory = new DatabaseFactory(config);
+        RestaurantRepository repository = factory.getRestaurantRepository();
         assertNotNull(repository);
         assertInstanceOf(InMemoryRestaurantRepository.class, repository);
     }
 
     @Test
-    void createRestaurantRepository_WithUnknownType_ReturnsInMemoryRepositoryAsFallback() {
-        DatabaseFactory factory = new DatabaseFactory("unknown");
-        RestaurantRepository repository = factory.createRestaurantRepository();
-        assertNotNull(repository);
-        assertInstanceOf(InMemoryRestaurantRepository.class, repository);
-    }
-
-    @Test
-    void createRestaurantRepository_WithNullType_ReturnsInMemoryRepositoryAsFallback() {
+    void getRestaurantRepository_WithNullType_ReturnsInMemoryRepositoryAsFallback() {
         DatabaseFactory factory = new DatabaseFactory(null);
-        RestaurantRepository repository = factory.createRestaurantRepository();
+        RestaurantRepository repository = factory.getRestaurantRepository();
         assertNotNull(repository);
         assertInstanceOf(InMemoryRestaurantRepository.class, repository);
     }
 
     @Test
-    void createRestaurantRepository_WithMixedCaseMongoType_ReturnsMongoRepository() {
-        DatabaseFactory factory = new DatabaseFactory("MoNgO");
-        RestaurantRepository repository = factory.createRestaurantRepository();
-        assertNotNull(repository);
-        assertInstanceOf(MongoRestaurantRepository.class, repository);
-    }
-
-    @Test
-    void createReservationRepository_WithMongoType_ReturnsMongoRepository() {
-        DatabaseFactory factory = new DatabaseFactory("mongo");
-        ReservationRepository repository = factory.createReservationRepository();
+    void getReservationRepository_WithMongoType_ReturnsMongoRepository() {
+        DBConfig config = new DBConfig(
+                DBConfig.DEFAULT_HOST,
+                DBConfig.DEFAULT_PORT,
+                DBConfig.DEFAULT_DATABASE_NAME,
+                DBConfig.PersistenceType.MONGO_DB
+        );
+        DatabaseFactory factory = new DatabaseFactory(config);
+        ReservationRepository repository = factory.getReservationRepository();
         assertNotNull(repository);
         assertInstanceOf(MongoReservationRepository.class, repository);
     }
 
     @Test
-    void createReservationRepository_WithInMemoryType_ReturnsInMemoryRepository() {
-        DatabaseFactory factory = new DatabaseFactory("inmemory");
-        ReservationRepository repository = factory.createReservationRepository();
+    void getReservationRepository_WithInMemoryType_ReturnsInMemoryRepository() {
+        DBConfig config = new DBConfig(
+                DBConfig.DEFAULT_HOST,
+                DBConfig.DEFAULT_PORT,
+                DBConfig.DEFAULT_DATABASE_NAME,
+                DBConfig.PersistenceType.IN_MEMORY
+        );
+
+        DatabaseFactory factory = new DatabaseFactory(config);
+        ReservationRepository repository = factory.getReservationRepository();
         assertNotNull(repository);
         assertInstanceOf(InMemoryReservationRepository.class, repository);
-    }
-
-    @Test
-    void createReservationRepository_WithUnknownType_ReturnsInMemoryRepositoryAsFallback() {
-        DatabaseFactory factory = new DatabaseFactory("postgresql");
-        ReservationRepository repository = factory.createReservationRepository();
-        assertNotNull(repository);
-        assertInstanceOf(InMemoryReservationRepository.class, repository);
-    }
-
-    @Test
-    void defaultConstructor_WithNoSystemProperty_UsesInMemoryAsFallback() {
-        System.clearProperty("persistence");
-        DatabaseFactory factory = new DatabaseFactory("inmemory");
-        RestaurantRepository repository = factory.createRestaurantRepository();
-        assertNotNull(repository);
-        assertInstanceOf(InMemoryRestaurantRepository.class, repository);
-    }
-
-    @Test
-    void defaultConstructor_WithMongoSystemProperty_CreatesMongoRepository() {
-        System.setProperty("persistence", "mongo");
-        DatabaseFactory factory = new DatabaseFactory("mongo");
-        RestaurantRepository repository = factory.createRestaurantRepository();
-        assertNotNull(repository);
-        assertInstanceOf(MongoRestaurantRepository.class, repository);
-    }
-
-    @Test
-    void defaultConstructor_WithInMemorySystemProperty_CreatesInMemoryRepository() {
-        System.setProperty("persistence", "inmemory");
-        DatabaseFactory factory = new DatabaseFactory("inmemory");
-        RestaurantRepository repository = factory.createRestaurantRepository();
-        assertNotNull(repository);
-        assertInstanceOf(InMemoryRestaurantRepository.class, repository);
     }
 
     @Test
     void factoryCreatesNewInstancesEachTime() {
-        DatabaseFactory factory = new DatabaseFactory("inmemory");
-        RestaurantRepository repo1 = factory.createRestaurantRepository();
-        RestaurantRepository repo2 = factory.createRestaurantRepository();
+        DBConfig config = new DBConfig(
+                DBConfig.DEFAULT_HOST,
+                DBConfig.DEFAULT_PORT,
+                DBConfig.DEFAULT_DATABASE_NAME,
+                DBConfig.PersistenceType.IN_MEMORY
+        );
+
+        DatabaseFactory factory = new DatabaseFactory(config);
+        RestaurantRepository repo1 = factory.getRestaurantRepository();
+        RestaurantRepository repo2 = factory.getRestaurantRepository();
         assertNotSame(repo1, repo2, "Factory should create new instances each time");
     }
 }
