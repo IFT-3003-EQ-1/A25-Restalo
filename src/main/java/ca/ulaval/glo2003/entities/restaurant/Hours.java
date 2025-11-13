@@ -1,8 +1,13 @@
 package ca.ulaval.glo2003.entities.restaurant;
 
+import dev.morphia.annotations.Entity;
+
+@Entity
 public class Hours {
-    private final String close;
-    private final String open;
+    private  String close;
+    private  String open;
+    public Hours() {
+    }
 
     public String getClose() {
         return close;

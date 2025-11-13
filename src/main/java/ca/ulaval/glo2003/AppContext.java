@@ -11,25 +11,30 @@ import ca.ulaval.glo2003.api.response.exceptions.MissingParameterExceptionMapper
 import ca.ulaval.glo2003.domain.ReservationService;
 import ca.ulaval.glo2003.domain.RestaurantService;
 import ca.ulaval.glo2003.entities.CustomerFactory;
+import ca.ulaval.glo2003.entities.ReservationRepository;
+import ca.ulaval.glo2003.entities.RestaurantRepository;
 import ca.ulaval.glo2003.entities.assemblers.ReservationAssembler;
 import ca.ulaval.glo2003.entities.reservation.ReservationFactory;
 import ca.ulaval.glo2003.entities.reservation.ReservationTimeFactory;
-import ca.ulaval.glo2003.infra.persistence.InMemoryReservationRepository;
+import ca.ulaval.glo2003.infra.persistence.*;
 import ca.ulaval.glo2003.entities.restaurant.OwnerFactory;
 import ca.ulaval.glo2003.entities.assemblers.RestaurantAssembler;
 import ca.ulaval.glo2003.entities.restaurant.RestaurantFactory;
 import ca.ulaval.glo2003.entities.filters.FilterRestaurantFactory;
-import ca.ulaval.glo2003.infra.persistence.InMemoryRestaurantRepository;
-import ca.ulaval.glo2003.infra.persistence.RestaurantRepository;
+import ca.ulaval.glo2003.infra.persistence.DBConfig;
+import com.google.common.base.Strings;
 import org.glassfish.jersey.server.ResourceConfig;
 
 public class AppContext extends ResourceConfig {
 
-    public static ResourceConfig getRessources() {
-       final RestaurantRepository restaurantRepository = new InMemoryRestaurantRepository();
-       final  RestaurantDtoAssembler restaurantDtoAssembler = new RestaurantDtoAssembler();
+    public ResourceConfig getRessources() {
+        DatabaseFactory databaseFactory = new DatabaseFactory(getConfigFromEnv());
+        final RestaurantRepository restaurantRepository = databaseFactory.getRestaurantRepository();
+        final ReservationRepository reservationRepository = databaseFactory.getReservationRepository();
 
-       final RestaurantService restaurantService = new RestaurantService(
+        final  RestaurantDtoAssembler restaurantDtoAssembler = new RestaurantDtoAssembler();
+
+        final RestaurantService restaurantService = new RestaurantService(
                 new RestaurantFactory(),
                 restaurantRepository,
                 new OwnerFactory(),
@@ -37,30 +42,30 @@ public class AppContext extends ResourceConfig {
                 new FilterRestaurantFactory()
         );
 
-       final ReservationService  reservationService= new ReservationService(
+        final ReservationService  reservationService= new ReservationService(
                 restaurantRepository,
                 new ReservationFactory(
                         new CustomerFactory(),
                         new ReservationTimeFactory()
                 ),
-                new InMemoryReservationRepository(),
+               reservationRepository,
                new ReservationAssembler()
         );
 
-        final RestaurantResource restaurantRessource = new RestaurantResource(
+         final RestaurantResource restaurantRessource = new RestaurantResource(
                 restaurantService,
                 restaurantDtoAssembler,
                 reservationService
         );
 
-        final SearchResource searchRessource = new SearchResource(
+         final SearchResource searchRessource = new SearchResource(
                 restaurantService,
                 restaurantDtoAssembler
         );
 
-        final ReservationResource reservationResource = new ReservationResource(reservationService);
+         final ReservationResource reservationResource = new ReservationResource(reservationService);
 
-        return new ResourceConfig()
+         return new ResourceConfig()
                 .register(searchRessource)
                 .register(restaurantRessource)
                 .register(reservationResource)
@@ -68,5 +73,38 @@ public class AppContext extends ResourceConfig {
                 .register(InvalideParameterExceptionMapper.class)
                 .register(MissingParameterExceptionMapper.class)
                 .register(NotFoundExceptionMapper.class);
-       }
+    }
+
+    private DBConfig getConfigFromEnv() {
+        DBConfig.PersistenceType persistenceType;
+        String persistence = System.getProperty("persistence", "inmemory");
+        if (persistence.equals("mongo")) {
+            persistenceType = DBConfig.PersistenceType.MONGO_DB;
+        } else  {
+            persistenceType = DBConfig.DEFAULT_PERSISTENCE_TYPE;
+        }
+
+        String dbName = System.getenv().get("MONGO_DATABASE_NAME");
+        if (Strings.isNullOrEmpty(dbName)) {
+            dbName = DBConfig.DEFAULT_DATABASE_NAME;
+        }
+
+        String host = System.getenv().get("MONGO_HOST");
+        if (Strings.isNullOrEmpty(host)) {
+            host = DBConfig.DEFAULT_HOST;
+        }
+
+        String port_str = System.getenv().get("MONGO_PORT");
+        if (Strings.isNullOrEmpty(port_str)) {
+            port_str = Integer.toString(DBConfig.DEFAULT_PORT);
+        }
+
+
+        return new DBConfig(
+                host,
+                Integer.parseInt(port_str),
+                dbName,
+                persistenceType
+        );
+    }
 }

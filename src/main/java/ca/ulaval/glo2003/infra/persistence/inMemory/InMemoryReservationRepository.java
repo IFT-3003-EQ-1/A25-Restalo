@@ -1,6 +1,7 @@
-package ca.ulaval.glo2003.infra.persistence;
+package ca.ulaval.glo2003.infra.persistence.inMemory;
 
 import ca.ulaval.glo2003.entities.reservation.Reservation;
+import ca.ulaval.glo2003.entities.ReservationRepository;
 
 import java.util.*;
 

@@ -4,13 +4,39 @@ package ca.ulaval.glo2003.entities.restaurant;
 import java.time.Duration;
 import java.time.LocalTime;
 
+import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.Id;
+import dev.morphia.annotations.Embedded;
+import org.bson.types.ObjectId;
+import java.time.Duration;
+import java.time.LocalTime;
+
+@Entity("restaurants")
 public class Restaurant {
-    private final String id;
-    private final Owner owner;
-    private final String name;
-    private final int capacity;
-    private final Hours hours;
-    private final ConfigReservation configReservation;
+
+    @Id
+    private String id;
+
+    private Owner owner;
+    private String name;
+    private int capacity;
+    private Hours hours;
+
+    private ConfigReservation configReservation;
+
+    // Default constructor required by Morphia
+    public Restaurant() {
+    }
+
+    public Restaurant(String id, Owner owner, String name, int capacity,
+                      Hours hours, ConfigReservation configReservation) {
+        this.id = id;
+        this.owner = owner;
+        this.name = name;
+        this.capacity = capacity;
+        this.hours = hours;
+        this.configReservation = configReservation;
+    }
 
     public String getId() {
         return id;
@@ -24,6 +50,7 @@ public class Restaurant {
         return name;
     }
 
+
     public int getCapacity() {
         return capacity;
     }
@@ -36,20 +63,9 @@ public class Restaurant {
         return configReservation;
     }
 
-
-    public Restaurant(String id, Owner owner, String name, int capacity, Hours hours, ConfigReservation configReservation) {
-        this.id = id;
-        this.owner = owner;
-        this.name = name;
-        this.capacity = capacity;
-        this.hours = hours;
-        this.configReservation = configReservation;
-    }
-
     public int getReservationDuration() {
         LocalTime openTime = LocalTime.parse(hours.getOpen());
         LocalTime closeTime = LocalTime.parse(hours.getClose());
-        // Calculer la durée totale d'ouverture en minutes
         return (int) Duration.between(openTime, closeTime).toMinutes();
     }
 }

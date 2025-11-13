@@ -11,7 +11,7 @@ import ca.ulaval.glo2003.entities.exceptions.ForbiddenAccessException;
 import ca.ulaval.glo2003.entities.exceptions.NotFoundException;
 import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.entities.filters.FilterRestaurantFactory;
-import ca.ulaval.glo2003.infra.persistence.InMemoryRestaurantRepository;
+import ca.ulaval.glo2003.infra.persistence.inMemory.InMemoryRestaurantRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

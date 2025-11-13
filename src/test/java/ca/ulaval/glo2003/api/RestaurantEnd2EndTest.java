@@ -24,7 +24,7 @@ public class RestaurantEnd2EndTest extends JerseyTest {
 
     @Override
     protected Application configure() {
-        return AppContext.getRessources();
+        return (new AppContext()).getRessources();
     }
 
     @BeforeEach

@@ -2,10 +2,15 @@ package ca.ulaval.glo2003.entities.reservation;
 
 import ca.ulaval.glo2003.entities.Customer;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
+import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.Id;
 
+@Entity("reservations")
 public class Reservation {
+    @Id
+    private  String id;
     private  String number;
-    private  String  date;
+    private  String  date; // AAAA-MM-DD
     private  ReservationTime time;
     private  int groupSize;
     private  Customer customer;

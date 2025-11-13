@@ -7,8 +7,6 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.Application;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.test.JerseyTest;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -17,10 +15,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SearchRestaurantEnd2EndTest extends JerseyTest {
 
-    private RestaurantDtoAssembler assembler = new RestaurantDtoAssembler();
+    private final RestaurantDtoAssembler assembler = new RestaurantDtoAssembler();
 
     protected Application configure() {
-        return AppContext.getRessources();
+        return (new AppContext()).getRessources();
     }
 
     @Test

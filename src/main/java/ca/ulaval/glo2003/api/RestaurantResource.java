@@ -69,11 +69,11 @@ public class RestaurantResource {
 
         List<RestaurantDto> restaurantDtos = restaurantService.getRestaurants(ownerId);
 
-        List<Map<String, Object>> sortie = restaurantDtos
+        List<Map<String, Object>> restaurants = restaurantDtos
                 .stream()
                 .map(restaurantDtoAssembler::toJson)
                 .toList();
-        return Response.ok(sortie).build();
+        return Response.ok(restaurants).build();
     }
 
     @POST

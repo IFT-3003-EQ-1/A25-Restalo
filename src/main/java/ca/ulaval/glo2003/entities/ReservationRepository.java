@@ -1,4 +1,4 @@
-package ca.ulaval.glo2003.infra.persistence;
+package ca.ulaval.glo2003.entities;
 
 import ca.ulaval.glo2003.entities.reservation.Reservation;
 

@@ -6,8 +6,8 @@ import ca.ulaval.glo2003.entities.exceptions.NotFoundException;
 import ca.ulaval.glo2003.entities.reservation.Reservation;
 import ca.ulaval.glo2003.entities.reservation.ReservationFactory;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
-import ca.ulaval.glo2003.infra.persistence.ReservationRepository;
-import ca.ulaval.glo2003.infra.persistence.RestaurantRepository;
+import ca.ulaval.glo2003.entities.ReservationRepository;
+import ca.ulaval.glo2003.entities.RestaurantRepository;
 
 public class ReservationService {
     private final RestaurantRepository restaurantRepository;

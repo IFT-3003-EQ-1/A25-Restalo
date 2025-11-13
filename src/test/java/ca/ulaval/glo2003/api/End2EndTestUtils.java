@@ -54,4 +54,8 @@ public class End2EndTestUtils {
             fail(e.getMessage());
         }
     }
+
+    public static void clearDatabase() {
+
+    }
 }

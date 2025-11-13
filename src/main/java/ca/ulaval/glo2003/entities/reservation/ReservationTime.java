@@ -1,8 +1,13 @@
 package ca.ulaval.glo2003.entities.reservation;
 
+import dev.morphia.annotations.Entity;
+
+@Entity
 public class ReservationTime {
-    private final String start;
-    private final String end;
+    private  String start;
+    private  String end;
+
+    public ReservationTime() {}
 
     public ReservationTime(String start, String end) {
         this.start = start;
