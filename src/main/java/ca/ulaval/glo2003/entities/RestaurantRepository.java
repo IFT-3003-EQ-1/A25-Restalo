@@ -16,4 +16,6 @@ public interface RestaurantRepository {
     List<Restaurant> searchRestaurants(List<Filter<Restaurant>> filters);
 
     List<Restaurant> getAll();
+
+    boolean delete(String id);
 }

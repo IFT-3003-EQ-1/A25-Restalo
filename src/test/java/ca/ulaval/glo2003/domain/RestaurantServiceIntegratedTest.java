@@ -11,6 +11,7 @@ import ca.ulaval.glo2003.entities.exceptions.ForbiddenAccessException;
 import ca.ulaval.glo2003.entities.exceptions.NotFoundException;
 import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.entities.filters.FilterRestaurantFactory;
+import ca.ulaval.glo2003.infra.persistence.inMemory.InMemoryReservationRepository;
 import ca.ulaval.glo2003.infra.persistence.inMemory.InMemoryRestaurantRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,7 @@ public class RestaurantServiceIntegratedTest {
         restaurantService = new RestaurantService(
                 new RestaurantFactory(),
                 new InMemoryRestaurantRepository(),
+                new InMemoryReservationRepository(),
                 new OwnerFactory(),
                 new RestaurantAssembler(),
                 new FilterRestaurantFactory()

@@ -26,4 +26,12 @@ public class MongoReservationRepository implements ReservationRepository {
                .first();
        return Optional.ofNullable(reservation);
     }
+
+    @Override
+    public boolean deleteRelatedReservations(String restaurantId) {
+        return datastore.find(Reservation.class)
+                .filter(Filters.eq("restaurantId", restaurantId))
+                .delete()
+                .getDeletedCount() != 0;
+    }
 }

@@ -54,4 +54,12 @@ public class MongoRestaurantRepository implements RestaurantRepository {
                 .iterator()
                 .toList();
     }
+
+    @Override
+    public boolean delete(String id) {
+        return datastore.find(Restaurant.class)
+                .filter(Filters.eq("id", id))
+                .delete()
+                .getDeletedCount() != 0;
+    }
 }

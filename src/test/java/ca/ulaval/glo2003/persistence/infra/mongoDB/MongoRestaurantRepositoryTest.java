@@ -179,4 +179,44 @@ public class MongoRestaurantRepositoryTest {
         assertEquals(2, repository.searchRestaurants(filtres).size());
     }
 
+    @Test
+    public void givenDelete_whenRestaurantIdIsValid_thenRestaurantIsDeleted() {
+        repository.save(restaurant);
+        Restaurant other = new Restaurant(
+                "2",
+                new Owner(
+                        "1"
+                ),
+                "Pizz",
+                2,
+                new Hours(),
+                new ConfigReservation()
+        );
+        repository.save(other);
+
+        assertTrue(repository.delete(RESTAURANT_ID));
+        assertFalse(repository.get(RESTAURANT_ID).isPresent());
+        assertTrue(repository.get(other.getId()).isPresent());
+    }
+
+    @Test
+    public void givenDelete_whenIdIsNotValid_thenReturnFalse() {
+        repository.save(restaurant);
+        Restaurant other = new Restaurant(
+                "2",
+                new Owner(
+                        "1"
+                ),
+                "Pizz",
+                2,
+                new Hours(),
+                new ConfigReservation()
+        );
+        repository.save(other);
+
+        assertFalse(repository.delete(RESTAURANT_ID));
+        assertTrue(repository.get(RESTAURANT_ID).isPresent());
+        assertTrue(repository.get(other.getId()).isPresent());
+    }
+
 }

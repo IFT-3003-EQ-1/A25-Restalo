@@ -135,6 +135,59 @@ public class RestaurantEnd2EndTest extends JerseyTest {
         assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
     }
 
+    @Test
+    public void givenDeleteRestaurant_whenCorrectRequest_thenResponseIsNoContent() {
+        RestaurantDto restaurantDto = End2EndTestUtils.buildDefaultRestaurantDto();
+        End2EndTestUtils.postRestaurant(target("/restaurants"), restaurantDto);
+
+        try (Response response =  target("/restaurants")
+                .queryParam("id", restaurantDto.id)
+                .request().header("Owner", restaurantDto.owner.id)
+                .delete()) {
+            assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
+        }
+    }
+
+    @Test
+    public void givenDeleteRestaurant_whenOwnerDoesntExist_thenResponseIsNotFound() {
+        RestaurantDto restaurantDto = End2EndTestUtils.buildDefaultRestaurantDto();
+        End2EndTestUtils.postRestaurant(target("/restaurants"), restaurantDto);
+
+        try (Response response =  target("/restaurants")
+                .queryParam("id", restaurantDto.id)
+                .request().header("Owner", null)
+                .delete()) {
+            assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
+        }
+    }
+
+    @Test
+    public void givenDeleteRestaurant_whenRestaurantDoesntExist_thenResponseIsNotFound() {
+        RestaurantDto restaurantDto = End2EndTestUtils.buildDefaultRestaurantDto();
+        End2EndTestUtils.postRestaurant(target("/restaurants"), restaurantDto);
+
+        try (Response response =  target("/restaurants")
+                .queryParam("id", null)
+                .request().header("Owner", restaurantDto.owner.id)
+                .delete()) {
+            assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
+        }
+
+    }
+
+    @Test
+    public void givenDeleteRestaurant_whenMissingParameter_thenResponseIsBadRequest() {
+        RestaurantDto restaurantDto = End2EndTestUtils.buildDefaultRestaurantDto();
+        End2EndTestUtils.postRestaurant(target("/restaurants"), restaurantDto);
+
+        try (Response response =  target("/restaurants")
+                .queryParam("id", restaurantDto.id)
+                .request().header("Owner", restaurantDto.owner.id)
+                .delete()) {
+            assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+        }
+    }
+
     private String extractIdFromLocation(Response response) {
         URI location = response.getLocation();
         String path = location.getPath();

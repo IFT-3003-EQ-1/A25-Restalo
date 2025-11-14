@@ -8,4 +8,6 @@ public interface ReservationRepository {
     void save(Reservation reservation);
 
     Optional<Reservation> get(String id);
+    
+    boolean deleteRelatedReservations(String restaurantId);
 }
