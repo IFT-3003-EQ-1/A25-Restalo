@@ -145,16 +145,17 @@ public class RestaurantServiceIntegratedTest {
 
     @Test
     public void givenDeleteRestaurant_shouldDeleteRestaurant_whenRestaurantExists() {
-        boolean isDeleted = restaurantService.deleteRestaurant(restaurantDto.id, restaurantDto.owner.id);
+        String restaurantId = restaurantService.createRestaurant(ownerDto, restaurantDto);
+        boolean isDeleted = restaurantService.deleteRestaurant(restaurantId, restaurantDto.owner.id);
 
         assertTrue(isDeleted, "Should be able to delete restaurant");
     }
 
     @Test
     public void givenDeleteRestaurant_shouldThrowException_whenOwnerDoesntExist() {
-
+        String restaurantId = restaurantService.createRestaurant(ownerDto, restaurantDto);
         assertThrows(ForbiddenAccessException.class,
-                () -> restaurantService.deleteRestaurant(restaurantDto.id, "12345"));
+                () -> restaurantService.deleteRestaurant(restaurantId, "12345"));
     }
 
     @Test

@@ -106,6 +106,7 @@ public class RestaurantService {
             throw new ForbiddenAccessException("le restaurant n'appartient pas au restaurateur");
         }
 
-        return restaurantRepository.delete(restaurantId) && reservationRepository.deleteRelatedReservations(restaurantId);
+        reservationRepository.deleteRelatedReservations(restaurantId);
+        return restaurantRepository.delete(restaurantId);
     }
 }
