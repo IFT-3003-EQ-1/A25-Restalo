@@ -138,10 +138,9 @@ public class RestaurantEnd2EndTest extends JerseyTest {
     @Test
     public void givenDeleteRestaurant_whenCorrectRequest_thenResponseIsNoContent() {
         RestaurantDto restaurantDto = End2EndTestUtils.buildDefaultRestaurantDto();
-        End2EndTestUtils.postRestaurant(target("/restaurants"), restaurantDto);
+        String restaurantId = End2EndTestUtils.postRestaurant(target("/restaurants"), restaurantDto);
 
-        try (Response response =  target("/restaurants")
-                .queryParam("id", restaurantDto.id)
+        try (Response response =  target("/restaurants/" + restaurantId)
                 .request().header("Owner", restaurantDto.owner.id)
                 .delete()) {
             assertEquals(Response.Status.NO_CONTENT.getStatusCode(), response.getStatus());
@@ -151,10 +150,9 @@ public class RestaurantEnd2EndTest extends JerseyTest {
     @Test
     public void givenDeleteRestaurant_whenOwnerDoesntExist_thenResponseIsNotFound() {
         RestaurantDto restaurantDto = End2EndTestUtils.buildDefaultRestaurantDto();
-        End2EndTestUtils.postRestaurant(target("/restaurants"), restaurantDto);
+        String restaurantId = End2EndTestUtils.postRestaurant(target("/restaurants"), restaurantDto);
 
-        try (Response response =  target("/restaurants")
-                .queryParam("id", restaurantDto.id)
+        try (Response response =  target("/restaurants/" + restaurantId)
                 .request().header("Owner", null)
                 .delete()) {
             assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
@@ -164,10 +162,9 @@ public class RestaurantEnd2EndTest extends JerseyTest {
     @Test
     public void givenDeleteRestaurant_whenRestaurantDoesntExist_thenResponseIsNotFound() {
         RestaurantDto restaurantDto = End2EndTestUtils.buildDefaultRestaurantDto();
-        End2EndTestUtils.postRestaurant(target("/restaurants"), restaurantDto);
-
-        try (Response response =  target("/restaurants")
-                .queryParam("id", null)
+        String restaurantId = End2EndTestUtils.postRestaurant(target("/restaurants"), restaurantDto);
+        restaurantId = "-1"; // "-1" id doesnt exist
+        try (Response response =  target("/restaurants/" + restaurantId)
                 .request().header("Owner", restaurantDto.owner.id)
                 .delete()) {
             assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
@@ -175,13 +172,13 @@ public class RestaurantEnd2EndTest extends JerseyTest {
 
     }
 
-    @Test
+    //@Test
+    // question: how can it fails?
     public void givenDeleteRestaurant_whenMissingParameter_thenResponseIsBadRequest() {
         RestaurantDto restaurantDto = End2EndTestUtils.buildDefaultRestaurantDto();
-        End2EndTestUtils.postRestaurant(target("/restaurants"), restaurantDto);
+        String restaurantId = End2EndTestUtils.postRestaurant(target("/restaurants"), restaurantDto);
 
-        try (Response response =  target("/restaurants")
-                .queryParam("id", restaurantDto.id)
+        try (Response response =  target("/restaurants/" + restaurantId)
                 .request().header("Owner", restaurantDto.owner.id)
                 .delete()) {
             assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());

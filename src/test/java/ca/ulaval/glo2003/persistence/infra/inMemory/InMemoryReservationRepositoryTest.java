@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class InMemoryReservationRepositoryTest {
@@ -52,7 +53,7 @@ public class InMemoryReservationRepositoryTest {
     public void givenDeleteRelatedReservations_whenInvalideReservationId_thenReturnFalse() {
         reservationRepository.save(reservation);
 
-        assertTrue(reservationRepository.deleteRelatedReservations(null),
+        assertFalse(reservationRepository.deleteRelatedReservations(null),
                 "Delete shouldn't delete any reservation");
 
 
