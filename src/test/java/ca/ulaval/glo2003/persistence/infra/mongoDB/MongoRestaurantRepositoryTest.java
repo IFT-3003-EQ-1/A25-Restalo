@@ -8,13 +8,11 @@ import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 import ca.ulaval.glo2003.infra.persistence.mongoDB.MongoRestaurantRepository;
 import dev.morphia.Datastore;
 import dev.morphia.query.Query;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
@@ -56,11 +54,6 @@ public class MongoRestaurantRepositoryTest {
                 new Hours(),
                 new ConfigReservation()
         );
-    }
-
-    @AfterEach
-    public void tearDown() {
-        Mockito.mockitoSession();
     }
 
     @Test

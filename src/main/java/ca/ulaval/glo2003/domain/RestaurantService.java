@@ -4,7 +4,6 @@ import ca.ulaval.glo2003.domain.dtos.restaurant.OwnerDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
 import ca.ulaval.glo2003.entities.ReservationRepository;
 import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
-import ca.ulaval.glo2003.entities.reservation.Reservation;
 import ca.ulaval.glo2003.entities.restaurant.Owner;
 import ca.ulaval.glo2003.entities.restaurant.OwnerFactory;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
@@ -15,7 +14,6 @@ import ca.ulaval.glo2003.entities.filters.Filter;
 import ca.ulaval.glo2003.entities.filters.FilterRestaurantFactory;
 import ca.ulaval.glo2003.entities.restaurant.RestaurantFactory;
 import ca.ulaval.glo2003.entities.RestaurantRepository;
-import net.sf.saxon.event.FilterFactory;
 
 import java.util.List;
 
@@ -30,7 +28,8 @@ public class RestaurantService {
 
     public RestaurantService(
             RestaurantFactory restaurantFactory,
-            RestaurantRepository restaurantRepository, ReservationRepository reservationRepository,
+            RestaurantRepository restaurantRepository,
+            ReservationRepository reservationRepository,
             OwnerFactory ownerFactory,
             RestaurantAssembler restaurantAssembler, FilterRestaurantFactory filterRestaurantFactory) {
         this.restaurantFactory = restaurantFactory;
