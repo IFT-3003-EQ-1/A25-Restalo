@@ -149,10 +149,6 @@ public class RestaurantServiceUnitTest {
         String restaurantId = restaurantDto.id;
         String ownerId = null;
 
-        when(restaurantRepository.get(restaurantId)).thenReturn(Optional.of(restaurant));
-        when(restaurantRepository.delete(restaurantId)).thenReturn(true);
-
-
         assertThrows(MissingParameterException.class, ()-> restaurantService.deleteRestaurant(restaurantId, ownerId));
     }
 
