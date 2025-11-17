@@ -99,6 +99,10 @@ public class RestaurantService {
     }
 
     public boolean deleteRestaurant(String restaurantId, String ownerId) {
+        if (ownerId == null || ownerId.isBlank()) {
+            throw new MissingParameterException("Owner");
+        }
+
         Restaurant restaurant = restaurantRepository.get(restaurantId)
                 .orElseThrow(() -> new NotFoundException("le restaurant n'existe pas"));
 
