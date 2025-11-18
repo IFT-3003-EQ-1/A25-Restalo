@@ -20,9 +20,9 @@ public class MongoReservationRepository implements ReservationRepository {
     }
 
     @Override
-    public Optional<Reservation> get(String id) {
+    public Optional<Reservation> get(String number) {
        Reservation reservation = datastore.find(Reservation.class)
-               .filter(Filters.eq("id", id))
+               .filter(Filters.eq("number", number))
                .first();
        return Optional.ofNullable(reservation);
     }

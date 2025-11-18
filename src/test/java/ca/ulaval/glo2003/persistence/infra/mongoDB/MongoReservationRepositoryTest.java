@@ -1,76 +1,27 @@
 package ca.ulaval.glo2003.persistence.infra.mongoDB;
 
-import ca.ulaval.glo2003.entities.Customer;
-import ca.ulaval.glo2003.entities.reservation.Reservation;
-import ca.ulaval.glo2003.entities.reservation.ReservationTime;
-import ca.ulaval.glo2003.entities.restaurant.Restaurant;
+import ca.ulaval.glo2003.infra.persistence.DBConfig;
 import ca.ulaval.glo2003.infra.persistence.mongoDB.MongoReservationRepository;
-import dev.morphia.Datastore;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import ca.ulaval.glo2003.persistence.infra.ReservationRepositoryTest;
+import com.mongodb.client.MongoClients;
+import dev.morphia.Morphia;
+import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
-import java.util.*;
+@Testcontainers
+public class MongoReservationRepositoryTest extends ReservationRepositoryTest {
 
-import static org.junit.jupiter.api.Assertions.*;
+    public static final String DEFAULT_DATABASE_NAME = "testRestaloDB";
+    public static final DBConfig.PersistenceType PERSISTENCE_TYPE = DBConfig.PersistenceType.MONGO_DB;
 
-@ExtendWith(MockitoExtension.class)
-@Disabled
-public class MongoReservationRepositoryTest {
+    @Container
+    final MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:8");
 
-    private final String RESERVATION_ID = "1";
-
-    @Mock
-    public Datastore datastore;
-
-    private MongoReservationRepository repository;
-
-    private Reservation reservation;
-
-
-    @BeforeEach
-    public void setUp() {
-        repository = new MongoReservationRepository(datastore);
-        reservation = new Reservation(
-                RESERVATION_ID,
-                "2025-10-25",
-                new ReservationTime(),
-                2,
-                new Customer(),
-                new Restaurant()
-        );
+    @Override
+    protected MongoReservationRepository getRepository() {
+        var dataStore = Morphia.createDatastore(MongoClients.create(mongoDBContainer.getConnectionString()),DEFAULT_DATABASE_NAME);
+        System.out.println(mongoDBContainer.getConnectionString());
+        return new MongoReservationRepository(dataStore);
     }
-
-    @Test
-    public void givenGet_whenIdIsValid_thenReturnReservation() {
-        repository.save(reservation);
-
-        Optional<Reservation> value = repository.get(RESERVATION_ID);
-
-        assertTrue(value.isPresent());
-        assertEquals(value.get(), reservation);
-    }
-
-    @Test
-    public void givenGet_whenIdIsNotValid_thenReturnEmptyOptional() {
-        repository.save(reservation);
-
-        Optional<Reservation> restaurantObtenu = repository.get(null);
-
-        assertFalse(restaurantObtenu.isPresent());
-    }
-
-    @Test
-    public void givenSave_whenParametersAreValid_thenDatastoreContainsReservation() {
-        repository.save(reservation);
-
-        Optional<Reservation> value = repository.get(RESERVATION_ID);
-
-        assertTrue(value.isPresent());
-        assertEquals(value.get(), reservation);
-    }
-
 }

@@ -21,7 +21,6 @@ public class MongoDBConnection {
 
     public MongoDBConnection(DBConfig config) {
         this.config = config;
-
     }
     
     public  Datastore getDatastore() {
