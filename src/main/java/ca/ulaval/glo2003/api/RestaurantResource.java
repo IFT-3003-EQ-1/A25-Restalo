@@ -5,7 +5,9 @@ import ca.ulaval.glo2003.domain.ReservationService;
 import ca.ulaval.glo2003.domain.RestaurantService;
 import ca.ulaval.glo2003.domain.dtos.ReservationDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.OwnerDto;
+import ca.ulaval.glo2003.domain.dtos.restaurant.ReservationSearch;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
+import ca.ulaval.glo2003.entities.reservation.Reservation;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
@@ -84,5 +86,18 @@ public class RestaurantResource {
         String reservationId = reservationService.addReservation(restaurantId, createReservation);
         URI location = infosUri.getBaseUriBuilder().path("reservations").path(reservationId).build();
         return Response.created(location).build();
+    }
+
+    @GET
+    public Response searchReservation(
+            @HeaderParam("Owner") String ownerId,
+            @PathParam("id") String restaurantId,
+            @PathParam("date") String reservationData,
+            @PathParam("customerName") String customerName,
+            @Context UriInfo infosUri
+    ) {
+        ReservationSearch searchPayload = new ReservationSearch(ownerId,customerName, reservationData, restaurantId);
+        List<ReservationDto> reservations = reservationService.findBySearchCriteria(searchPayload);
+        return Response.ok(reservations).build();
     }
 }

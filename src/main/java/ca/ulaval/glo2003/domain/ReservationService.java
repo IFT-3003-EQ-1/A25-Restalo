@@ -1,6 +1,8 @@
 package ca.ulaval.glo2003.domain;
 
 import ca.ulaval.glo2003.domain.dtos.ReservationDto;
+import ca.ulaval.glo2003.domain.dtos.restaurant.ReservationSearch;
+import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
 import ca.ulaval.glo2003.entities.assemblers.ReservationAssembler;
 import ca.ulaval.glo2003.entities.exceptions.NotFoundException;
 import ca.ulaval.glo2003.entities.reservation.Reservation;
@@ -8,6 +10,8 @@ import ca.ulaval.glo2003.entities.reservation.ReservationFactory;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 import ca.ulaval.glo2003.entities.ReservationRepository;
 import ca.ulaval.glo2003.entities.RestaurantRepository;
+
+import java.util.List;
 
 public class ReservationService {
     private final RestaurantRepository restaurantRepository;
@@ -44,5 +48,13 @@ public class ReservationService {
         );
 
         return reservationAssembler.toDto(reservation);
+    }
+
+    public List<ReservationDto> findBySearchCriteria(ReservationSearch searchPayload) {
+        List<Reservation> reservation = reservationRepository.search(searchPayload).orElseThrow(
+                ()-> new NotFoundException("Reservation not found")
+        );
+
+       return reservation.stream().map(reservationAssembler::toDto).toList();
     }
 }
