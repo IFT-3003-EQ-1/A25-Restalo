@@ -55,7 +55,17 @@ public class InMemoryReservationRepositoryTest {
 
         assertFalse(reservationRepository.deleteRelatedReservations(null),
                 "Delete shouldn't delete any reservation");
+    }
 
+    @Test
+    public void givenDelete_whenValidReservationId_thenReturnTrue() {
+        reservationRepository.save(reservation);
+        assertTrue(reservationRepository.delete(reservation.getNumber()));
+    }
 
+    @Test
+    public void givenDelete_whenInvalidReservationId_thenReturnFalse() {
+        reservationRepository.save(reservation);
+        assertFalse(reservationRepository.delete("-1"));
     }
 }
