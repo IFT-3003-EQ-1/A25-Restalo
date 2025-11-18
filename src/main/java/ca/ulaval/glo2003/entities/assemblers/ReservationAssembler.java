@@ -18,8 +18,9 @@ public class ReservationAssembler {
                        reservationDto.date = reservation.getDate();
                        reservationDto.customer = toDto(reservation.getCustomer());
                        reservationDto.restaurant = new RestaurantAssembler().toPartialDto(reservation.getRestaurant());
-                       reservationDto.startTime = reservationTimeDto == null ?  null : reservationTimeDto.getStart();
-                       return reservationDto;
+                       reservationDto.time = reservationTimeDto;
+
+        return reservationDto;
     }
 
     private CustomerDto toDto(@Nullable Customer customer) {

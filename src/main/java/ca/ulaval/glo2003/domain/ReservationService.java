@@ -46,4 +46,10 @@ public class ReservationService {
         return reservationAssembler.toDto(reservation);
     }
 
+    public boolean deleteReservation(String reservationNumber) {
+        boolean isDeleted = reservationRepository.delete(reservationNumber);
+        if(!isDeleted)
+            throw new NotFoundException("Reservation not found");
+        return true;
+    }
 }
