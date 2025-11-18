@@ -1,12 +1,12 @@
 package ca.ulaval.glo2003.api;
 
+import ca.ulaval.glo2003.api.assemblers.ReservationDtoAssembler;
 import ca.ulaval.glo2003.api.assemblers.RestaurantDtoAssembler;
 import ca.ulaval.glo2003.domain.dtos.*;
 import ca.ulaval.glo2003.domain.dtos.restaurant.ConfigReservationDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.HourDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.OwnerDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
-import ca.ulaval.glo2003.entities.Customer;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.Response;
@@ -24,7 +24,7 @@ public class End2EndTestUtils {
 
         RestaurantDto  restaurantDto = new RestaurantDto();
         restaurantDto.capacity = 2;
-        restaurantDto.hours= new HourDto("11:00:00","19:00:00");
+        restaurantDto.hours = new HourDto("11:00:00","19:00:00");
         restaurantDto.owner = ownerDto;
         restaurantDto.name = "Pizz";
         restaurantDto.hours.open = "11:00:00";
@@ -36,18 +36,22 @@ public class End2EndTestUtils {
     }
 
     public static ReservationDto buildReservationDto(){
-         ReservationDto createReservationDto = new ReservationDto();
-                              createReservationDto.customer =(new CustomerDto("testName","test@mail.com","5144151540"));
-                              createReservationDto.date= "2025-10-18";
-                              createReservationDto.groupSize = 2;
-                              createReservationDto.startTime="11:30:00";
-                              return createReservationDto;
+        ReservationDto createReservationDto = new ReservationDto();
+        createReservationDto.customer =
+                (new CustomerDto("testName","test@mail.com","5144151540"));
+
+        createReservationDto.date = "2025-10-18";
+        createReservationDto.groupSize = 2;
+        createReservationDto.time.start = "11:30:00";
+        createReservationDto.time.end = "12:30:00";
+        createReservationDto.restaurant = buildDefaultRestaurantDto();
+        return createReservationDto;
     }
 
     public static String postRestaurant(WebTarget target, RestaurantDto restaurantDto) {
         Map<String, Object> json =  (new RestaurantDtoAssembler()).toJson(restaurantDto);
         String restaurantId = null;
-        try (Response response = target.request().header("Owner", "1").post(Entity.json(json))) {
+        try (Response response = target.path("/restaurants").request().header("Owner", "1").post(Entity.json(json))) {
             String[] pathFragments = response.getLocation().getPath().split("/");
 
             restaurantId = pathFragments[pathFragments.length-1];
@@ -58,6 +62,24 @@ public class End2EndTestUtils {
             fail(e.getMessage());
         }
         return restaurantId;
+    }
+
+    public static String postReservation(WebTarget target, ReservationDto reservationDto) {
+        Map<String, Object> json =  (new ReservationDtoAssembler()).toJson(reservationDto);
+        String reservationNumber = null;
+        target = target.path("/restaurants/" + reservationDto.restaurant.id + "/reservations");
+        try (Response response = target.request().post(Entity.json(json))) {
+            String[] pathFragments = response.getLocation().getPath().split("/");
+
+            reservationNumber = pathFragments[pathFragments.length-1];
+            reservationDto.number = reservationNumber;
+
+            assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+        return reservationNumber;
+
     }
 
 }

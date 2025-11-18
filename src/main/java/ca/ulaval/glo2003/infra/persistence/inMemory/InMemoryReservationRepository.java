@@ -30,4 +30,9 @@ public class InMemoryReservationRepository implements ReservationRepository {
     public boolean deleteRelatedReservations(String restaurantId) {
         return database.values().removeIf(reservation -> reservation.getRestaurant().getId().equals(restaurantId));
     }
+
+    @Override
+    public boolean delete(String number) {
+        return database.remove(number) != null;
+    }
 }

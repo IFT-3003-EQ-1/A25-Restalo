@@ -34,4 +34,12 @@ public class MongoReservationRepository implements ReservationRepository {
                 .delete()
                 .getDeletedCount() != 0;
     }
+
+    @Override
+    public boolean delete(String number) {
+        return datastore.find(Reservation.class)
+                .filter(Filters.eq("number", number))
+                .delete()
+                .getDeletedCount() != 0;
+    }
 }

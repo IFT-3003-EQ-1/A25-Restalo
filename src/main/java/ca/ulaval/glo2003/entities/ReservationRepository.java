@@ -10,4 +10,6 @@ public interface ReservationRepository {
     Optional<Reservation> get(String id);
     
     boolean deleteRelatedReservations(String restaurantId);
+
+    boolean delete(String id);
 }

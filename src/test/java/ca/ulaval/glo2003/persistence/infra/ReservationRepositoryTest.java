@@ -5,7 +5,6 @@ import ca.ulaval.glo2003.entities.ReservationRepository;
 import ca.ulaval.glo2003.entities.reservation.Reservation;
 import ca.ulaval.glo2003.entities.reservation.ReservationTime;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
-import ca.ulaval.glo2003.infra.persistence.mongoDB.MongoReservationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class ReservationRepositoryTest {
     private final String RESERVATION_NUMBER = "1";
-    private final int GROUPE_SIZE = 2;
+    private final int GROUP_SIZE = 2;
 
     private ReservationRepository repository;
 
@@ -33,7 +32,7 @@ public abstract class ReservationRepositoryTest {
                 RESERVATION_NUMBER,
                 "2025-10-25",
                 new ReservationTime(),
-                GROUPE_SIZE,
+                GROUP_SIZE,
                 new Customer(),
                 new Restaurant()
         );
@@ -63,6 +62,18 @@ public abstract class ReservationRepositoryTest {
 
         Optional<Reservation> value = repository.get(RESERVATION_NUMBER);
         assertTrue(value.isPresent());
-        assertEquals(value.get().getGroupSize(), GROUPE_SIZE);
+        assertEquals(value.get().getGroupSize(), GROUP_SIZE);
+    }
+
+    @Test
+    public void givenDelete_whenValidReservationId_thenReturnTrue() {
+        repository.save(reservation);
+        assertTrue(repository.delete(reservation.getNumber()));
+    }
+
+    @Test
+    public void givenDelete_whenInvalidReservationId_thenReturnFalse() {
+        repository.save(reservation);
+        assertFalse(repository.delete("-1"));
     }
 }

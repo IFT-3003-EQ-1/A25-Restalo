@@ -11,16 +11,6 @@ import java.util.Map;
 
 public class InMemoryReservationRepositoryTest extends ReservationRepositoryTest {
 
-    private InMemoryReservationRepository reservationRepository;
-
-    private Map<String, Reservation> reservations;
-
-    private Reservation reservation;
-
-    private Restaurant restaurant;
-
-    private final String RESTAURANT_ID = "1";
-
     @Override
     protected ReservationRepository getRepository() {
         Map<String, Reservation> database = new HashMap<>();

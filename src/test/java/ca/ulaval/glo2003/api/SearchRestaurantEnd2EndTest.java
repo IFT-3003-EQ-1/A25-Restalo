@@ -34,7 +34,7 @@ public class SearchRestaurantEnd2EndTest extends JerseyTest {
 
     @Test
     public void givenSearchRestaurants_whenWrongHourOpensFormat_thenResponseIsError() {
-        End2EndTestUtils.postRestaurant(target("/restaurants"), End2EndTestUtils.buildDefaultRestaurantDto());
+        End2EndTestUtils.postRestaurant(target(), End2EndTestUtils.buildDefaultRestaurantDto());
 
         RestaurantDto restaurantDto = End2EndTestUtils.buildDefaultRestaurantDto();
         restaurantDto.hours.close = "-1";
