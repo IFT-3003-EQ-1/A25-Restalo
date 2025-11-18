@@ -8,6 +8,11 @@ import java.util.Optional;
 
 public interface ReservationRepository {
     void save(Reservation reservation);
+
     Optional<Reservation> get(String id);
     Optional<List<Reservation>> search(ReservationSearch searchPayload);
+
+    boolean deleteRelatedReservations(String restaurantId);
+
+    boolean delete(String id);
 }

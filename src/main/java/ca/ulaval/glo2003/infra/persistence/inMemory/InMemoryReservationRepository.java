@@ -1,11 +1,9 @@
 package ca.ulaval.glo2003.infra.persistence.inMemory;
 
-import ca.ulaval.glo2003.domain.dtos.restaurant.ReservationSearch;
 import ca.ulaval.glo2003.entities.reservation.Reservation;
 import ca.ulaval.glo2003.entities.ReservationRepository;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class InMemoryReservationRepository implements ReservationRepository {
     private final Map<String, Reservation> database;
@@ -63,5 +61,15 @@ public class InMemoryReservationRepository implements ReservationRepository {
             }
         }
         return true;
+    }
+
+    @Override
+    public boolean deleteRelatedReservations(String restaurantId) {
+        return database.values().removeIf(reservation -> reservation.getRestaurant().getId().equals(restaurantId));
+    }
+
+    @Override
+    public boolean delete(String number) {
+        return database.remove(number) != null;
     }
 }

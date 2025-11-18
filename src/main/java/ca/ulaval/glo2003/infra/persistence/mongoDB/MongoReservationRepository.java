@@ -1,13 +1,10 @@
 package ca.ulaval.glo2003.infra.persistence.mongoDB;
 
-import ca.ulaval.glo2003.domain.dtos.restaurant.ReservationSearch;
 import ca.ulaval.glo2003.entities.reservation.Reservation;
 import ca.ulaval.glo2003.entities.ReservationRepository;
 import dev.morphia.Datastore;
-import dev.morphia.query.Query;
 import dev.morphia.query.filters.Filters;
 
-import java.util.List;
 import java.util.Optional;
 
 public class MongoReservationRepository implements ReservationRepository {
@@ -51,5 +48,21 @@ public class MongoReservationRepository implements ReservationRepository {
         }
 
         return Optional.of(query.iterator().toList());
+    }
+
+    @Override
+    public boolean deleteRelatedReservations(String restaurantId) {
+        return datastore.find(Reservation.class)
+                .filter(Filters.eq("restaurantId", restaurantId))
+                .delete()
+                .getDeletedCount() != 0;
+    }
+
+    @Override
+    public boolean delete(String id) {
+        return datastore.find(Reservation.class)
+                .filter(Filters.eq("id", id))
+                .delete()
+                .getDeletedCount() != 0;
     }
 }

@@ -28,7 +28,7 @@ import java.util.Map;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class RestaurantResource {
-    private  final RestaurantService restaurantService;
+    private final RestaurantService restaurantService;
     private final RestaurantDtoAssembler restaurantDtoAssembler;
     private final ReservationService reservationService;
 
@@ -100,4 +100,14 @@ public class RestaurantResource {
         List<ReservationDto> reservations = reservationService.findBySearchCriteria(searchPayload);
         return Response.ok(reservations).build();
     }
+
+    @DELETE
+    @Path("/{id}")
+    public Response deleteRestaurant(@PathParam("id") String restaurantId,
+                                     @Context UriInfo infosUri,
+                                     @HeaderParam("Owner") String ownerId) {
+        boolean isRestaurantDeleted = restaurantService.deleteRestaurant(restaurantId, ownerId);
+        return Response.noContent().build();
+    }
+
 }

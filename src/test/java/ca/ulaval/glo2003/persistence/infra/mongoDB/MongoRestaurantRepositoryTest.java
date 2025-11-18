@@ -8,13 +8,11 @@ import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 import ca.ulaval.glo2003.infra.persistence.mongoDB.MongoRestaurantRepository;
 import dev.morphia.Datastore;
 import dev.morphia.query.Query;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
@@ -56,11 +54,6 @@ public class MongoRestaurantRepositoryTest {
                 new Hours(),
                 new ConfigReservation()
         );
-    }
-
-    @AfterEach
-    public void tearDown() {
-        Mockito.mockitoSession();
     }
 
     @Test
@@ -177,6 +170,46 @@ public class MongoRestaurantRepositoryTest {
         filtres.add(r -> r.getName().equals("Pizz"));
 
         assertEquals(2, repository.searchRestaurants(filtres).size());
+    }
+
+    @Test
+    public void givenDelete_whenRestaurantIdIsValid_thenRestaurantIsDeleted() {
+        repository.save(restaurant);
+        Restaurant other = new Restaurant(
+                "2",
+                new Owner(
+                        "1"
+                ),
+                "Pizz",
+                2,
+                new Hours(),
+                new ConfigReservation()
+        );
+        repository.save(other);
+
+        assertTrue(repository.delete(RESTAURANT_ID));
+        assertFalse(repository.get(RESTAURANT_ID).isPresent());
+        assertTrue(repository.get(other.getId()).isPresent());
+    }
+
+    @Test
+    public void givenDelete_whenIdIsNotValid_thenReturnFalse() {
+        repository.save(restaurant);
+        Restaurant other = new Restaurant(
+                "2",
+                new Owner(
+                        "1"
+                ),
+                "Pizz",
+                2,
+                new Hours(),
+                new ConfigReservation()
+        );
+        repository.save(other);
+
+        assertFalse(repository.delete(RESTAURANT_ID));
+        assertTrue(repository.get(RESTAURANT_ID).isPresent());
+        assertTrue(repository.get(other.getId()).isPresent());
     }
 
 }

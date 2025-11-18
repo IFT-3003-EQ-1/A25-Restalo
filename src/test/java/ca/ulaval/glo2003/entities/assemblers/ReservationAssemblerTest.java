@@ -74,7 +74,7 @@ class ReservationAssemblerTest {
         ReservationDto result = reservationAssembler.toDto(reservation);
 
         assertNotNull(result);
-        assertNull(result.startTime);
+        assertNull(result.time.start);
         assertEquals("RES222", result.number);
     }
 

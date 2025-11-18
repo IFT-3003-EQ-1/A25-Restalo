@@ -5,7 +5,6 @@ import ca.ulaval.glo2003.domain.dtos.ReservationDto;
 import ca.ulaval.glo2003.entities.Customer;
 import ca.ulaval.glo2003.entities.CustomerFactory;
 import ca.ulaval.glo2003.entities.exceptions.InvalideParameterException;
-import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.entities.reservation.Reservation;
 import ca.ulaval.glo2003.entities.reservation.ReservationFactory;
 import ca.ulaval.glo2003.entities.reservation.ReservationTime;
@@ -53,7 +52,7 @@ class ReservationFactoryTest {
         // Setup valid ReservationDto
         validReservationDto = new ReservationDto();
         validReservationDto.date = "2025-10-25";
-        validReservationDto.startTime = "18:00";
+        validReservationDto.time.start = "18:00";
         validReservationDto.groupSize = 4;
         validReservationDto.customer = mock(CustomerDto.class); // Customer DTO object
 
@@ -90,7 +89,7 @@ class ReservationFactoryTest {
         reservationFactory.createReservation(validReservationDto, restaurant);
 
         verify(reservationTimeFactory).create(
-                validReservationDto.startTime,
+                validReservationDto.time.start,
                 "22:00",
                 120
         );
@@ -150,7 +149,7 @@ class ReservationFactoryTest {
         verify(restaurant).getHours();
         verify(hours).getClose();
         verify(reservationTimeFactory).create(
-                validReservationDto.startTime,
+                validReservationDto.time.start,
                 "23:30",
                 120
         );
@@ -164,7 +163,7 @@ class ReservationFactoryTest {
 
         verify(restaurant).getReservationDuration();
         verify(reservationTimeFactory).create(
-                validReservationDto.startTime,
+                validReservationDto.time.start,
                 "22:00",
                 90
         );
@@ -172,7 +171,7 @@ class ReservationFactoryTest {
 
     @Test
     void createReservation_shouldHandleDifferentStartTimes() {
-        validReservationDto.startTime = "19:30";
+        validReservationDto.time.start = "19:30";
 
         reservationFactory.createReservation(validReservationDto, restaurant);
 
@@ -198,9 +197,9 @@ class ReservationFactoryTest {
         when(reservationTimeFactory.create(anyString(), anyString(), anyInt()))
                 .thenThrow(new InvalideParameterException("Reservation Start time is too late"));
 
-        assertThrows(InvalideParameterException.class, () -> {
-            reservationFactory.createReservation(validReservationDto, restaurant);
-        });
+        assertThrows(InvalideParameterException.class, () ->
+            reservationFactory.createReservation(validReservationDto, restaurant)
+        );
     }
 
     @Test

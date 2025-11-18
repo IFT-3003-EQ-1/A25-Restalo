@@ -95,4 +95,15 @@ public class InMemoryRestaurantRepositoryTest {
 
         assertEquals(2, repository.searchRestaurants(filtres).size());
     }
+
+    @Test
+    public void givenDelete_whenRestaurantIdIsValid_thenRestaurantIsDeleted() {
+
+    }
+
+    @Test
+    public void givenDelete_whenIdIsNotValid_thenReturnFalse() {
+
+    }
+
 }

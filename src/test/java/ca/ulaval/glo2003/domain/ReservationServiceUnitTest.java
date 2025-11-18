@@ -1,6 +1,7 @@
 package ca.ulaval.glo2003.domain;
 
 import ca.ulaval.glo2003.domain.dtos.ReservationDto;
+import ca.ulaval.glo2003.entities.exceptions.NotFoundException;
 import ca.ulaval.glo2003.entities.reservation.Reservation;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 import ca.ulaval.glo2003.entities.assemblers.ReservationAssembler;
@@ -15,10 +16,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.fail;
 
 @ExtendWith(MockitoExtension.class)
 public class ReservationServiceUnitTest {
@@ -119,4 +119,17 @@ public class ReservationServiceUnitTest {
         verify(reservationRepository).get(reservationId);
         verify(reservationAssembler, never()).toDto(any());
     }
+
+    @Test
+    public void givenDeleteReservation_whenParameterIsValid_thenReturnTrue() {
+        when(reservationRepository.delete(any())).thenReturn(true);
+        assertTrue(reservationService.deleteReservation("reservation-123"));
+    }
+
+    @Test
+    public void givenDeleteReservation_whenReservationDoesntExist_thenThrowNotFoundException() {
+        when(reservationRepository.delete(any())).thenReturn(false);
+        assertThrows(NotFoundException.class, () -> reservationService.deleteReservation("non-existent"));
+    }
+
 }
