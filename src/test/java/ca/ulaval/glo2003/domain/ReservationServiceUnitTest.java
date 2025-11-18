@@ -2,6 +2,7 @@ package ca.ulaval.glo2003.domain;
 
 import ca.ulaval.glo2003.domain.dtos.ReservationDto;
 import ca.ulaval.glo2003.entities.exceptions.NotFoundException;
+import ca.ulaval.glo2003.entities.filters.FilterReservationFactory;
 import ca.ulaval.glo2003.entities.reservation.Reservation;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 import ca.ulaval.glo2003.entities.assemblers.ReservationAssembler;
@@ -35,15 +36,19 @@ public class ReservationServiceUnitTest {
     @Mock
     private ReservationAssembler reservationAssembler;
 
+    @Mock
+    private FilterReservationFactory filterFactory;
+
     private ReservationService reservationService;
 
     @BeforeEach
     public void setUp() {
         reservationService = new ReservationService(
-            restaurantRepository,
-            reservationFactory,
-            reservationRepository,
-            reservationAssembler
+                restaurantRepository,
+                reservationFactory,
+                reservationRepository,
+                reservationAssembler,
+                filterFactory
         );
     }
 

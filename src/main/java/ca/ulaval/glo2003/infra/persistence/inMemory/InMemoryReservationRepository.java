@@ -1,5 +1,6 @@
 package ca.ulaval.glo2003.infra.persistence.inMemory;
 
+import ca.ulaval.glo2003.entities.filters.Filter;
 import ca.ulaval.glo2003.entities.reservation.Reservation;
 import ca.ulaval.glo2003.entities.ReservationRepository;
 
@@ -27,40 +28,21 @@ public class InMemoryReservationRepository implements ReservationRepository {
     }
 
     @Override
-    public Optional<List<Reservation>> search(ReservationSearch searchDto) {
-        return Optional.of(database.values().stream()
-                .filter(reservation -> matchesSearchCriteria(reservation, searchDto))
-                .collect(Collectors.toList()));
-    }
-
-    private boolean matchesSearchCriteria(Reservation reservation, ReservationSearch searchDto) {
-        if (searchDto.restaurantId != null) {
-            if (reservation.getRestaurant() == null ||
-                    !searchDto.restaurantId.equals(reservation.getRestaurant().getId())) {
-                return false;
+    public List<Reservation> search(List<Filter<Reservation>> filters) {
+        List<Reservation> restaurants = new ArrayList<>();
+        database.values().forEach(r -> {
+            boolean isValide = true;
+            for (Filter<Reservation> filter : filters) {
+                if(!filter.filter(r)) {
+                    isValide = false;
+                }
             }
-        }
 
-        if (searchDto.ownerId != null) {
-            if (reservation.getRestaurant() == null ||
-                    !searchDto.ownerId.equals(reservation.getRestaurant().getOwner().getId())) {
-                return false;
+            if (isValide) {
+                restaurants.add(r);
             }
-        }
-
-        if (searchDto.customerName != null) {
-            if (reservation.getCustomer() == null ||
-                    !reservation.getCustomer().getName().toLowerCase().startsWith(searchDto.customerName.toLowerCase())) {
-                return false;
-            }
-        }
-
-        if (searchDto.reservationDate != null) {
-            if (!searchDto.reservationDate.equals(reservation.getDate())) {
-                return false;
-            }
-        }
-        return true;
+        });
+        return restaurants;
     }
 
     @Override

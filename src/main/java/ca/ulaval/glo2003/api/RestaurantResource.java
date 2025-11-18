@@ -5,16 +5,8 @@ import ca.ulaval.glo2003.domain.ReservationService;
 import ca.ulaval.glo2003.domain.RestaurantService;
 import ca.ulaval.glo2003.domain.dtos.ReservationDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.OwnerDto;
-import ca.ulaval.glo2003.domain.dtos.restaurant.ReservationSearch;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
-import ca.ulaval.glo2003.entities.reservation.Reservation;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.HeaderParam;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -89,15 +81,15 @@ public class RestaurantResource {
     }
 
     @GET
+    @Path("/{id}/reservations")
     public Response searchReservation(
             @HeaderParam("Owner") String ownerId,
             @PathParam("id") String restaurantId,
-            @PathParam("date") String reservationData,
-            @PathParam("customerName") String customerName,
+            @QueryParam("date") String reservationData,
+            @QueryParam("customerName") String customerName,
             @Context UriInfo infosUri
     ) {
-        ReservationSearch searchPayload = new ReservationSearch(ownerId,customerName, reservationData, restaurantId);
-        List<ReservationDto> reservations = reservationService.findBySearchCriteria(searchPayload);
+        List<ReservationDto> reservations = reservationService.findBySearchCriteria(ownerId, customerName, reservationData, restaurantId);
         return Response.ok(reservations).build();
     }
 

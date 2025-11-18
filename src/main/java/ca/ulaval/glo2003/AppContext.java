@@ -15,6 +15,7 @@ import ca.ulaval.glo2003.entities.CustomerFactory;
 import ca.ulaval.glo2003.entities.ReservationRepository;
 import ca.ulaval.glo2003.entities.RestaurantRepository;
 import ca.ulaval.glo2003.entities.assemblers.ReservationAssembler;
+import ca.ulaval.glo2003.entities.filters.FilterReservationFactory;
 import ca.ulaval.glo2003.entities.reservation.ReservationFactory;
 import ca.ulaval.glo2003.entities.reservation.ReservationTimeFactory;
 import ca.ulaval.glo2003.infra.persistence.*;
@@ -51,7 +52,8 @@ public class AppContext extends ResourceConfig {
                         new ReservationTimeFactory()
                 ),
                reservationRepository,
-               new ReservationAssembler()
+               new ReservationAssembler(),
+                new FilterReservationFactory()
         );
 
          final RestaurantResource restaurantRessource = new RestaurantResource(

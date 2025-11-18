@@ -1,6 +1,6 @@
 package ca.ulaval.glo2003.entities;
 
-import ca.ulaval.glo2003.domain.dtos.restaurant.ReservationSearch;
+import ca.ulaval.glo2003.entities.filters.Filter;
 import ca.ulaval.glo2003.entities.reservation.Reservation;
 
 import java.util.List;
@@ -10,7 +10,8 @@ public interface ReservationRepository {
     void save(Reservation reservation);
 
     Optional<Reservation> get(String id);
-    Optional<List<Reservation>> search(ReservationSearch searchPayload);
+
+    List<Reservation> search(List<Filter<Reservation>> filters);
 
     boolean deleteRelatedReservations(String restaurantId);
 
