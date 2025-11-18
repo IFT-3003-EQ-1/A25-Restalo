@@ -56,4 +56,9 @@ public class InMemoryRestaurantRepository implements RestaurantRepository {
     public List<Restaurant> getAll() {
         return database.values().stream().toList();
     }
+
+    @Override
+    public boolean delete(String id) {
+        return database.remove(id) != null;
+    }
 }

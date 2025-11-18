@@ -44,18 +44,20 @@ public class End2EndTestUtils {
                               return createReservationDto;
     }
 
-    public static void postRestaurant(WebTarget target, RestaurantDto restaurantDto) {
+    public static String postRestaurant(WebTarget target, RestaurantDto restaurantDto) {
         Map<String, Object> json =  (new RestaurantDtoAssembler()).toJson(restaurantDto);
-
+        String restaurantId = null;
         try (Response response = target.request().header("Owner", "1").post(Entity.json(json))) {
+            String[] pathFragments = response.getLocation().getPath().split("/");
+
+            restaurantId = pathFragments[pathFragments.length-1];
+            restaurantDto.id = restaurantId;
 
             assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
         } catch (Exception e) {
             fail(e.getMessage());
         }
+        return restaurantId;
     }
 
-    public static void clearDatabase() {
-
-    }
 }

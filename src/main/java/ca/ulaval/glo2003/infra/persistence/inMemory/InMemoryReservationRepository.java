@@ -25,4 +25,9 @@ public class InMemoryReservationRepository implements ReservationRepository {
     public Optional<Reservation> get(String id) {
         return Optional.ofNullable(database.get(id));
     }
+
+    @Override
+    public boolean deleteRelatedReservations(String restaurantId) {
+        return database.values().removeIf(reservation -> reservation.getRestaurant().getId().equals(restaurantId));
+    }
 }

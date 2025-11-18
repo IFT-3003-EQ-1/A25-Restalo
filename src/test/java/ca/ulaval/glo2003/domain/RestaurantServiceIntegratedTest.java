@@ -11,6 +11,7 @@ import ca.ulaval.glo2003.entities.exceptions.ForbiddenAccessException;
 import ca.ulaval.glo2003.entities.exceptions.NotFoundException;
 import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.entities.filters.FilterRestaurantFactory;
+import ca.ulaval.glo2003.infra.persistence.inMemory.InMemoryReservationRepository;
 import ca.ulaval.glo2003.infra.persistence.inMemory.InMemoryRestaurantRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,7 @@ public class RestaurantServiceIntegratedTest {
         restaurantService = new RestaurantService(
                 new RestaurantFactory(),
                 new InMemoryRestaurantRepository(),
+                new InMemoryReservationRepository(),
                 new OwnerFactory(),
                 new RestaurantAssembler(),
                 new FilterRestaurantFactory()
@@ -139,5 +141,27 @@ public class RestaurantServiceIntegratedTest {
         searchParams.name = "Pizz";
         assertEquals(2, restaurantService.searchRestaurants(searchParams).size());
 
+    }
+
+    @Test
+    public void givenDeleteRestaurant_shouldDeleteRestaurant_whenRestaurantExists() {
+        String restaurantId = restaurantService.createRestaurant(ownerDto, restaurantDto);
+        boolean isDeleted = restaurantService.deleteRestaurant(restaurantId, restaurantDto.owner.id);
+
+        assertTrue(isDeleted, "Should be able to delete restaurant");
+    }
+
+    @Test
+    public void givenDeleteRestaurant_shouldThrowException_whenOwnerDoesntExist() {
+        String restaurantId = restaurantService.createRestaurant(ownerDto, restaurantDto);
+        assertThrows(ForbiddenAccessException.class,
+                () -> restaurantService.deleteRestaurant(restaurantId, "12345"));
+    }
+
+    @Test
+    public void givenDeleteRestaurant_shouldThrowException_whenReservationDoesNotExist() {
+
+        assertThrows(NotFoundException.class,
+                () -> restaurantService.deleteRestaurant("12345", restaurantDto.owner.id));
     }
 }

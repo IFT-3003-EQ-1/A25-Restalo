@@ -6,13 +6,7 @@ import ca.ulaval.glo2003.domain.RestaurantService;
 import ca.ulaval.glo2003.domain.dtos.ReservationDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.OwnerDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.HeaderParam;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -26,7 +20,7 @@ import java.util.Map;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class RestaurantResource {
-    private  final RestaurantService restaurantService;
+    private final RestaurantService restaurantService;
     private final RestaurantDtoAssembler restaurantDtoAssembler;
     private final ReservationService reservationService;
 
@@ -85,4 +79,14 @@ public class RestaurantResource {
         URI location = infosUri.getBaseUriBuilder().path("reservations").path(reservationId).build();
         return Response.created(location).build();
     }
+
+    @DELETE
+    @Path("/{id}")
+    public Response deleteRestaurant(@PathParam("id") String restaurantId,
+                                     @Context UriInfo infosUri,
+                                     @HeaderParam("Owner") String ownerId) {
+        boolean isRestaurantDeleted = restaurantService.deleteRestaurant(restaurantId, ownerId);
+        return Response.noContent().build();
+    }
+
 }
