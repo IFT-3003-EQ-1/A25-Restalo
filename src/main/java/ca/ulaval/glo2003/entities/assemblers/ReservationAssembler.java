@@ -29,7 +29,7 @@ public class ReservationAssembler {
     }
 
     private ReservationTimeDto toDto(@Nullable ReservationTime reservationTime) {
-        if (reservationTime == null) return null;
+        if (reservationTime == null) return new ReservationTimeDto();
         return new ReservationTimeDto(reservationTime.getStart(), reservationTime.getEnd());
     }
 
