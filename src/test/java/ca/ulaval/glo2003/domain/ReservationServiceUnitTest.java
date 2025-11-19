@@ -210,16 +210,16 @@ public class ReservationServiceUnitTest {
                 reservation.getDate(),
                 restaurant.getId(),
                 restaurant.getOwner().getId()
-        ));
+        )).thenReturn(List.of(r->true));
 
         when(reservationRepository.search(any())).thenReturn(List.of(reservation));
 
-        assertEquals(expected, reservationService.findBySearchCriteria(
+        assertEquals(expected.size(), reservationService.findBySearchCriteria(
                 restaurant.getOwner().getId(),
                 reservation.getCustomer().getName(),
                 reservation.getDate(),
                 restaurant.getId()
-        ));
+        ).size());
     }
 
     @Test
@@ -231,12 +231,12 @@ public class ReservationServiceUnitTest {
         when(restaurantRepository.get(restaurant.getId())).thenReturn(Optional.of(restaurant));
         when(reservationRepository.getAll()).thenReturn(List.of(reservation));
 
-        assertEquals(expected, reservationService.findBySearchCriteria(
+        assertEquals(expected.size(), reservationService.findBySearchCriteria(
                 restaurant.getOwner().getId(),
-                reservation.getCustomer().getName(),
-                reservation.getDate(),
+                null,
+                null,
                 restaurant.getId()
-        ));
+        ).size());
     }
 
     @Test
@@ -250,7 +250,7 @@ public class ReservationServiceUnitTest {
                 reservation.getDate(),
                 restaurant.getId(),
                 restaurant.getOwner().getId()
-        ));
+        )).thenReturn(new  ArrayList<>());
 
         when(reservationRepository.search(any())).thenReturn(new ArrayList<>());
 

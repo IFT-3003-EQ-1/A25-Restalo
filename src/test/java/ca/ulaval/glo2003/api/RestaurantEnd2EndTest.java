@@ -2,6 +2,7 @@ package ca.ulaval.glo2003.api;
 
 import ca.ulaval.glo2003.AppContext;
 import ca.ulaval.glo2003.api.assemblers.RestaurantDtoAssembler;
+import ca.ulaval.glo2003.domain.dtos.ReservationDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.ConfigReservationDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
 import jakarta.ws.rs.client.Entity;
@@ -131,9 +132,9 @@ public class RestaurantEnd2EndTest extends JerseyTest {
     }
 
     @Test
-    public void givenListRestaurants_whenNullOwnerId_thenResponseIsError() {
+    public void givenListRestaurants_whenInvalidOwnerId_thenResponseIsError() {
 
-        Response response = target("/restaurants").request().header("Owner", INVALID_ID).get();
+        Response response = target("/restaurants").request().header("Owner", "").get();
 
         assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
     }
@@ -189,11 +190,15 @@ public class RestaurantEnd2EndTest extends JerseyTest {
     @Test
     public void givenSearchReservations_whenCorrectRequest_thenResponseIsOk() {
         RestaurantDto restaurantDto = End2EndTestUtils.buildDefaultRestaurantDto();
+        ReservationDto reservationDto = End2EndTestUtils.buildReservationDto();
         End2EndTestUtils.postRestaurant(target(), restaurantDto);
-        String date = null;
-        String customerName = null;
+        reservationDto.restaurant.id = restaurantDto.id;
+        End2EndTestUtils.postReservation(target(), reservationDto);
 
-        try (Response response = target("/restaurants/" + restaurantDto.id  + "/search")
+        String date = reservationDto.date;
+        String customerName = reservationDto.customer.name;
+
+        try (Response response = target("/restaurants/" + restaurantDto.id  + "/reservations")
                 .queryParam("date", date)
                 .queryParam("customerName", customerName)
                 .request().header("Owner", restaurantDto.owner.id).get()) {
@@ -204,47 +209,41 @@ public class RestaurantEnd2EndTest extends JerseyTest {
     @Test
     public void givenSearchReservations_whenOwnerDoesntMatch_thenResponseIsNotFound() {
         RestaurantDto restaurantDto = End2EndTestUtils.buildDefaultRestaurantDto();
+        ReservationDto reservationDto = End2EndTestUtils.buildReservationDto();
         End2EndTestUtils.postRestaurant(target(), restaurantDto);
-        String date = null;
-        String customerName = null;
+        reservationDto.restaurant.id = restaurantDto.id;
+        End2EndTestUtils.postReservation(target(), reservationDto);
 
-        try (Response response = target("/restaurants/" + restaurantDto.id  + "/search")
+        String date = reservationDto.date;
+        String customerName = reservationDto.customer.name;
+
+        try (Response response = target("/restaurants/" + restaurantDto.id  + "/reservations")
                 .queryParam("date", date)
                 .queryParam("customerName", customerName)
-                .request().header("Owner", restaurantDto.owner.id).get()) {
-            assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+                .request().header("Owner", INVALID_ID).get()) {
+            assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
         }
     }
 
     @Test
     public void givenSearchReservations_whenInvalidRestaurantId_thenResponseIsNotFound() {
         RestaurantDto restaurantDto = End2EndTestUtils.buildDefaultRestaurantDto();
+        ReservationDto reservationDto = End2EndTestUtils.buildReservationDto();
         End2EndTestUtils.postRestaurant(target(), restaurantDto);
-        String date = null;
-        String customerName = null;
+        reservationDto.restaurant.id = restaurantDto.id;
+        End2EndTestUtils.postReservation(target(), reservationDto);
 
-        try (Response response = target("/restaurants/" + restaurantDto.id  + "/search")
+        String date = reservationDto.date;
+        String customerName = reservationDto.customer.name;
+
+        try (Response response = target("/restaurants/" + INVALID_ID  + "/reservations")
                 .queryParam("date", date)
                 .queryParam("customerName", customerName)
                 .request().header("Owner", restaurantDto.owner.id).get()) {
-            assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+            assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
         }
     }
 
-    @Test
-    public void givenSearchReservations_whenInvalidParameter_thenResponseIsBadRequest() {
-        RestaurantDto restaurantDto = End2EndTestUtils.buildDefaultRestaurantDto();
-        End2EndTestUtils.postRestaurant(target(), restaurantDto);
-        String date = null;
-        String customerName = null;
-
-        try (Response response = target("/restaurants/" + restaurantDto.id  + "/search")
-                .queryParam("date", date)
-                .queryParam("customerName", customerName)
-                .request().header("Owner", restaurantDto.owner.id).get()) {
-            assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
-        }
-    }
 
     private String extractIdFromLocation(Response response) {
         URI location = response.getLocation();

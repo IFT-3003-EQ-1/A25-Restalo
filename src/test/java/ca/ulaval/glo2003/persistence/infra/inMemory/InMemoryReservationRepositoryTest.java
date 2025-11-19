@@ -1,6 +1,7 @@
 package ca.ulaval.glo2003.persistence.infra.inMemory;
 
 import ca.ulaval.glo2003.entities.Customer;
+import ca.ulaval.glo2003.entities.filters.Filter;
 import ca.ulaval.glo2003.entities.reservation.Reservation;
 import ca.ulaval.glo2003.entities.reservation.ReservationTime;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
@@ -8,11 +9,12 @@ import ca.ulaval.glo2003.infra.persistence.inMemory.InMemoryReservationRepositor
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class InMemoryReservationRepositoryTest {
 
@@ -25,6 +27,8 @@ public class InMemoryReservationRepositoryTest {
     private Restaurant restaurant;
 
     private final String RESTAURANT_ID = "1";
+
+    private final String INVALID_ID = "-11";
 
     @BeforeEach
     public void setUp() {
@@ -66,6 +70,21 @@ public class InMemoryReservationRepositoryTest {
     @Test
     public void givenDelete_whenInvalidReservationId_thenReturnFalse() {
         reservationRepository.save(reservation);
-        assertFalse(reservationRepository.delete("-1"));
+        assertFalse(reservationRepository.delete(INVALID_ID));
+    }
+
+    @Test
+    public void givenGetAll_whenNotEmptyDB_thenReturnAllReservations() {
+        reservationRepository.save(reservation);
+        assertEquals(reservations.size(), reservationRepository.getAll().size());
+    }
+
+    @Test
+    public void givenSearch_whenFiltersNotEmpty_thenReturnMatchingReservations() {
+        reservationRepository.save(reservation);
+        List<Filter<Reservation>> filters = new ArrayList<>();
+        filters.add(r -> r.getNumber().equals(reservation.getNumber()));
+
+        assertEquals(1, reservationRepository.search(filters).size());
     }
 }
