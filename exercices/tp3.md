@@ -196,9 +196,101 @@ Cela ajoute du bruit, et parfois on passe tout droit. Pour ce cas en particulier
 
 ## Planification
 
+Voici un résumé de notre utilisation des outils de gestion de projet de Github
+
+### Github Project
+
+Notre Kanban
+
+![GET kanban](./images/TP3/Kanbon_final.png)
+
+
+### Milestone
+
+Milestone du TP2
+
+![GET milestone](./images/TP3/Milestone.png)
+
+
+### Issues
+
+Issue 1:
+
+![GET issue_1](./images/TP3/Issue_1a.png)
+
+![GET issue_1](./images/TP3/Issue_1b.png)
+
+![GET issue_1](./images/TP3/Issue_1c.png)
+
+Issue 2:
+
+![GET issue_2](./images/TP3/Issue_2a.png)
+
+![GET issue_2](./images/TP3/Issue_2b.png)
+
+![GET issue_2](./images/TP3/Issue_2c.png)
+
+Issue 3:
+
+
+![GET issue_2](./images/TP3/Issue_3a.png)
+
+![GET issue_2](./images/TP3/Issue_3b.png)
+
+![GET issue_2](./images/TP3/Issue_3c.png)
+
+Issue 4:
+
+![GET issue_2](./images/TP3/Issue_4a.png)
+
+Issue 5:
+
+![GET issue_2](./images/TP3/Issue_5a.png)
+
+![GET issue_2](./images/TP3/Issue_5b.png)
+
+![GET issue_2](./images/TP3/Issue_5c.png)
+
+### Pull requests
+
+Pull request 1:
+
+![GET pr_1](./images/TP3/PR_1a.png)
+
+![GET pr_1](./images/TP3/PR_1b.png)
+
+
+Pull request 2:
+
+![GET pr_2_1](./images/TP3/PR_2.png)
+
+Pull request 3:
+
+![GET pr_3_1](./images/TP3/PR_3.png)
+
+Pull request 4:
+
+![GET pr_1](./images/TP3/PR_4a.png)
+
+![GET pr_1](./images/TP3/PR_4b.png)
+
+
+### Arbre de commits
+
+Notre arbre de commit. Notez que certaines branches ont été supprimées :
+
+![GET commit_tree](./images/TP3/arbre_de_commit.png)
+
 ## Déclaration d'utilisation de l'IA
 
 Nous avons utilisé l'outil de synthèse de Google (AI overview) pour simplifier nos recherches web.
 
 
 ## Architecture
+
+Voici un extrait non exhaustif de notre architecture.
+
+![GET architecture](./images/TP3/Architecture.png)
+
+Pour séparer la couche de persistance de nos couches logiques, nous avons créer une DatabaseFactory qui retourne une implémentation d'un Repository, en fonction des configurations d'environnement.
+Notez que cette configuration est injecté par l'AppContext au démarrage de l'application, via les variables d'environnement correspondantes.
