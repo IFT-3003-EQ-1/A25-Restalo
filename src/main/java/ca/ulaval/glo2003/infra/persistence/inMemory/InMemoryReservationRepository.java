@@ -1,5 +1,6 @@
 package ca.ulaval.glo2003.infra.persistence.inMemory;
 
+import ca.ulaval.glo2003.entities.filters.Filter;
 import ca.ulaval.glo2003.entities.reservation.Reservation;
 import ca.ulaval.glo2003.entities.ReservationRepository;
 
@@ -27,6 +28,29 @@ public class InMemoryReservationRepository implements ReservationRepository {
     }
 
     @Override
+    public List<Reservation> getAll() {
+        return database.values().stream().toList();
+    }
+
+    @Override
+    public List<Reservation> search(List<Filter<Reservation>> filters) {
+        List<Reservation> restaurants = new ArrayList<>();
+        database.values().forEach(r -> {
+            boolean isValide = true;
+            for (Filter<Reservation> filter : filters) {
+                if(!filter.filter(r)) {
+                    isValide = false;
+                }
+            }
+
+            if (isValide) {
+                restaurants.add(r);
+            }
+        });
+        return restaurants;
+    }
+
+    @Override
     public boolean deleteRelatedReservations(String restaurantId) {
         return database.values().removeIf(reservation -> reservation.getRestaurant().getId().equals(restaurantId));
     }
@@ -35,4 +59,5 @@ public class InMemoryReservationRepository implements ReservationRepository {
     public boolean delete(String number) {
         return database.remove(number) != null;
     }
+
 }

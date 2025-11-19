@@ -1,13 +1,16 @@
 package ca.ulaval.glo2003.infra.persistence.mongoDB;
 
+import ca.ulaval.glo2003.entities.filters.Filter;
 import ca.ulaval.glo2003.entities.reservation.Reservation;
 import ca.ulaval.glo2003.entities.ReservationRepository;
 import dev.morphia.Datastore;
 import dev.morphia.query.filters.Filters;
 
+import java.util.List;
 import java.util.Optional;
 
 public class MongoReservationRepository implements ReservationRepository {
+
     private final Datastore datastore;
 
     public MongoReservationRepository(Datastore datastore) {
@@ -25,6 +28,20 @@ public class MongoReservationRepository implements ReservationRepository {
                .filter(Filters.eq("number", number))
                .first();
        return Optional.ofNullable(reservation);
+    }
+
+    @Override
+    public List<Reservation> getAll() {
+        return datastore.find(Reservation.class).stream().toList();
+    }
+
+    @Override
+    public List<Reservation> search(List<Filter<Reservation>> filters) {
+        return datastore.find(Reservation.class).stream().filter(
+                reservation -> filters.stream().anyMatch(
+                        filter -> filter.filter(reservation)
+                )
+        ).toList();
     }
 
     @Override

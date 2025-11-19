@@ -80,6 +80,19 @@ public class RestaurantResource {
         return Response.created(location).build();
     }
 
+    @GET
+    @Path("/{id}/reservations")
+    public Response searchReservation(
+            @HeaderParam("Owner") String ownerId,
+            @PathParam("id") String restaurantId,
+            @QueryParam("date") String reservationData,
+            @QueryParam("customerName") String customerName,
+            @Context UriInfo infosUri
+    ) {
+        List<ReservationDto> reservations = reservationService.findBySearchCriteria(ownerId, customerName, reservationData, restaurantId);
+        return Response.ok(reservations).build();
+    }
+
     @DELETE
     @Path("/{id}")
     public Response deleteRestaurant(@PathParam("id") String restaurantId,
