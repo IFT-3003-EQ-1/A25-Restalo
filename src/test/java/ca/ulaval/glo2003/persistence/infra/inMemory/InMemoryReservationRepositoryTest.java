@@ -2,11 +2,12 @@ package ca.ulaval.glo2003.persistence.infra.inMemory;
 
 import ca.ulaval.glo2003.entities.Customer;
 import ca.ulaval.glo2003.entities.filters.Filter;
-import ca.ulaval.glo2003.entities.ReservationRepository;
 import ca.ulaval.glo2003.entities.reservation.Reservation;
+import ca.ulaval.glo2003.entities.reservation.ReservationTime;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 import ca.ulaval.glo2003.infra.persistence.inMemory.InMemoryReservationRepository;
-import ca.ulaval.glo2003.persistence.infra.ReservationRepositoryTest;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,7 +56,6 @@ public class InMemoryReservationRepositoryTest {
     @Test
     public void givenDeleteRelatedReservations_whenInvalideReservationId_thenReturnFalse() {
         reservationRepository.save(reservation);
-public class InMemoryReservationRepositoryTest extends ReservationRepositoryTest {
 
         assertFalse(reservationRepository.deleteRelatedReservations(null),
                 "Delete shouldn't delete any reservation");
@@ -86,9 +86,5 @@ public class InMemoryReservationRepositoryTest extends ReservationRepositoryTest
         filters.add(r -> r.getNumber().equals(reservation.getNumber()));
 
         assertEquals(1, reservationRepository.search(filters).size());
-    @Override
-    protected ReservationRepository getRepository() {
-        Map<String, Reservation> database = new HashMap<>();
-        return new InMemoryReservationRepository(database);
     }
 }
