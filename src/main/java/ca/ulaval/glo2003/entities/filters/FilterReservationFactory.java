@@ -9,7 +9,7 @@ import java.util.List;
 public class FilterReservationFactory {
 
     public List<Filter<Reservation>> createFilters(String customerName,
-                                                   String reservationData,
+                                                   String reservationDate,
                                                    String restaurantId,
                                                    String ownerId) {
         List<Filter<Reservation>> filters = new ArrayList<>();
@@ -18,8 +18,8 @@ public class FilterReservationFactory {
                     reservation.getCustomer().getName().toLowerCase().startsWith(customerName.toLowerCase()));
         }
 
-        if (!Strings.isNullOrEmpty(reservationData)) {
-            filters.add(reservation -> reservation.getDate().equals(reservationData));
+        if (!Strings.isNullOrEmpty(reservationDate)) {
+            filters.add(reservation -> reservation.getDate().equals(reservationDate));
         }
 
         filters.add(reservation -> reservation.getRestaurant().getId().equals(restaurantId));

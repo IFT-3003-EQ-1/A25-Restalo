@@ -28,6 +28,11 @@ public class InMemoryReservationRepository implements ReservationRepository {
     }
 
     @Override
+    public List<Reservation> getAll() {
+        return database.values().stream().toList();
+    }
+
+    @Override
     public List<Reservation> search(List<Filter<Reservation>> filters) {
         List<Reservation> restaurants = new ArrayList<>();
         database.values().forEach(r -> {
@@ -54,4 +59,5 @@ public class InMemoryReservationRepository implements ReservationRepository {
     public boolean delete(String number) {
         return database.remove(number) != null;
     }
+
 }

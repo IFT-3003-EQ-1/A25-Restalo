@@ -11,6 +11,8 @@ public interface ReservationRepository {
 
     Optional<Reservation> get(String id);
 
+    List<Reservation> getAll();
+
     List<Reservation> search(List<Filter<Reservation>> filters);
 
     boolean deleteRelatedReservations(String restaurantId);

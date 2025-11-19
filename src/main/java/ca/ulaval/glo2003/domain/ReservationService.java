@@ -12,6 +12,7 @@ import ca.ulaval.glo2003.entities.reservation.ReservationFactory;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 import ca.ulaval.glo2003.entities.ReservationRepository;
 import ca.ulaval.glo2003.entities.RestaurantRepository;
+import com.google.common.base.Strings;
 
 import java.util.List;
 
@@ -75,14 +76,18 @@ public class ReservationService {
             throw new ForbiddenAccessException("le restaurant n'appartient pas au restaurateur");
         }
 
-        List<Filter<Reservation>> filters =
-                filterFactory.createFilters(customerName, reservationData, restaurantId, ownerId);
+        if (Strings.isNullOrEmpty(reservationData) && Strings.isNullOrEmpty(customerName)) {
+           return reservationRepository.getAll().stream().map(reservationAssembler::toDto).toList();
+        } else {
+            List<Filter<Reservation>> filters =
+                    filterFactory.createFilters(customerName, reservationData, restaurantId, ownerId);
 
-        List<Reservation> reservations = reservationRepository.search(filters);
-        if (reservations.isEmpty())
-            throw new NotFoundException("Reservation not found");
+            List<Reservation> reservations = reservationRepository.search(filters);
+            if (reservations.isEmpty())
+                throw new NotFoundException("Reservation not found");
 
-        return reservations.stream().map(reservationAssembler::toDto).toList();
+            return reservations.stream().map(reservationAssembler::toDto).toList();
+        }
 
     }
 }

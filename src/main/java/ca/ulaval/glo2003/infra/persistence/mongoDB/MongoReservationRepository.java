@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class MongoReservationRepository implements ReservationRepository {
+
     private final Datastore datastore;
 
     public MongoReservationRepository(Datastore datastore) {
@@ -27,6 +28,11 @@ public class MongoReservationRepository implements ReservationRepository {
                .filter(Filters.eq("id", id))
                .first();
        return Optional.ofNullable(reservation);
+    }
+
+    @Override
+    public List<Reservation> getAll() {
+        return datastore.find(Reservation.class).stream().toList();
     }
 
     @Override
