@@ -101,8 +101,6 @@ public class AppContext extends ResourceConfig {
         if (Strings.isNullOrEmpty(port_str)) {
             port_str = Integer.toString(DBConfig.DEFAULT_PORT);
         }
-
-
         return new DBConfig(
                 host,
                 Integer.parseInt(port_str),

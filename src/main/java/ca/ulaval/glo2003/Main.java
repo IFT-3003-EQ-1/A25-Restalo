@@ -4,6 +4,7 @@ import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 
 import java.net.URI;
+import java.util.Objects;
 
 public class Main {
     public static final String BASE_URI = "http://0.0.0.0:8080/";
@@ -12,8 +13,14 @@ public class Main {
 
     public static HttpServer startServer() {
         AppContext context = new AppContext();
-        server = GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), context.getRessources());
+        server = GrizzlyHttpServerFactory.createHttpServer(URI.create(getConfig().getURI()), context.getRessources());
         return server;
+    }
+
+    public static AppConfig getConfig() {
+        String host = Objects.toString(System.getenv("HOSTNAME"), "0.0.0.0");
+        String port = Objects.toString(System.getenv("PORT"), "0.0.0.0");
+        return new AppConfig(host, port);
     }
 
     public static void main(String[] args) {
