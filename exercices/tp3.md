@@ -3,6 +3,9 @@
 
 
 ## Stories
+Voici les quatre stories que nous pensions implémenter pour le TP4. 
+Sois: Créer le menu, Obtenir le menu, Supprimer le menu, Écrire un rapport de ventes
+
 
 ### Créer le menu
 En tant que propriétaire, je veux pouvoir créer un menu.
@@ -120,7 +123,7 @@ Réponse
 - 404 NOT FOUND: le restaurant n'a pas de menu
 
 
-#### Écrire rapport de ventes journalier
+#### Écrire un rapport de ventes 
 En tant que propriétaire, je veux pouvoir journaliser les ventes de ma journée
 
 #### Critères de succès
@@ -161,7 +164,28 @@ Body
 
 ## Rétrospective
 
-## Continuous Deploiement
+
+
+### Pipelin CI
+
+
+
+### Tests
+
+Nous avons besoin d'environs 3h de tests pour 1h de code. En général, ce temps est relativement constant au fils du temps.
+En effet, la mise en place initiale requiers beaucoup d'effort, mais nous devons également refactor est modifier les tests au fils que le programme évolue.
+L'effort total reste donc plus ou moins constant au fils du temps.
+
+Concernant le niveau de confience, c'est certains que les tests nous permettent de garantir le fonctionnement du programme, et donc notre niveau de confiance.
+Cependant, l'effort requis pour mettre en place tout test non-trivial est tellement grand que je me vois mal mettre à l'échelle notre stratégie de test pour un système modérément complex.
+Notre enjeu principal relève du seeding de data pour setup la mise en place des tests. 
+Il existe probablement une méthode plus efficace pour générer un jeu de données associé à un modèle complexe que celui que nous utilisons. 
+
+Moyens pour améliorer la qualité de nos tests:
+1) Avoir utilitaire global qui populate l'ensemble de notre modèle. Ensuite, trouver un moyen pour injecter ces données dans nos testRunner.
+2) Fragmenter certaines classe (exemple: RestaurantRessource.) Lorsqu'une classe devient trop grosse, on ce perd dans les fichiers de tests. 
+3) Certains tests sont redondant, car ils tests des morceaux de codes qui ont été copier/coller. Par exemple, le morceau de code qui "authentifie" le Owner. 
+Cela ajoute du bruit, et parfois on passe tout droit. Pour ce cas en particulier, nous avions pensé extraire cette logique, et la déplacé dans une annotation/décorateur. 
 
 ## Planification
 
