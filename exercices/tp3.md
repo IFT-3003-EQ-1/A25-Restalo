@@ -164,7 +164,7 @@ Body
 
 ## Rétrospective
 
-
+Rétrospectives sur le travail réalisé lors du TP3. Prendre note que le projet a été réalisé dans son intégralité par Gabriel Gibeau et Brahima Traore. 
 
 ### Pipelin CI
 
@@ -176,7 +176,9 @@ Points positifs du CI:
 1) Tel que mentionné ci-dessus : attraper des bugs qui sont camouflés par des configurations locales. 
 Par exemple, une variable hard-coded qui fonctionne uniquement pour un environnement précis.
 2) Garantir que les tests sont exécutés, même si le développeur oublie de tout les exécuter.
-3) 
+3) L'environnement du CI est beaucoup plus proche de l'environnement de production que nos environnement de développeur. 
+J'imagine donc que cela ajoute une couche de confiance envers la fiabilité du produit logiciel dans un context d'entreprise.
+
 ### Tests
 
 Nous avons besoin d'environs 3h de tests pour 1h de code. En général, ce temps est relativement constant au fils du temps.
@@ -190,8 +192,8 @@ Il existe probablement une méthode plus efficace pour générer un jeu de donn�
 
 Moyens pour améliorer la qualité de nos tests:
 1) Avoir utilitaire global qui populate l'ensemble de notre modèle. Ensuite, trouver un moyen pour injecter ces données dans nos testRunner.
-2) Fragmenter certaines classe (exemple: RestaurantRessource.) Lorsqu'une classe devient trop grosse, on ce perd dans les fichiers de tests. 
-3) Certains tests sont redondant, car ils tests des morceaux de codes qui ont été copier/coller. Par exemple, le morceau de code qui "authentifie" le Owner. 
+2) Fragmenter certaines classes (exemple : RestaurantRessource.) Lorsqu'une classe devient trop grosse, on ce perd dans les fichiers de tests. 
+3) Certains tests sont redondants, car ils testent des morceaux de codes qui ont été copier/coller. Par exemple, le morceau de code qui "authentifie" le Owner. 
 Cela ajoute du bruit, et parfois on passe tout droit. Pour ce cas en particulier, nous avions pensé extraire cette logique, et la déplacé dans une annotation/décorateur. 
 
 ## Planification
