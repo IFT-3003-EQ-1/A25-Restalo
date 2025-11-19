@@ -17,8 +17,8 @@ public class Main {
     }
 
     public static AppConfig getConfig() {
-        String host = Objects.toString(System.getenv("HOSTNAME"), "0.0.0.0");
-        String port = Objects.toString(System.getenv("PORT"), "0.0.0.0");
+        String host = "0.0.0.0";
+        String port = Objects.toString(System.getenv("PORT"), "8080");
         return new AppConfig(host, port);
     }
 
