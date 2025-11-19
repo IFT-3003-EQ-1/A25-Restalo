@@ -35,7 +35,7 @@ item:
 {
     id: string,
     name: string,
-    price: float,
+    price: float
 }
 
 
@@ -86,7 +86,7 @@ item:
 {
     id: string,
     name: string,
-    price: float,
+    price: float
 }
 
 - 404 NOT FOUND : le restaurant n'existe pas
