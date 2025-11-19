@@ -7,7 +7,6 @@ import java.net.URI;
 import java.util.Objects;
 
 public class Main {
-    public static final String BASE_URI = "http://0.0.0.0:8080/";
 
     private static HttpServer server;
 
@@ -25,7 +24,7 @@ public class Main {
 
     public static void main(String[] args) {
         startServer();
-        System.out.printf("Jersey app started with endpoints available at %s%n", BASE_URI);
+        System.out.printf("Jersey app started with endpoints available at %s%n", getConfig().getURI());
     }
 
 }
