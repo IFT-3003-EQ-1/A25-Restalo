@@ -1,7 +1,5 @@
 # Exercices - TP3
 
-
-
 ## Stories
 Voici les quatre stories que nous pensions implémenter pour le TP4. 
 Sois: Créer le menu, Obtenir le menu, Supprimer le menu, Écrire un rapport de ventes
@@ -201,3 +199,6 @@ Cela ajoute du bruit, et parfois on passe tout droit. Pour ce cas en particulier
 ## Déclaration d'utilisation de l'IA
 
 Nous avons utilisé l'outil de synthèse de Google (AI overview) pour simplifier nos recherches web.
+
+
+## Architecture
