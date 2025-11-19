@@ -168,8 +168,15 @@ Body
 
 ### Pipelin CI
 
+Nous n'avons jamais eu de problème à tester manuellement notre code. Nos tests d'intégration étaient déjà essentiellement automatisé à l'aide de postman.
+Ainsi donc, l'implémentation du pipeline de CI ne nous a pas vraiment fait sauver de temps à proprement parler. 
+Cependant, cela nous a permis d'attraper certains bugs de type "configuration d'environnement."
 
-
+Points positifs du CI:
+1) Tel que mentionné ci-dessus : attraper des bugs qui sont camouflés par des configurations locales. 
+Par exemple, une variable hard-coded qui fonctionne uniquement pour un environnement précis.
+2) Garantir que les tests sont exécutés, même si le développeur oublie de tout les exécuter.
+3) 
 ### Tests
 
 Nous avons besoin d'environs 3h de tests pour 1h de code. En général, ce temps est relativement constant au fils du temps.
@@ -189,3 +196,6 @@ Cela ajoute du bruit, et parfois on passe tout droit. Pour ce cas en particulier
 
 ## Planification
 
+## Déclaration d'utilisation de l'IA
+
+Nous avons utilisé l'outil de synthèse de Google (AI overview) pour simplifier nos recherches web.
