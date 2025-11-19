@@ -202,14 +202,14 @@ Voici un résumé de notre utilisation des outils de gestion de projet de Github
 
 Notre Kanban
 
-![GET kanban](./images/TP3/Kanbon_final.png)
+![GET kanban](./images/TP3/Kanban_final.png)
 
 
 ### Milestone
 
 Milestone du TP2
 
-![GET milestone](./images/TP3/Milestone.png)
+![GET milestone](./images/TP3/MIlestone.png)
 
 
 ### Issues
