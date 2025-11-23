@@ -1,4 +1,4 @@
-package ca.ulaval.glo2003;
+package ca.ulaval.glo2003.api;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -14,5 +14,8 @@ public class HealthResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response health() {
         return Response.ok(new HealthResponse("ok")).build();
+    }
+
+    public record HealthResponse(String status) {
     }
 }
