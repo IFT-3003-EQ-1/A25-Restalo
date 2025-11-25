@@ -1,16 +1,11 @@
 package ca.ulaval.glo2003.api.requests;
 
-import ca.ulaval.glo2003.api.response.exceptions.ForbiddenAccessExceptionMapper;
 import ca.ulaval.glo2003.api.response.exceptions.MissingParameterExceptionMapper;
 import ca.ulaval.glo2003.domain.SecurityService;
-import ca.ulaval.glo2003.entities.exceptions.ForbiddenAccessException;
+import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
 import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
-import com.google.common.base.Strings;
-import jakarta.ws.rs.NameBinding;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
-import jakarta.ws.rs.core.MultivaluedMap;
-import jakarta.ws.rs.ext.Provider;
 
 import java.io.IOException;
 import java.util.List;
@@ -38,13 +33,12 @@ public class AutorizationRequestFilter implements ContainerRequestFilter {
 
         String ownerId = ownerIdHeaderParam.getFirst();
         String idRestaurant = idRestaurantPathParam.getFirst();
-        securityService.hasAccess(idRestaurant, ownerId);
 
+        RestaurantDto dto = securityService.accessRestaurant(idRestaurant, ownerId);
+
+        requestContext.setProperty("restaurant", dto);
 
     }
 
-    private void abort(ContainerRequestContext requestContext, String msg) {
-        requestContext.abortWith(new MissingParameterExceptionMapper().toResponse(new MissingParameterException(msg)));
-    }
 }
 

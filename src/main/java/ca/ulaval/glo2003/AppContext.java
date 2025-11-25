@@ -76,7 +76,7 @@ public class AppContext extends ResourceConfig {
          final HealthResource healthResource = new HealthResource();
 
          final AutorizationRequestFilter autorizationRequestFilter = new AutorizationRequestFilter(
-                 new SecurityService(restaurantRepository)
+                 new SecurityService(restaurantRepository, new RestaurantAssembler())
          );
 
          return new ResourceConfig()

@@ -1,6 +1,8 @@
 package ca.ulaval.glo2003.domain;
 
+import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
 import ca.ulaval.glo2003.entities.RestaurantRepository;
+import ca.ulaval.glo2003.entities.assemblers.RestaurantAssembler;
 import ca.ulaval.glo2003.entities.exceptions.ForbiddenAccessException;
 import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.entities.exceptions.NotFoundException;
@@ -11,11 +13,14 @@ public class SecurityService {
 
     private final RestaurantRepository restaurantRepository;
 
-    public SecurityService(RestaurantRepository restaurantRepository) {
+    private final RestaurantAssembler assembler;
+
+    public SecurityService(RestaurantRepository restaurantRepository, RestaurantAssembler assembler) {
         this.restaurantRepository = restaurantRepository;
+        this.assembler = assembler;
     }
 
-    public boolean hasAccess(String idRestaurant, String ownerId) {
+    public RestaurantDto accessRestaurant(String idRestaurant, String ownerId) {
         if (Strings.isNullOrEmpty(ownerId)) {
             throw new MissingParameterException("Owner");
         }
@@ -27,7 +32,8 @@ public class SecurityService {
         if (!restaurant.getOwner().getId().equals(ownerId)) {
             throw new ForbiddenAccessException("");
         }
-        return true;
+
+        return assembler.toDto(restaurant);
     }
 
 }
