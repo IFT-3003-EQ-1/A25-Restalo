@@ -2,7 +2,7 @@ package ca.ulaval.glo2003.domain;
 
 import ca.ulaval.glo2003.domain.dtos.restaurant.OwnerDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
-import ca.ulaval.glo2003.entities.ReservationRepository;
+import ca.ulaval.glo2003.entities.reservation.ReservationRepository;
 import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.entities.restaurant.Owner;
 import ca.ulaval.glo2003.entities.restaurant.OwnerFactory;
@@ -13,7 +13,7 @@ import ca.ulaval.glo2003.entities.exceptions.NotFoundException;
 import ca.ulaval.glo2003.entities.filters.Filter;
 import ca.ulaval.glo2003.entities.filters.FilterRestaurantFactory;
 import ca.ulaval.glo2003.entities.restaurant.RestaurantFactory;
-import ca.ulaval.glo2003.entities.RestaurantRepository;
+import ca.ulaval.glo2003.entities.restaurant.RestaurantRepository;
 
 import java.util.List;
 

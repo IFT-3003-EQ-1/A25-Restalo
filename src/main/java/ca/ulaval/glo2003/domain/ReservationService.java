@@ -10,8 +10,8 @@ import ca.ulaval.glo2003.entities.filters.FilterReservationFactory;
 import ca.ulaval.glo2003.entities.reservation.Reservation;
 import ca.ulaval.glo2003.entities.reservation.ReservationFactory;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
-import ca.ulaval.glo2003.entities.ReservationRepository;
-import ca.ulaval.glo2003.entities.RestaurantRepository;
+import ca.ulaval.glo2003.entities.reservation.ReservationRepository;
+import ca.ulaval.glo2003.entities.restaurant.RestaurantRepository;
 import com.google.common.base.Strings;
 
 import java.util.List;

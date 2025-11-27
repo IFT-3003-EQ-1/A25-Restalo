@@ -1,6 +1,5 @@
-package ca.ulaval.glo2003.entities;
+package ca.ulaval.glo2003.entities.restaurant;
 
-import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 import ca.ulaval.glo2003.entities.filters.Filter;
 
 import java.util.List;

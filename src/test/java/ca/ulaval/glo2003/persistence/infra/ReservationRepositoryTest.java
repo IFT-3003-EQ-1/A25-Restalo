@@ -1,7 +1,7 @@
 package ca.ulaval.glo2003.persistence.infra;
 
 import ca.ulaval.glo2003.entities.Customer;
-import ca.ulaval.glo2003.entities.ReservationRepository;
+import ca.ulaval.glo2003.entities.reservation.ReservationRepository;
 import ca.ulaval.glo2003.entities.reservation.Reservation;
 import ca.ulaval.glo2003.entities.reservation.ReservationTime;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;

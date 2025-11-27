@@ -1,7 +1,7 @@
 package ca.ulaval.glo2003.infra.persistence;
 
-import ca.ulaval.glo2003.entities.ReservationRepository;
-import ca.ulaval.glo2003.entities.RestaurantRepository;
+import ca.ulaval.glo2003.entities.reservation.ReservationRepository;
+import ca.ulaval.glo2003.entities.restaurant.RestaurantRepository;
 import ca.ulaval.glo2003.infra.persistence.inMemory.InMemoryReservationRepository;
 import ca.ulaval.glo2003.infra.persistence.inMemory.InMemoryRestaurantRepository;
 import ca.ulaval.glo2003.infra.persistence.mongoDB.MongoDBConnection;

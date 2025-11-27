@@ -1,6 +1,6 @@
 package ca.ulaval.glo2003.persistence.infra.mongoDB;
 
-import ca.ulaval.glo2003.entities.RestaurantRepository;
+import ca.ulaval.glo2003.entities.restaurant.RestaurantRepository;
 import ca.ulaval.glo2003.infra.persistence.mongoDB.MongoRestaurantRepository;
 import ca.ulaval.glo2003.persistence.infra.RestaurantRepositoryTest;
 import com.mongodb.client.MongoClients;

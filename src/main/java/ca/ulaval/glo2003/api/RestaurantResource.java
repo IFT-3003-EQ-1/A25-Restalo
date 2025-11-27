@@ -117,6 +117,7 @@ public class RestaurantResource {
                                @Context UriInfo infosUri,
                                MenuDto menuDto) {
         URI location_menu = infosUri.getBaseUri(); // TODO : point the URI on corresponding GET
+
         return Response.created(location_menu).build();
     }
 }
