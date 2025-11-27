@@ -9,6 +9,7 @@ import ca.ulaval.glo2003.domain.dtos.restaurant.MenuDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.OwnerDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -52,12 +53,12 @@ public class RestaurantResource {
     @Path("/{id}")
     @OwnerOnly
     public Response getRestaurant(@HeaderParam("Owner") String ownerId,
-                                  @PathParam("id") String restaurantId) {
+                                  @PathParam("id") String restaurantId,
+                                  @Context ContainerRequestContext crc) {
 
 
-        RestaurantDto restaurantDto = restaurantService.getRestaurant(restaurantId, ownerId);
 
-
+        RestaurantDto restaurantDto = (RestaurantDto) crc.getProperty("restaurant");
         return Response.ok(restaurantDtoAssembler.toJson(restaurantDto)).build();
     }
 
@@ -91,8 +92,10 @@ public class RestaurantResource {
             @PathParam("id") String restaurantId,
             @QueryParam("date") String reservationData,
             @QueryParam("customerName") String customerName,
-            @Context UriInfo infosUri
+            @Context UriInfo infosUri,
+            @Context ContainerRequestContext crc
     ) {
+        RestaurantDto restaurantDto = (RestaurantDto) crc.getProperty("restaurant");
         List<ReservationDto> reservations = reservationService.findBySearchCriteria(ownerId, customerName, reservationData, restaurantId);
         return Response.ok(reservations).build();
     }
