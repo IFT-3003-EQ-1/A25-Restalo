@@ -2,12 +2,14 @@ package ca.ulaval.glo2003.api;
 
 import ca.ulaval.glo2003.api.assemblers.RestaurantDtoAssembler;
 import ca.ulaval.glo2003.api.requests.OwnerOnly;
+import ca.ulaval.glo2003.domain.MenuService;
 import ca.ulaval.glo2003.domain.ReservationService;
 import ca.ulaval.glo2003.domain.RestaurantService;
 import ca.ulaval.glo2003.domain.dtos.ReservationDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.MenuDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.OwnerDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
+import ca.ulaval.glo2003.entities.menu.MenuRepository;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.Context;
@@ -26,14 +28,16 @@ public class RestaurantResource {
     private final RestaurantService restaurantService;
     private final RestaurantDtoAssembler restaurantDtoAssembler;
     private final ReservationService reservationService;
+    private final MenuService menuService;
 
     public RestaurantResource(RestaurantService restaurantService,
                               RestaurantDtoAssembler restaurantDtoAssembler,
-                              ReservationService reservationService
-                               ) {
+                              ReservationService reservationService, MenuService menuService
+    ) {
         this.restaurantService = restaurantService;
         this.restaurantDtoAssembler = restaurantDtoAssembler;
         this.reservationService = reservationService;
+        this.menuService = menuService;
     }
 
     @POST
@@ -96,7 +100,7 @@ public class RestaurantResource {
             @Context ContainerRequestContext crc
     ) {
         RestaurantDto restaurantDto = (RestaurantDto) crc.getProperty("restaurant");
-        List<ReservationDto> reservations = reservationService.findBySearchCriteria(ownerId, customerName, reservationData, restaurantId);
+        List<ReservationDto> reservations = reservationService.findBySearchCriteria(restaurantDto, customerName, reservationData);
         return Response.ok(reservations).build();
     }
 
@@ -105,8 +109,10 @@ public class RestaurantResource {
     @OwnerOnly
     public Response deleteRestaurant(@PathParam("id") String restaurantId,
                                      @Context UriInfo infosUri,
+                                     @Context ContainerRequestContext crc,
                                      @HeaderParam("Owner") String ownerId) {
-        boolean isRestaurantDeleted = restaurantService.deleteRestaurant(restaurantId, ownerId);
+        RestaurantDto restaurantDto = (RestaurantDto) crc.getProperty("restaurant");
+        boolean isRestaurantDeleted = restaurantService.deleteRestaurant(restaurantDto.id);
         return Response.noContent().build();
     }
 
@@ -115,9 +121,11 @@ public class RestaurantResource {
     @OwnerOnly
     public Response createMenu(@HeaderParam("Owner") String ownerId,
                                @Context UriInfo infosUri,
+                               @Context ContainerRequestContext crc,
                                MenuDto menuDto) {
         URI location_menu = infosUri.getBaseUri(); // TODO : point the URI on corresponding GET
-
+        RestaurantDto restaurantDto = (RestaurantDto) crc.getProperty("restaurant");
+        menuService.createMenu(menuDto, restaurantDto);
         return Response.created(location_menu).build();
     }
 }

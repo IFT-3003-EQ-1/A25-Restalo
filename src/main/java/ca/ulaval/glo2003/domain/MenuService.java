@@ -1,9 +1,13 @@
 package ca.ulaval.glo2003.domain;
 
 import ca.ulaval.glo2003.domain.dtos.restaurant.MenuDto;
+import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
 import ca.ulaval.glo2003.entities.menu.Menu;
 import ca.ulaval.glo2003.entities.menu.MenuFactory;
 import ca.ulaval.glo2003.entities.menu.MenuRepository;
+import ca.ulaval.glo2003.entities.restaurant.OwnerFactory;
+import ca.ulaval.glo2003.entities.restaurant.Restaurant;
+import ca.ulaval.glo2003.entities.restaurant.RestaurantFactory;
 
 public class MenuService {
 
@@ -11,15 +15,25 @@ public class MenuService {
 
     private final MenuFactory menuFactory;
 
-    public MenuService(MenuRepository menuRepository, MenuFactory menuFactory) {
+    private final RestaurantFactory restaurantFactory;
+
+    private final OwnerFactory ownerFactory;
+
+    public MenuService(MenuRepository menuRepository, MenuFactory menuFactory, RestaurantFactory restaurantFactory, OwnerFactory ownerFactory) {
         this.menuRepository = menuRepository;
         this.menuFactory = menuFactory;
+        this.restaurantFactory = restaurantFactory;
+        this.ownerFactory = ownerFactory;
     }
 
 
-    public MenuDto createMenu() {
-        Menu menu = menuFactory.createMenu();
-        menuRepository.create(menu);
-        return new MenuDto();
+    public String createMenu(MenuDto menuDto, RestaurantDto restaurantDto) {
+        Restaurant restaurant = restaurantFactory.createRestaurant(
+                ownerFactory.createOwner(restaurantDto.owner.id),
+                restaurantDto
+        );
+        Menu menu = menuFactory.createMenu(menuDto, restaurant);
+
+        return menuRepository.save(menu);
     }
 }

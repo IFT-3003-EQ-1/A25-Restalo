@@ -82,18 +82,7 @@ public class RestaurantService {
 
     }
 
-    public boolean deleteRestaurant(String restaurantId, String ownerId) {
-        if (ownerId == null || ownerId.isBlank()) {
-            throw new MissingParameterException("Owner");
-        }
-
-        Restaurant restaurant = restaurantRepository.get(restaurantId)
-                .orElseThrow(() -> new NotFoundException("le restaurant n'existe pas"));
-
-        if (!restaurant.getOwner().getId().equals(ownerId)) {
-            throw new ForbiddenAccessException("le restaurant n'appartient pas au restaurateur");
-        }
-
+    public boolean deleteRestaurant(String restaurantId) {
         reservationRepository.deleteRelatedReservations(restaurantId);
         return restaurantRepository.delete(restaurantId);
     }

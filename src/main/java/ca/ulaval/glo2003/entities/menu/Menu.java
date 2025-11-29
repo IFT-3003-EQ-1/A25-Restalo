@@ -1,12 +1,14 @@
 package ca.ulaval.glo2003.entities.menu;
 
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
+import dev.morphia.annotations.Id;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Menu {
 
+    @Id
     private final String id;
 
     private final Restaurant restaurant;

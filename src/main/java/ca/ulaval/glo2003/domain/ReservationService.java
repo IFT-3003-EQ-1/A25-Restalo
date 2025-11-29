@@ -1,6 +1,7 @@
 package ca.ulaval.glo2003.domain;
 
 import ca.ulaval.glo2003.domain.dtos.ReservationDto;
+import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
 import ca.ulaval.glo2003.entities.assemblers.ReservationAssembler;
 import ca.ulaval.glo2003.entities.exceptions.ForbiddenAccessException;
 import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
@@ -63,24 +64,13 @@ public class ReservationService {
         return true;
     }
 
-    public List<ReservationDto> findBySearchCriteria(String ownerId, String customerName, String reservationData, String restaurantId) {
-
-        if (ownerId == null || ownerId.isBlank()) {
-            throw new MissingParameterException("Owner");
-        }
-
-        Restaurant restaurant = restaurantRepository.get(restaurantId)
-                .orElseThrow(() -> new NotFoundException("le restaurant n'existe pas"));
-
-        if (!restaurant.getOwner().getId().equals(ownerId)) {
-            throw new ForbiddenAccessException("le restaurant n'appartient pas au restaurateur");
-        }
+    public List<ReservationDto> findBySearchCriteria(RestaurantDto restaurantDto, String customerName, String reservationData) {
 
         if (Strings.isNullOrEmpty(reservationData) && Strings.isNullOrEmpty(customerName)) {
            return reservationRepository.getAll().stream().map(reservationAssembler::toDto).toList();
         } else {
             List<Filter<Reservation>> filters =
-                    filterFactory.createFilters(customerName, reservationData, restaurantId, ownerId);
+                    filterFactory.createFilters(customerName, reservationData, restaurantDto.id, restaurantDto.owner.id);
 
             List<Reservation> reservations = reservationRepository.search(filters);
             if (reservations.isEmpty())

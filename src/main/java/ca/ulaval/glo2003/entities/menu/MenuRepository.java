@@ -1,9 +1,10 @@
 package ca.ulaval.glo2003.entities.menu;
 
+import java.util.Optional;
 
 public interface MenuRepository {
 
-    public boolean create(Menu menu);
+    public String save(Menu menu);
 
-    public boolean get(String id);
+    public Optional<Menu> get(String id);
 }
