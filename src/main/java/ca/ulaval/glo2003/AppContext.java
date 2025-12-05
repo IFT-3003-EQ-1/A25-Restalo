@@ -11,10 +11,13 @@ import ca.ulaval.glo2003.api.response.exceptions.ForbiddenAccessExceptionMapper;
 import ca.ulaval.glo2003.api.response.exceptions.NotFoundExceptionMapper;
 import ca.ulaval.glo2003.api.response.exceptions.InvalideParameterExceptionMapper;
 import ca.ulaval.glo2003.api.response.exceptions.MissingParameterExceptionMapper;
+import ca.ulaval.glo2003.domain.MenuService;
 import ca.ulaval.glo2003.domain.ReservationService;
 import ca.ulaval.glo2003.domain.RestaurantService;
 import ca.ulaval.glo2003.domain.SecurityService;
 import ca.ulaval.glo2003.entities.CustomerFactory;
+import ca.ulaval.glo2003.entities.menu.MenuFactory;
+import ca.ulaval.glo2003.entities.menu.MenuRepository;
 import ca.ulaval.glo2003.entities.reservation.ReservationRepository;
 import ca.ulaval.glo2003.entities.restaurant.RestaurantRepository;
 import ca.ulaval.glo2003.entities.assemblers.ReservationAssembler;
@@ -36,8 +39,16 @@ public class AppContext extends ResourceConfig {
         DatabaseFactory databaseFactory = new DatabaseFactory(getConfigFromEnv());
         final RestaurantRepository restaurantRepository = databaseFactory.getRestaurantRepository();
         final ReservationRepository reservationRepository = databaseFactory.getReservationRepository();
+        final MenuRepository menuRepository = databaseFactory.getMenuRepository();
 
         final  RestaurantDtoAssembler restaurantDtoAssembler = new RestaurantDtoAssembler();
+
+        final MenuService menuService = new MenuService(
+                menuRepository,
+                new MenuFactory(),
+                new RestaurantFactory(),
+                new OwnerFactory()
+        );
 
         final RestaurantService restaurantService = new RestaurantService(
                 new RestaurantFactory(),
@@ -62,7 +73,8 @@ public class AppContext extends ResourceConfig {
          final RestaurantResource restaurantRessource = new RestaurantResource(
                 restaurantService,
                 restaurantDtoAssembler,
-                reservationService
+                reservationService,
+                 menuService
         );
 
          final SearchResource searchRessource = new SearchResource(

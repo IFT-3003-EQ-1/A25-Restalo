@@ -57,6 +57,7 @@ public class End2EndTestUtils {
             restaurantId = pathFragments[pathFragments.length-1];
             restaurantDto.id = restaurantId;
 
+
             assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
         } catch (Exception e) {
             fail(e.getMessage());

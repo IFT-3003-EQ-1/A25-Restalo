@@ -178,14 +178,4 @@ public abstract class RestaurantRepositoryTest {
         restaurantRepository.delete(RESTAURANT_ID);
         assertFalse(restaurantRepository.get(RESTAURANT_ID).isPresent());
     }
-
-    //    @Test
-//    public void givenDelete_whenRestaurantIdIsValid_thenRestaurantIsDeleted() {
-//
-//    }
-//
-//    @Test
-//    public void givenDelete_whenIdIsNotValid_thenReturnFalse() {
-//
-//    }
 }

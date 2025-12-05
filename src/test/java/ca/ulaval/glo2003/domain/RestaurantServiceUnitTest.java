@@ -66,24 +66,12 @@ public class RestaurantServiceUnitTest {
                 filterFactory
         );
 
-        restaurantDto = new RestaurantDto(
-                "1",
-                ownerDto,
-                "Pizz",
-                new HourDto(),
-                4,
-                new ConfigReservationDto()
-        );
-        ownerDto = new OwnerDto("1");
-        owner = new Owner("1");
-        restaurant = new Restaurant(
-                "i",
-                owner,
-                "Pizz",
-                4,
-                new Hours(),
-                new ConfigReservation()
-        );
+        restaurantDto = DomainTestUtils.getRestaurantDto();
+        restaurant = DomainTestUtils.getRestaurant();
+
+        ownerDto = new OwnerDto(restaurantDto.owner.id);
+        owner = new Owner(restaurant.getOwner().getId());
+
     }
 
     @Test
@@ -98,73 +86,11 @@ public class RestaurantServiceUnitTest {
     }
 
     @Test
-    public void givenGetRestaurant_whenValidParameters_thenReturnRestaurant() {
-        String restaurantId = restaurantDto.id;
-        String ownerId = ownerDto.id;
-
-        when(restaurantRepository.get(restaurantId)).thenReturn(Optional.of(restaurant));
-        when(restaurantAssembler.toDto(restaurant)).thenReturn(restaurantDto);
-
-        RestaurantDto returnedVal = restaurantService.getRestaurant(restaurantId, ownerId);
-        assertEquals(restaurantDto, returnedVal);
-    }
-
-    @Test
-    public void givenGetRestaurant_whenOwnerIdIsNull_thenThrowMissingParameterException() {
-        String restaurantId = restaurantDto.id;
-        String ownerId = null;
-
-        assertThrows(MissingParameterException.class, () -> restaurantService.getRestaurant(restaurantId, ownerId));
-    }
-
-    @Test
-    public void givenGetRestaurant_whenRestaurantIdDOesntExist_thenThrowNotFoundException() {
-        String restaurantId = "-1";
-        String ownerId = ownerDto.id;
-
-        assertThrows(NotFoundException.class, () -> restaurantService.getRestaurant(restaurantId, ownerId));
-    }
-
-    @Test
     public void givenDeleteRestaurant_whenValidParameters_thenReturnTrue() {
         String restaurantId = restaurantDto.id;
-        String ownerId = ownerDto.id;
 
-        when(restaurantRepository.get(restaurantId)).thenReturn(Optional.of(restaurant));
         when(restaurantRepository.delete(restaurantId)).thenReturn(true);
 
-        assertTrue(restaurantService.deleteRestaurant(restaurantId, ownerId));
+        assertTrue(restaurantService.deleteRestaurant(restaurantId));
     }
-
-    @Test
-    public void givenDeleteRestaurant_whenRestaurantIdIsNull_thenThrowNotFoundException() {
-        String restaurantId = null;
-        String ownerId = ownerDto.id;
-
-        assertThrows(NotFoundException.class, ()-> restaurantService.deleteRestaurant(restaurantId, ownerId));
-    }
-
-    @Test
-    public void givenDeleteRestaurant_whenOwnerIdIsNull_thenThrowMissingParameterException() {
-        String restaurantId = restaurantDto.id;
-        String ownerId = null;
-
-        assertThrows(MissingParameterException.class, ()-> restaurantService.deleteRestaurant(restaurantId, ownerId));
-    }
-
-    @Test
-    public void givenDeleteRestaurant_whenOwnerIdDoesntMatch_thenThrowForbiddenAcessException() {
-        String restaurantId = restaurantDto.id;
-        String ownerId = "123";
-
-        assertThrows(NotFoundException.class, ()-> restaurantService.deleteRestaurant(restaurantId, ownerId));
-
-    }
-
-
-
-
-
-
-
 }

@@ -20,7 +20,7 @@ public class SecurityService {
         this.assembler = assembler;
     }
 
-    public RestaurantDto accessRestaurant(String idRestaurant, String ownerId) {
+    public RestaurantDto getRestaurant(String idRestaurant, String ownerId) {
         if (Strings.isNullOrEmpty(ownerId)) {
             throw new MissingParameterException("Owner");
         }

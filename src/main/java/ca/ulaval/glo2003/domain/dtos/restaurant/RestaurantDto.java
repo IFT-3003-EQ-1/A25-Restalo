@@ -30,21 +30,6 @@ public class RestaurantDto {
         this.reservation = reservation;
     }
 
-    public RestaurantDto(String id, String name, HourDto hours, int capacity, ConfigReservationDto reservation) {
-        this.id = id;
-        this.name = name;
-        this.hours = hours;
-        this.capacity = capacity;
-        this.reservation = reservation;
-    }
-
-    public RestaurantDto(String id, String name, HourDto hours, int capacity) {
-        this.id = id;
-        this.name = name;
-        this.hours = hours;
-        this.capacity = capacity;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
