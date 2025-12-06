@@ -233,6 +233,15 @@ public class RestaurantEnd2EndTest extends JerseyTest {
         }
     }
 
+    @Test
+    public void givenCreateMenu_whenCorrectRequest_thenReturnLocation() {
+        fail();
+    }
+
+    @Test
+    public void givenCreateMenu_whenInvalidParameter_thenReturnBadRequest() {
+        fail();
+    }
 
     private String extractIdFromLocation(Response response) {
         URI location = response.getLocation();
