@@ -113,7 +113,7 @@ public class RestaurantEnd2EndTest extends JerseyTest {
         End2EndTestUtils.postRestaurant(target(), restaurantDto);
 
         Response response = target("/restaurants").request().header("Owner", restaurantDto.owner.id).get();
-        List<RestaurantDto> restaurantDtos = response.readEntity(List.class);
+        var restaurantDtos = response.readEntity(List.class);
 
         assertEquals(1, restaurantDtos.size());
         assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
@@ -227,14 +227,14 @@ public class RestaurantEnd2EndTest extends JerseyTest {
     @Test
     public void givenCreateMenu_whenCorrectRequest_thenReturnLocation() {
         End2EndTestUtils.postRestaurant(target(), restaurantDto);
-        MenuDto menuDto = End2EndTestUtils.buildDefaultMenuDto();
+        MenuDto menuDto = End2EndTestUtils.buildDefaultMenuDto(restaurantDto.id);
         Map<String, Object> json = menuDto.toJson();
 
         try (Response response = target("/restaurants/" + restaurantDto.id + "/menus/").request()
                 .header("Owner", restaurantDto.owner.id).post(Entity.json(json))) {
             String location = extractIdFromLocation(response);
 
-            assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+            assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
             assertFalse(Strings.isNullOrEmpty(location));
         }
 
@@ -243,7 +243,9 @@ public class RestaurantEnd2EndTest extends JerseyTest {
     @Test
     public void givenCreateMenu_whenInvalidParameter_thenReturnBadRequest() {
         End2EndTestUtils.postRestaurant(target(), restaurantDto);
-        MenuDto menuDto = End2EndTestUtils.buildDefaultMenuDto();
+        MenuDto menuDto = End2EndTestUtils.buildDefaultMenuDto(restaurantDto.id);
+
+        menuDto.items.clear();
         Map<String, Object> json = menuDto.toJson();
 
         try (Response response = target("/restaurants/" + restaurantDto.id + "/menus/").request()

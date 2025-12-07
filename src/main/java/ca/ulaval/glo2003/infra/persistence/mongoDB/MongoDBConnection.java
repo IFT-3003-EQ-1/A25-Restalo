@@ -1,5 +1,6 @@
 package ca.ulaval.glo2003.infra.persistence.mongoDB;
 
+import ca.ulaval.glo2003.entities.menu.Menu;
 import ca.ulaval.glo2003.entities.reservation.Reservation;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 import ca.ulaval.glo2003.infra.persistence.DBConfig;
@@ -16,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class MongoDBConnection {
     private MongoClient mongoClient;
     private Datastore datastore;
-    private DBConfig config;
+    private final DBConfig config;
 
 
     public MongoDBConnection(DBConfig config) {
@@ -41,13 +42,13 @@ public class MongoDBConnection {
             mongoClient = MongoClients.create(settings);
 
             datastore = Morphia.createDatastore(mongoClient, config.getDatabaseName());
+
             datastore.getMapper().getEntityModel(Restaurant.class);
             datastore.getMapper().getEntityModel(Reservation.class);
+            datastore.getMapper().getEntityModel(Menu.class);
 
             System.out.println("MongoDB connected successfully!");
         } catch (Exception e) {
-            System.err.println("Failed to connect to MongoDB: " + e.getMessage());
-            e.printStackTrace();
             throw new RuntimeException("MongoDB connection failed", e);
         }
     }

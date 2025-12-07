@@ -22,11 +22,12 @@ public class InMemoryMenuRepository implements MenuRepository {
 
     @Override
     public String save(Menu menu) {
-        return "";
+        database.put(menu.getId(), menu);
+        return menu.getId();
     }
 
     @Override
     public Optional<Menu> get(String id) {
-        return null;
+        return Optional.ofNullable(database.get(id));
     }
 }

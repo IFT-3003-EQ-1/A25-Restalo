@@ -5,13 +5,12 @@ import ca.ulaval.glo2003.domain.dtos.restaurant.MenuItemDto;
 import ca.ulaval.glo2003.entities.exceptions.InvalideParameterException;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 import com.google.common.base.Strings;
-import net.bytebuddy.asm.Advice;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class MenuFactory {
 
@@ -44,8 +43,11 @@ public class MenuFactory {
                     item.price
             ));
         }
+
+        String id = UUID.randomUUID().toString().replace("-", "");
+
         return new Menu(
-                menuDto.id,
+                id,
                 restaurant,
                 menuDto.title,
                 menuDto.startDate,

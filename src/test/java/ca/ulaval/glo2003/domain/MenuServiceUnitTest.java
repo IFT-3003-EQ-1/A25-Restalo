@@ -7,7 +7,6 @@ import ca.ulaval.glo2003.entities.menu.MenuFactory;
 import ca.ulaval.glo2003.entities.menu.MenuRepository;
 import ca.ulaval.glo2003.entities.restaurant.OwnerFactory;
 import ca.ulaval.glo2003.entities.restaurant.RestaurantFactory;
-import ca.ulaval.glo2003.entities.restaurant.RestaurantRepository;
 import com.google.common.base.Strings;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -58,9 +57,12 @@ public class MenuServiceUnitTest {
 
         when(restaurantFactory.createRestaurant(any(), any())).thenReturn(DomainTestUtils.getRestaurant());
         when(menuFactory.createMenu(any(), any())).thenReturn(DomainTestUtils.getMenu());
+        when(menuRepository.save(any())).thenReturn(menuDto.id);
 
         String id = menuService.createMenu(menuDto, restaurantDto);
+
         assertFalse(Strings.isNullOrEmpty(id));
+        assertEquals(menuDto.id, id);
     }
 
     @Test

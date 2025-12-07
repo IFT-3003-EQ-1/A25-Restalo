@@ -47,7 +47,7 @@ public class End2EndTestUtils {
         return createReservationDto;
     }
 
-    public static MenuDto buildDefaultMenuDto() {
+    public static MenuDto buildDefaultMenuDto(String restaurantId) {
         List<MenuItemDto> items = new ArrayList<>();
         items.add(new MenuItemDto(
                 "1",
@@ -59,7 +59,7 @@ public class End2EndTestUtils {
                 "Menu - 1",
                 "2024-04-05",
                 items,
-                buildDefaultRestaurantDto().id
+                restaurantId
         );
     }
 
