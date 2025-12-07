@@ -1,6 +1,7 @@
 package ca.ulaval.glo2003.infra.persistence.mongoDB;
 
 import ca.ulaval.glo2003.entities.menu.Menu;
+import ca.ulaval.glo2003.entities.menu.MenuItem;
 import ca.ulaval.glo2003.entities.reservation.Reservation;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 import ca.ulaval.glo2003.infra.persistence.DBConfig;
@@ -46,6 +47,7 @@ public class MongoDBConnection {
             datastore.getMapper().getEntityModel(Restaurant.class);
             datastore.getMapper().getEntityModel(Reservation.class);
             datastore.getMapper().getEntityModel(Menu.class);
+            datastore.getMapper().getEntityModel(MenuItem.class);
 
             System.out.println("MongoDB connected successfully!");
         } catch (Exception e) {

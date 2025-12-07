@@ -10,7 +10,7 @@ import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import static ca.ulaval.glo2003.persistence.infra.InfraTestUtils.DEFAULT_DATABASE_NAME;
+import static ca.ulaval.glo2003.infra.persistence.DBConfig.DEFAULT_DATABASE_NAME;
 
 @Testcontainers
 public class MongoRestaurantRepositoryTest extends RestaurantRepositoryTest {

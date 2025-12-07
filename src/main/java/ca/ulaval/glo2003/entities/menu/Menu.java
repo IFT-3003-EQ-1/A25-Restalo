@@ -1,11 +1,14 @@
 package ca.ulaval.glo2003.entities.menu;
 
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
+import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+@Entity("menus")
 public class Menu {
 
     @Id
@@ -35,6 +38,10 @@ public class Menu {
         return startDate;
     }
 
+    public List<MenuItem> getMenuItems() {
+        return menuItems;
+    }
+
     public Menu(String id, Restaurant restaurant, String title, String startDate, List<MenuItem> menuItems) {
         this.id = id;
         this.restaurant = restaurant;
@@ -49,5 +56,17 @@ public class Menu {
         this.title = null;
         this.startDate = null;
         this.menuItems = new ArrayList<>();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Menu menu = (Menu) o;
+        return Objects.equals(id, menu.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

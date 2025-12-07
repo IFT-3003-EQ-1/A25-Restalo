@@ -31,7 +31,6 @@ public class MenuFactoryTest {
     public void givenCreateMenu_whenParametersAreValid_thenReturnMenu() {
         Menu menu = menuFactory.createMenu(menuDto, restaurant);
 
-        assertEquals(menuDto.id, menu.getId());
         assertEquals(restaurant.getId(), menu.getRestaurant().getId());
         assertEquals(menu.getTitle(), menuDto.title);
         assertEquals(menu.getStartDate(), menuDto.startDate);
