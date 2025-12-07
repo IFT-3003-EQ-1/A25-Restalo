@@ -3,17 +3,19 @@ package ca.ulaval.glo2003.domain;
 import ca.ulaval.glo2003.domain.dtos.CustomerDto;
 import ca.ulaval.glo2003.domain.dtos.ReservationDto;
 import ca.ulaval.glo2003.domain.dtos.ReservationTimeDto;
-import ca.ulaval.glo2003.domain.dtos.restaurant.ConfigReservationDto;
-import ca.ulaval.glo2003.domain.dtos.restaurant.HourDto;
-import ca.ulaval.glo2003.domain.dtos.restaurant.OwnerDto;
-import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
+import ca.ulaval.glo2003.domain.dtos.restaurant.*;
 import ca.ulaval.glo2003.entities.Customer;
+import ca.ulaval.glo2003.entities.menu.Menu;
+import ca.ulaval.glo2003.entities.menu.MenuItem;
 import ca.ulaval.glo2003.entities.reservation.Reservation;
 import ca.ulaval.glo2003.entities.reservation.ReservationTime;
 import ca.ulaval.glo2003.entities.restaurant.ConfigReservation;
 import ca.ulaval.glo2003.entities.restaurant.Hours;
 import ca.ulaval.glo2003.entities.restaurant.Owner;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DomainTestUtils {
 
@@ -70,6 +72,35 @@ public class DomainTestUtils {
                         reservationDto.customer.phoneNumber
                 ),
                 restaurant
+        );
+    }
+
+    public static MenuDto getMenuDto() {
+        List<MenuItemDto> items = new ArrayList<>();
+        items.add(new MenuItemDto(
+                "1",
+                "steak",
+                30.0F
+        ));
+        return new MenuDto(
+                "1",
+                "Menu - 1",
+                "2024-04-05",
+                items,
+                getRestaurantDto().id
+        );
+    }
+
+    public static Menu getMenu() {
+        MenuDto menuDto = getMenuDto();
+        List<MenuItem> items = menuDto.items.stream()
+                .map(dto -> new MenuItem(dto.id, dto.name, dto.price)).toList();
+        return new Menu(
+                menuDto.id,
+                getRestaurant(),
+                menuDto.title,
+                menuDto.startDate,
+                items
         );
     }
 }

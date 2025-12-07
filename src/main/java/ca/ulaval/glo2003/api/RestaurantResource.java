@@ -9,7 +9,6 @@ import ca.ulaval.glo2003.domain.dtos.ReservationDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.MenuDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.OwnerDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
-import ca.ulaval.glo2003.entities.menu.MenuRepository;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.Context;
@@ -107,25 +106,23 @@ public class RestaurantResource {
     @DELETE
     @Path("/{id}")
     @OwnerOnly
-    public Response deleteRestaurant(@PathParam("id") String restaurantId,
-                                     @Context UriInfo infosUri,
-                                     @Context ContainerRequestContext crc,
-                                     @HeaderParam("Owner") String ownerId) {
+    public Response deleteRestaurant(@Context ContainerRequestContext crc) {
         RestaurantDto restaurantDto = (RestaurantDto) crc.getProperty("restaurant");
         boolean isRestaurantDeleted = restaurantService.deleteRestaurant(restaurantDto.id);
         return Response.noContent().build();
     }
 
     @POST
-    @Path("/menus")
+    @Path("/{id}/menus")
     @OwnerOnly
     public Response createMenu(@HeaderParam("Owner") String ownerId,
                                @Context UriInfo infosUri,
                                @Context ContainerRequestContext crc,
                                MenuDto menuDto) {
-        URI location_menu = infosUri.getBaseUri(); // TODO : point the URI on corresponding GET
         RestaurantDto restaurantDto = (RestaurantDto) crc.getProperty("restaurant");
-        menuService.createMenu(menuDto, restaurantDto);
-        return Response.created(location_menu).build();
+        String id = menuService.createMenu(menuDto, restaurantDto);
+
+        URI location = infosUri.getBaseUriBuilder().path("menus").path(id).build();
+        return Response.created(location).build();
     }
 }

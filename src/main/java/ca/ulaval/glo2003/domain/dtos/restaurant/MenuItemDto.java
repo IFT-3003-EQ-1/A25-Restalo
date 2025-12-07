@@ -7,6 +7,13 @@ public class MenuItemDto {
     public String name;
     public float price;
 
+    public MenuItemDto() {}
+
+    public MenuItemDto(String id, String name, float price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
 
 
     public Map<String, Object> toJson() {

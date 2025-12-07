@@ -3,14 +3,13 @@ package ca.ulaval.glo2003.api;
 import ca.ulaval.glo2003.api.assemblers.ReservationDtoAssembler;
 import ca.ulaval.glo2003.api.assemblers.RestaurantDtoAssembler;
 import ca.ulaval.glo2003.domain.dtos.*;
-import ca.ulaval.glo2003.domain.dtos.restaurant.ConfigReservationDto;
-import ca.ulaval.glo2003.domain.dtos.restaurant.HourDto;
-import ca.ulaval.glo2003.domain.dtos.restaurant.OwnerDto;
-import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
+import ca.ulaval.glo2003.domain.dtos.restaurant.*;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.Response;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -46,6 +45,22 @@ public class End2EndTestUtils {
         createReservationDto.time.end = "12:30:00";
         createReservationDto.restaurant = buildDefaultRestaurantDto();
         return createReservationDto;
+    }
+
+    public static MenuDto buildDefaultMenuDto() {
+        List<MenuItemDto> items = new ArrayList<>();
+        items.add(new MenuItemDto(
+                "1",
+                "steak",
+                30.0F
+        ));
+        return new MenuDto(
+                "1",
+                "Menu - 1",
+                "2024-04-05",
+                items,
+                buildDefaultRestaurantDto().id
+        );
     }
 
     public static String postRestaurant(WebTarget target, RestaurantDto restaurantDto) {
