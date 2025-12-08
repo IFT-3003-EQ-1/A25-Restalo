@@ -92,7 +92,6 @@ public class RestaurantResource {
     @OwnerOnly
     public Response searchReservation(
             @HeaderParam("Owner") String ownerId,
-            @PathParam("id") String restaurantId,
             @QueryParam("date") String reservationData,
             @QueryParam("customerName") String customerName,
             @Context UriInfo infosUri,
@@ -124,5 +123,13 @@ public class RestaurantResource {
 
         URI location = infosUri.getBaseUriBuilder().path("menus").path(id).build();
         return Response.created(location).build();
+    }
+
+    @GET
+    @Path("/{id}/menus")
+    public Response getMenu(@PathParam("id") String restaurantId) {
+
+        MenuDto menuDto = menuService.getMenu(restaurantId);
+        return Response.ok(menuDto.toJson()).build();
     }
 }
