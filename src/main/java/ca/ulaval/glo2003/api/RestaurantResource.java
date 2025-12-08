@@ -6,6 +6,7 @@ import ca.ulaval.glo2003.domain.MenuService;
 import ca.ulaval.glo2003.domain.ReservationService;
 import ca.ulaval.glo2003.domain.RestaurantService;
 import ca.ulaval.glo2003.domain.dtos.ReservationDto;
+import ca.ulaval.glo2003.domain.dtos.SalesDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.MenuDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.OwnerDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
@@ -132,4 +133,17 @@ public class RestaurantResource {
         MenuDto menuDto = menuService.getMenu(restaurantId);
         return Response.ok(menuDto.toJson()).build();
     }
+
+    @POST
+    @Path("/{id}/sales")
+    @OwnerOnly
+    public Response writeSalesReport(@Context ContainerRequestContext crc,
+                                     SalesDto salesDto) {
+        RestaurantDto restaurantDto = (RestaurantDto) crc.getProperty("restaurant");
+
+        URI location = null;
+        return Response.created(location).build();
+    }
+
+
 }

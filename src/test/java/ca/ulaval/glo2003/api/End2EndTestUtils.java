@@ -8,6 +8,7 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.Response;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -96,6 +97,26 @@ public class End2EndTestUtils {
         }
         return reservationNumber;
 
+    }
+
+    public static String postMenu(WebTarget target, MenuDto menuDto, String ownerId) {
+
+        target = target.path("/restaurants/" + menuDto.restaurantId + "/menus");
+        try (Response response = target.request().header("Owner", ownerId).post(Entity.json(menuDto.toJson()))) {
+
+            menuDto.id = extractIdFromLocation(response);
+            assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+
+        return menuDto.id;
+    }
+
+    public static String extractIdFromLocation(Response response) {
+        URI location = response.getLocation();
+        String path = location.getPath();
+        return path.substring(path.lastIndexOf('/') + 1);
     }
 
 }
