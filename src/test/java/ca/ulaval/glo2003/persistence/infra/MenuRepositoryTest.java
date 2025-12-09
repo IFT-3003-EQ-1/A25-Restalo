@@ -47,6 +47,6 @@ abstract public class MenuRepositoryTest {
         Optional<Menu> result = menuRepository.getFromRestaurantId(menu.getRestaurant().getId());
 
         assertFalse(result.isEmpty());
-        assertEquals(menu.getId(), result.get().getId());
+        assertEquals(menu, result.get());
     }
 }

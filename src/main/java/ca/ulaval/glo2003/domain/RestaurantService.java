@@ -1,15 +1,16 @@
 package ca.ulaval.glo2003.domain;
 
+import ca.ulaval.glo2003.domain.dtos.SalesDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.OwnerDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
+import ca.ulaval.glo2003.entities.Sales;
+import ca.ulaval.glo2003.entities.SalesRepository;
 import ca.ulaval.glo2003.entities.reservation.ReservationRepository;
 import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.entities.restaurant.Owner;
 import ca.ulaval.glo2003.entities.restaurant.OwnerFactory;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 import ca.ulaval.glo2003.entities.assemblers.*;
-import ca.ulaval.glo2003.entities.exceptions.ForbiddenAccessException;
-import ca.ulaval.glo2003.entities.exceptions.NotFoundException;
 import ca.ulaval.glo2003.entities.filters.Filter;
 import ca.ulaval.glo2003.entities.filters.FilterRestaurantFactory;
 import ca.ulaval.glo2003.entities.restaurant.RestaurantFactory;
@@ -22,6 +23,7 @@ public class RestaurantService {
     private final RestaurantFactory restaurantFactory;
     private final RestaurantRepository restaurantRepository;
     private final ReservationRepository reservationRepository;
+    private final SalesRepository salesRepository;
     private final OwnerFactory ownerFactory;
     private final RestaurantAssembler restaurantAssembler;
     private final FilterRestaurantFactory filterRestaurantFactory;
@@ -30,11 +32,14 @@ public class RestaurantService {
             RestaurantFactory restaurantFactory,
             RestaurantRepository restaurantRepository,
             ReservationRepository reservationRepository,
+            SalesRepository salesRepository,
             OwnerFactory ownerFactory,
-            RestaurantAssembler restaurantAssembler, FilterRestaurantFactory filterRestaurantFactory) {
+            RestaurantAssembler restaurantAssembler,
+            FilterRestaurantFactory filterRestaurantFactory) {
         this.restaurantFactory = restaurantFactory;
         this.restaurantRepository = restaurantRepository;
         this.reservationRepository = reservationRepository;
+        this.salesRepository = salesRepository;
         this.ownerFactory = ownerFactory;
         this.restaurantAssembler = restaurantAssembler;
         this.filterRestaurantFactory = filterRestaurantFactory;
@@ -85,5 +90,11 @@ public class RestaurantService {
     public boolean deleteRestaurant(String restaurantId) {
         reservationRepository.deleteRelatedReservations(restaurantId);
         return restaurantRepository.delete(restaurantId);
+    }
+
+    public String createSalesReport(SalesDto salesDto, RestaurantDto restaurantDto) {
+        Sales sales = restaurantFactory.createSalesReport(salesDto, restaurantFactory.fromDto(restaurantDto));
+        salesRepository.saveSalesReport(sales);
+        return restaurantDto.id;
     }
 }

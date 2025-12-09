@@ -1,8 +1,6 @@
 package ca.ulaval.glo2003.domain;
 
-import ca.ulaval.glo2003.domain.dtos.restaurant.ConfigReservationDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.HourDto;
-import ca.ulaval.glo2003.domain.dtos.restaurant.OwnerDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
 import ca.ulaval.glo2003.entities.restaurant.OwnerFactory;
 import ca.ulaval.glo2003.entities.assemblers.RestaurantAssembler;
@@ -11,6 +9,7 @@ import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.entities.filters.FilterRestaurantFactory;
 import ca.ulaval.glo2003.infra.persistence.inMemory.InMemoryReservationRepository;
 import ca.ulaval.glo2003.infra.persistence.inMemory.InMemoryRestaurantRepository;
+import ca.ulaval.glo2003.infra.persistence.inMemory.InMemorySalesRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -29,6 +28,7 @@ public class RestaurantServiceIntegratedTest {
                 new RestaurantFactory(),
                 new InMemoryRestaurantRepository(),
                 new InMemoryReservationRepository(),
+                new InMemorySalesRepository(),
                 new OwnerFactory(),
                 new RestaurantAssembler(),
                 new FilterRestaurantFactory()

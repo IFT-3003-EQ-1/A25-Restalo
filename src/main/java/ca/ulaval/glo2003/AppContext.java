@@ -16,6 +16,7 @@ import ca.ulaval.glo2003.domain.ReservationService;
 import ca.ulaval.glo2003.domain.RestaurantService;
 import ca.ulaval.glo2003.domain.SecurityService;
 import ca.ulaval.glo2003.entities.CustomerFactory;
+import ca.ulaval.glo2003.entities.SalesRepository;
 import ca.ulaval.glo2003.entities.menu.MenuFactory;
 import ca.ulaval.glo2003.entities.menu.MenuRepository;
 import ca.ulaval.glo2003.entities.reservation.ReservationRepository;
@@ -39,6 +40,7 @@ public class AppContext extends ResourceConfig {
         DatabaseFactory databaseFactory = new DatabaseFactory(getConfigFromEnv());
         final RestaurantRepository restaurantRepository = databaseFactory.getRestaurantRepository();
         final ReservationRepository reservationRepository = databaseFactory.getReservationRepository();
+        final SalesRepository salesRepository = databaseFactory.getSalesRepository();
         final MenuRepository menuRepository = databaseFactory.getMenuRepository();
 
         final  RestaurantDtoAssembler restaurantDtoAssembler = new RestaurantDtoAssembler();
@@ -53,6 +55,7 @@ public class AppContext extends ResourceConfig {
                 new RestaurantFactory(),
                 restaurantRepository,
                 reservationRepository,
+                salesRepository,
                 new OwnerFactory(),
                 new RestaurantAssembler(),
                 new FilterRestaurantFactory()

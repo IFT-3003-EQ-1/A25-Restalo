@@ -1,12 +1,16 @@
 package ca.ulaval.glo2003.entities.restaurant;
 
+import ca.ulaval.glo2003.domain.dtos.SalesDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.ConfigReservationDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
+import ca.ulaval.glo2003.entities.Sales;
 import ca.ulaval.glo2003.entities.exceptions.InvalideParameterException;
 import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
 import com.google.common.base.Strings;
 
+import java.time.DateTimeException;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.UUID;
@@ -93,5 +97,24 @@ public class RestaurantFactory {
         } else {
             return new ConfigReservation(configReservationDto.duration);
         }
+    }
+
+    public Sales createSalesReport(SalesDto salesDto, Restaurant restaurant) {
+        String id = UUID.randomUUID().toString();
+        if(Strings.isNullOrEmpty(salesDto.date))
+            throw new MissingParameterException("Le rapport de vente doit contenir une date");
+
+        try {
+            LocalDate.parse(salesDto.date);
+        } catch (DateTimeException e) {
+            throw new InvalideParameterException("Le format de la date est invalide");
+        }
+
+        return new Sales(
+                id,
+                salesDto.date,
+                salesDto.salesAmount,
+                restaurant
+        );
     }
 }

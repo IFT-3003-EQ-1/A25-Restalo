@@ -138,10 +138,12 @@ public class RestaurantResource {
     @Path("/{id}/sales")
     @OwnerOnly
     public Response writeSalesReport(@Context ContainerRequestContext crc,
+                                     @Context UriInfo infosUri,
                                      SalesDto salesDto) {
         RestaurantDto restaurantDto = (RestaurantDto) crc.getProperty("restaurant");
+        String id = restaurantService.createSalesReport(salesDto, restaurantDto);
 
-        URI location = null;
+        URI location = infosUri.getBaseUriBuilder().path("sales").path(id).build();
         return Response.created(location).build();
     }
 

@@ -1,16 +1,13 @@
 package ca.ulaval.glo2003.domain;
 
-import ca.ulaval.glo2003.domain.dtos.restaurant.ConfigReservationDto;
-import ca.ulaval.glo2003.domain.dtos.restaurant.HourDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.OwnerDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
 import ca.ulaval.glo2003.entities.reservation.ReservationRepository;
 import ca.ulaval.glo2003.entities.restaurant.RestaurantRepository;
 import ca.ulaval.glo2003.entities.assemblers.RestaurantAssembler;
-import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
-import ca.ulaval.glo2003.entities.exceptions.NotFoundException;
 import ca.ulaval.glo2003.entities.filters.FilterRestaurantFactory;
 import ca.ulaval.glo2003.entities.restaurant.*;
+import ca.ulaval.glo2003.infra.persistence.inMemory.InMemorySalesRepository;
 import com.google.common.base.Strings;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +15,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -61,6 +57,7 @@ public class RestaurantServiceUnitTest {
                 restaurantFactory,
                 restaurantRepository,
                 reservationRepository,
+                new InMemorySalesRepository(),
                 ownerFactory,
                 restaurantAssembler,
                 filterFactory
