@@ -30,13 +30,11 @@ public class MenuServiceIntegrationTest {
         datastore = new HashMap<>();
         MenuRepository menuRepository = new InMemoryMenuRepository(datastore);
         MenuFactory menuFactory = new MenuFactory();
-        OwnerFactory ownerFactory = new OwnerFactory();
 
         menuService = new MenuService(
                 menuRepository,
                 menuFactory,
-                restaurantFactory,
-                ownerFactory
+                restaurantFactory
         );
     }
 

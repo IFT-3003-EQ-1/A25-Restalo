@@ -6,7 +6,6 @@ import ca.ulaval.glo2003.entities.exceptions.NotFoundException;
 import ca.ulaval.glo2003.entities.menu.Menu;
 import ca.ulaval.glo2003.entities.menu.MenuFactory;
 import ca.ulaval.glo2003.entities.menu.MenuRepository;
-import ca.ulaval.glo2003.entities.restaurant.OwnerFactory;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 import ca.ulaval.glo2003.entities.restaurant.RestaurantFactory;
 
@@ -20,28 +19,23 @@ public class MenuService {
 
     private final RestaurantFactory restaurantFactory;
 
-    private final OwnerFactory ownerFactory;
 
-    public MenuService(MenuRepository menuRepository, MenuFactory menuFactory, RestaurantFactory restaurantFactory, OwnerFactory ownerFactory) {
+    public MenuService(MenuRepository menuRepository, MenuFactory menuFactory, RestaurantFactory restaurantFactory) {
         this.menuRepository = menuRepository;
         this.menuFactory = menuFactory;
         this.restaurantFactory = restaurantFactory;
-        this.ownerFactory = ownerFactory;
     }
 
 
     public String createMenu(MenuDto menuDto, RestaurantDto restaurantDto) {
-        Restaurant restaurant = restaurantFactory.createRestaurant(
-                ownerFactory.createOwner(restaurantDto.owner.id),
-                restaurantDto
-        );
+        Restaurant restaurant = restaurantFactory.fromDto(restaurantDto);
         Menu menu = menuFactory.createMenu(menuDto, restaurant);
-
-        return menuRepository.save(menu);
+        menuRepository.save(menu);
+        return menu.getRestaurant().getId();
     }
 
     public MenuDto getMenu(String restaurantId) {
-        Optional<Menu> retval = menuRepository.get(restaurantId);
+        Optional<Menu> retval = menuRepository.getFromRestaurantId(restaurantId);
         if(retval.isEmpty())
             throw new NotFoundException("Menu not found");
 

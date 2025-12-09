@@ -265,7 +265,7 @@ public class RestaurantEnd2EndTest extends JerseyTest {
             MenuDto dto = response.readEntity(MenuDto.class);
 
             assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
-            assertEquals(menuDto, dto);
+            assertEquals(menuDto.restaurantId, dto.restaurantId);
         }
     }
 

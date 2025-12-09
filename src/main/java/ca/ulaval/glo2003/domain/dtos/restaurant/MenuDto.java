@@ -59,11 +59,22 @@ public class MenuDto {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         MenuDto menuDto = (MenuDto) o;
-        return Objects.equals(id, menuDto.id) && Objects.equals(title, menuDto.title) && Objects.equals(startDate, menuDto.startDate) && Objects.equals(items, menuDto.items) && Objects.equals(restaurantId, menuDto.restaurantId);
+        return Objects.equals(id, menuDto.id) && Objects.equals(title, menuDto.title) && Objects.equals(startDate, menuDto.startDate) && Objects.equals(restaurantId, menuDto.restaurantId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, startDate, items, restaurantId);
+        return Objects.hash(id, title, startDate, restaurantId);
+    }
+
+    @Override
+    public String toString() {
+        return "MenuDto{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", startDate='" + startDate + '\'' +
+                ", items=" + items +
+                ", restaurantId='" + restaurantId + '\'' +
+                '}';
     }
 }

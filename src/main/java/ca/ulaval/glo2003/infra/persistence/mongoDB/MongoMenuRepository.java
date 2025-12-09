@@ -16,13 +16,12 @@ public class MongoMenuRepository implements MenuRepository {
     }
 
     @Override
-    public String save(Menu menu) {
+    public void save(Menu menu) {
         datastore.save(menu);
-        return menu.getId();
     }
 
     @Override
-    public Optional<Menu> get(String id) {
-        return Optional.ofNullable(datastore.find(Menu.class).filter(Filters.eq("id", id)).first());
+    public Optional<Menu> getFromRestaurantId(String restaurantId) {
+        return Optional.ofNullable(datastore.find(Menu.class).filter(Filters.eq("restaurant.id", restaurantId)).first());
     }
 }

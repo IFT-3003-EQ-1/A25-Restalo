@@ -99,18 +99,16 @@ public class End2EndTestUtils {
 
     }
 
-    public static String postMenu(WebTarget target, MenuDto menuDto, String ownerId) {
+    public static void postMenu(WebTarget target, MenuDto menuDto, String ownerId) {
 
         target = target.path("/restaurants/" + menuDto.restaurantId + "/menus");
         try (Response response = target.request().header("Owner", ownerId).post(Entity.json(menuDto.toJson()))) {
 
-            menuDto.id = extractIdFromLocation(response);
+            extractIdFromLocation(response);
             assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
         } catch (Exception e) {
             fail(e.getMessage());
         }
-
-        return menuDto.id;
     }
 
     public static String extractIdFromLocation(Response response) {

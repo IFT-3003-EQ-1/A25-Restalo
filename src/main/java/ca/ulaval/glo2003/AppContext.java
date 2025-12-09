@@ -46,8 +46,7 @@ public class AppContext extends ResourceConfig {
         final MenuService menuService = new MenuService(
                 menuRepository,
                 new MenuFactory(),
-                new RestaurantFactory(),
-                new OwnerFactory()
+                new RestaurantFactory()
         );
 
         final RestaurantService restaurantService = new RestaurantService(

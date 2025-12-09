@@ -4,6 +4,7 @@ import ca.ulaval.glo2003.domain.dtos.restaurant.ConfigReservationDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
 import ca.ulaval.glo2003.entities.exceptions.InvalideParameterException;
 import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
+import com.google.common.base.Strings;
 
 import java.time.Duration;
 import java.time.LocalTime;
@@ -71,6 +72,19 @@ public class RestaurantFactory {
                 restaurantDto.capacity,
                 new Hours(restaurantDto.hours.open, restaurantDto.hours.close),
                 config);
+    }
+
+    public Restaurant fromDto(RestaurantDto restaurantDto) {
+        if (Strings.isNullOrEmpty(restaurantDto.id))
+            throw new IllegalStateException("cannot use this method to initialise a new restaurant");
+        return new Restaurant(
+                restaurantDto.id,
+                new Owner(restaurantDto.owner.id),
+                restaurantDto.name,
+                restaurantDto.capacity,
+                new Hours(restaurantDto.hours.open, restaurantDto.hours.close),
+                new ConfigReservation(restaurantDto.reservation.duration)
+        );
     }
 
     private ConfigReservation createConfigReservation(ConfigReservationDto  configReservationDto) {
