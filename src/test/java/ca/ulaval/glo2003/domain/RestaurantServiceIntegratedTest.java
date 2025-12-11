@@ -138,7 +138,7 @@ public class RestaurantServiceIntegratedTest {
     public void givenCreateSalesReport_whenMissingParameter_thenThrowMissingParameterException() {
         SalesDto salesDto = new SalesDto(
                 null,
-                "2014-04-04",
+                null,
                 300.0F,
                 restaurantDto.id
         );

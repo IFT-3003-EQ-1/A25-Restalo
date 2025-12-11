@@ -100,9 +100,11 @@ public class RestaurantFactory {
     }
 
     public Sales createSalesReport(SalesDto salesDto, Restaurant restaurant) {
-        String id = UUID.randomUUID().toString();
         if(Strings.isNullOrEmpty(salesDto.date))
-            throw new MissingParameterException("Le rapport de vente doit contenir une date");
+            throw new MissingParameterException("date");
+
+        if(Strings.isNullOrEmpty(salesDto.restaurantId))
+            throw new MissingParameterException("restaurant id");
 
         try {
             LocalDate.parse(salesDto.date);
@@ -110,6 +112,7 @@ public class RestaurantFactory {
             throw new InvalideParameterException("Le format de la date est invalide");
         }
 
+        String id = UUID.randomUUID().toString();
         return new Sales(
                 id,
                 salesDto.date,

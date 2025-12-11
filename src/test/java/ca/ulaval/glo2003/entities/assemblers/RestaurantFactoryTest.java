@@ -7,12 +7,9 @@ import ca.ulaval.glo2003.domain.dtos.restaurant.HourDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.OwnerDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
 import ca.ulaval.glo2003.entities.Sales;
-import ca.ulaval.glo2003.entities.restaurant.Owner;
-import ca.ulaval.glo2003.entities.restaurant.OwnerFactory;
-import ca.ulaval.glo2003.entities.restaurant.Restaurant;
+import ca.ulaval.glo2003.entities.restaurant.*;
 import ca.ulaval.glo2003.entities.exceptions.InvalideParameterException;
 import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
-import ca.ulaval.glo2003.entities.restaurant.RestaurantFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,6 +18,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class RestaurantFactoryTest {
 
     private RestaurantDto restaurantDto;
+
+    private Restaurant restaurant;
 
     private Owner proprietaire;
 
@@ -32,6 +31,7 @@ public class RestaurantFactoryTest {
         restaurantFactory = new RestaurantFactory();
 
         restaurantDto = new RestaurantDto();
+        restaurantDto.id = "1";
         restaurantDto.owner = new OwnerDto();
         restaurantDto.reservation = new ConfigReservationDto();
         restaurantDto.name = "Pizz";
@@ -39,6 +39,15 @@ public class RestaurantFactoryTest {
         restaurantDto.hours = new HourDto("10:00:00","19:00:00");
         restaurantDto.reservation.duration = 90;
         restaurantDto.owner.id = "1";
+
+        restaurant = new Restaurant(
+                restaurantDto.id,
+                new Owner(restaurantDto.owner.id),
+                restaurantDto.name,
+                restaurantDto.capacity,
+                new Hours(restaurantDto.hours.open, restaurantDto.hours.close),
+                new ConfigReservation(restaurantDto.reservation.duration)
+        );
 
         proprietaire = proprietaireFactory.createOwner("1");
 
@@ -102,7 +111,7 @@ public class RestaurantFactoryTest {
                 300.0F,
                 restaurantDto.id
         );
-        Sales sales = restaurantFactory.createSalesReport(salesDto, restaurantFactory.fromDto(restaurantDto));
+        Sales sales = restaurantFactory.createSalesReport(salesDto, restaurant);
 
         assertEquals(salesDto.date, sales.getDate());
         assertEquals(salesDto.salesAmount, sales.getSalesAmount());
@@ -117,7 +126,7 @@ public class RestaurantFactoryTest {
                 300.0F,
                 restaurantDto.id
         );
-        assertThrows(InvalideParameterException.class, () -> restaurantFactory.createSalesReport(salesDto, restaurantFactory.fromDto(restaurantDto)));
+        assertThrows(InvalideParameterException.class, () -> restaurantFactory.createSalesReport(salesDto, restaurant));
     }
 
     @Test
@@ -128,7 +137,7 @@ public class RestaurantFactoryTest {
                 300.0F,
                 restaurantDto.id
         );
-        assertThrows(MissingParameterException.class, () -> restaurantFactory.createSalesReport(salesDto, restaurantFactory.fromDto(restaurantDto)));
+        assertThrows(MissingParameterException.class, () -> restaurantFactory.createSalesReport(salesDto, restaurant));
 
     }
 
