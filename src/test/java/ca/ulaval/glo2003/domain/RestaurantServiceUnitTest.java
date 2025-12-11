@@ -1,13 +1,15 @@
 package ca.ulaval.glo2003.domain;
 
+import ca.ulaval.glo2003.domain.dtos.SalesDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.OwnerDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
+import ca.ulaval.glo2003.entities.Sales;
+import ca.ulaval.glo2003.entities.SalesRepository;
 import ca.ulaval.glo2003.entities.reservation.ReservationRepository;
 import ca.ulaval.glo2003.entities.restaurant.RestaurantRepository;
 import ca.ulaval.glo2003.entities.assemblers.RestaurantAssembler;
 import ca.ulaval.glo2003.entities.filters.FilterRestaurantFactory;
 import ca.ulaval.glo2003.entities.restaurant.*;
-import ca.ulaval.glo2003.infra.persistence.inMemory.InMemorySalesRepository;
 import com.google.common.base.Strings;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -43,6 +46,9 @@ public class RestaurantServiceUnitTest {
     @Mock
     private ReservationRepository reservationRepository;
 
+    @Mock
+    private SalesRepository salesRepository;
+
     private RestaurantDto  restaurantDto;
 
     private OwnerDto ownerDto;
@@ -57,7 +63,7 @@ public class RestaurantServiceUnitTest {
                 restaurantFactory,
                 restaurantRepository,
                 reservationRepository,
-                new InMemorySalesRepository(),
+                salesRepository,
                 ownerFactory,
                 restaurantAssembler,
                 filterFactory
@@ -89,5 +95,25 @@ public class RestaurantServiceUnitTest {
         when(restaurantRepository.delete(restaurantId)).thenReturn(true);
 
         assertTrue(restaurantService.deleteRestaurant(restaurantId));
+    }
+
+    @Test
+    public void givenCreateSalesReport_whenValidParameters_thenReturnId() {
+        SalesDto salesDto = new SalesDto(
+                null,
+                "2014-04-04",
+                300.0F,
+                restaurantDto.id
+        );
+
+        when(restaurantFactory.createSalesReport(any(), any())).thenReturn(new Sales(
+                "1",
+                salesDto.date,
+                salesDto.salesAmount,
+                new Restaurant()
+        ));
+
+        String id = restaurantService.createSalesReport(salesDto, restaurantDto);
+        assertEquals(restaurantDto.id, id);
     }
 }

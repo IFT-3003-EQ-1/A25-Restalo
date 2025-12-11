@@ -1,5 +1,6 @@
 package ca.ulaval.glo2003.domain;
 
+import ca.ulaval.glo2003.domain.dtos.SalesDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.HourDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
 import ca.ulaval.glo2003.entities.restaurant.OwnerFactory;
@@ -120,4 +121,28 @@ public class RestaurantServiceIntegratedTest {
         assertTrue(isDeleted, "Should be able to delete restaurant");
     }
 
+    @Test
+    public void givenCreateSalesReport_whenValidParameters_thenReturnId() {
+        SalesDto salesDto = new SalesDto(
+                null,
+                "2014-04-04",
+                300.0F,
+                restaurantDto.id
+        );
+
+        String id = restaurantService.createSalesReport(salesDto, restaurantDto);
+        assertEquals(restaurantDto.id, id);
+    }
+
+    @Test
+    public void givenCreateSalesReport_whenMissingParameter_thenThrowMissingParameterException() {
+        SalesDto salesDto = new SalesDto(
+                null,
+                "2014-04-04",
+                300.0F,
+                restaurantDto.id
+        );
+
+        assertThrows(MissingParameterException.class, () -> restaurantService.createSalesReport(salesDto, restaurantDto));
+    }
 }
