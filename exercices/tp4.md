@@ -4,18 +4,58 @@
 Voici différents screenshot décrivant notre planification
 
 ## GitHub project
+Capture d'écran de notre Kanban
+
+![GET kanban](./images/TP4/kanban.png)
 
 
 ## Milestone
+Capture d'écran du Milestone 4
+
+![GET milestone](./images/TP4/milestones.png)
 
 
 ## Issues
+Issue 1
+
+![GET issue_1_1](./images/TP4/issue1_1.png)
+
+![GET issue_1_2](./images/TP4/issue1_2.png)
+
+Issue 2
+
+![GET issue_2](./images/TP4/issue2_1.png)
+
+Issue 3
+
+![GET issue_3](./images/TP4/issue3_1.png)
 
 
 ## Pull requests
 
+Pull Request 1
+
+![GET create_menu_1](./images/TP4/create_menu_1.png)
+
+![GET create_menu_2](./images/TP4/create_menu_2.png)
+
+Pull Request 2
+
+![GET get_menu_1](./images/TP4/get_menu_1.png)
+
+![GET get_menu_1](./images/TP4/get_menu_2.png)
+
+
+Pull Request 3
+
+![GET sales_1](./images/TP4/sales_1.png)
+
+![GET sales_2](./images/TP4/sales_2.png)
+
 
 ## Arbre de commits
+
+![GET commit_tree](images/TP4/commit_tree.png)
 
 
 # Open Source (Brahima)
@@ -45,7 +85,7 @@ Notre repo git sera également configuré pour exécuter ces actions à chaque c
 
 Voici un exemple de rapport produit par Dépendabot.
 
-![GET dependabot](./images/TP4/dependabot.png)
+![GET dependabot](./images/TP4/depandabot.png)
 
 La faille en question se trouve dans une dépendance transitive de notre application (vulnérabilité dans parsson, introduite via jersey.)
 Dependabot propose également un correctif (utiliser une version de Jersey plus récente, ou forcer l'utilisation de parson 1.1.3)
