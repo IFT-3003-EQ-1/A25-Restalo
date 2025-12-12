@@ -1,18 +1,40 @@
 # Exercices - TP4
 
 # Planification (Gabriel)
+Voici différents screenshot décrivant notre planification
+
+## GitHub project
+
+
+## Milestone
+
+
+## Issues
+
+
+## Pull requests
+
+
+## Arbre de commits
+
 
 # Open Source (Brahima)
 
 # Outils d'analyse (Brahima)
 
 # Architecture
+Voici un diagramme de notre architecture
+
+
 
 # Déclaration IA (Gabriel)
+Nous avons utilisé l'outil de synthèse de Google (AI overview) pour simplifier nos recherches web.
 
 # Outils de métrique
 
+
 # Sécurité (Gabriel)
+Voici l'ensemble des outils que nous avons mit en place pour améliorer la sécurité de notre application.
 
 ## Analyse de sécurité
 
@@ -48,7 +70,7 @@ Plus spécifiquement, voici trois bonnes pratiques permettant de garantir la sé
    Par exemple, dans notre projet, nous avons déplacé l'authentification des propriétaires dans un service spécial (voir @OwnerOnly/SecurityRessources.java)
    Ainsi, si on venait à détecter une faille dans la logique d'authentification, on peut corriger le problème a une seule place.
 
-# Rétrospective (Gabriel)
+# Rétrospective
 
 ## 1. Trois avantages pour une entreprise de contribuer à des projets open source
 
