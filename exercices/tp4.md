@@ -3,9 +3,9 @@
 
 # Planification (Gabriel)
 
-# Open Source
+# Open Source (Brahima)
 
-# Outils d'analyse
+# Outils d'analyse (Brahima)
 
 # Architecture 
 
