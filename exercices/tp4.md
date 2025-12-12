@@ -112,6 +112,34 @@ Plus spécifiquement, voici trois bonnes pratiques permettant de garantir la sé
 
 # Rétrospective
 
+Nous n'avons pas vraiment de processus distinct pour le développement des features.
+En effet, l'ensemble du travail a été réalisé par 2 personnes. On n'avait donc pas réellement besoin de processus complex, ou de stratégie formelle.
+Le travail était répartie en 2 morceaux au début de chaque sprint. Une part par personne. Chaque membre de l'équipe s'occupait de réviser la partie soumise par l'autre membre.
+Si on avait un bloquant, on contactait l'autre membre pour se planifier une rencontre ad hoc. Sinon, faisait une rencontre de suivie une ou deux fois par semaine.
+
+Ceci étant dit, il est clair que ce genre de processus n'est pas "scalable" pour des équipes plus grandes.
+Dans un tel context :
+1) En assignant l'ensemble des tâches du sprint au début du Milestone, il est plus difficile de réorganiser le travail si une tâche prend plus (ou moins) de temps que prévue. Dans notre cas, la moyenne au volume réduisait l'impact de la variance des estimations individuelles.
+Au lieu d'assigner l'ensemble du sprint au début du milestone, assigner les tâches une à la fois et laisser le reste dans un backlog. Ce faisant, il est plus facile de redistribuer le travail à mesure que le sprint avance.
+
+2) Notre code a beaucoup d'incohérence en termes de style de codage et de nomenclature. Développer en pair programming aiderait à standardiser notre code. Évidement, une telle solution n'est pas réaliste dans une équipe de deux programmeurs. 
+Une autre solution pour standardiser le style de code dans une grande organisation serait d'avoir un document technique explicitant les attentes en termes de style et nomenclature.  
+
+TODO : Démarche pour intégrer des nouveaux outils?
+
+Voici quelques bons coups réalisés par l'équipe :
+
+1) Le méchanism d'authentification avec l'annotation custom @OwnerOnly. Ce petit tour de passe-passe technique nous a permis de simplifier énormément nos tests, et facilité le développement lors du dernier sprint.
+Le mechanism permet de gérer toute la redondance liée à la validation que l'ID do Owner correspond à celui dans l'entité restaurant.
+
+2) Encore dans le volet technique : nous sommes fières de notre implémentation du connecteur MongoDBConnection.java et de la DatabaseFactory.java.
+Notre première approche était d'utiliser le patron Singleton pour implémenter le connecteur. Cependant, nous avions un sérieux problème de "code smell" lorsqu'on essayait d'injecter les configurations d'environnement dans le connecteur.
+Dans notre présente approche, on injecte l'état de la connection a la DB via un object DBConfig lors de l'initialisation de l'application. 
+On n'utilise pas de singleton a proprement parler, mais l'objet DatabaseFactory s'assure qu'une seule connection est ouverte à la fois, en plus de retourner la bonne implémentation de Repository (InMemory/Mongo.)
+
+3) Trois
+
+
 ## 1. Trois avantages pour une entreprise de contribuer à des projets open source
 
 ### 1.1. Amélioration de la qualité logicielle
