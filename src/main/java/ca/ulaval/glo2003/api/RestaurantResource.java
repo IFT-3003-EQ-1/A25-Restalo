@@ -2,6 +2,7 @@ package ca.ulaval.glo2003.api;
 
 import ca.ulaval.glo2003.api.assemblers.RestaurantDtoAssembler;
 import ca.ulaval.glo2003.api.requests.OwnerOnly;
+import ca.ulaval.glo2003.domain.MenuService;
 import ca.ulaval.glo2003.domain.ReservationService;
 import ca.ulaval.glo2003.domain.RestaurantService;
 import ca.ulaval.glo2003.domain.dtos.ReservationDto;
@@ -26,14 +27,16 @@ public class RestaurantResource {
     private final RestaurantService restaurantService;
     private final RestaurantDtoAssembler restaurantDtoAssembler;
     private final ReservationService reservationService;
+    private final MenuService menuService;
 
     public RestaurantResource(RestaurantService restaurantService,
                               RestaurantDtoAssembler restaurantDtoAssembler,
-                              ReservationService reservationService
-                               ) {
+                              ReservationService reservationService, MenuService menuService
+    ) {
         this.restaurantService = restaurantService;
         this.restaurantDtoAssembler = restaurantDtoAssembler;
         this.reservationService = reservationService;
+        this.menuService = menuService;
     }
 
     @POST
@@ -96,27 +99,30 @@ public class RestaurantResource {
             @Context ContainerRequestContext crc
     ) {
         RestaurantDto restaurantDto = (RestaurantDto) crc.getProperty("restaurant");
-        List<ReservationDto> reservations = reservationService.findBySearchCriteria(ownerId, customerName, reservationData, restaurantId);
+        List<ReservationDto> reservations = reservationService.findBySearchCriteria(restaurantDto, customerName, reservationData);
         return Response.ok(reservations).build();
     }
 
     @DELETE
     @Path("/{id}")
     @OwnerOnly
-    public Response deleteRestaurant(@PathParam("id") String restaurantId,
-                                     @Context UriInfo infosUri,
-                                     @HeaderParam("Owner") String ownerId) {
-        boolean isRestaurantDeleted = restaurantService.deleteRestaurant(restaurantId, ownerId);
+    public Response deleteRestaurant(@Context ContainerRequestContext crc) {
+        RestaurantDto restaurantDto = (RestaurantDto) crc.getProperty("restaurant");
+        boolean isRestaurantDeleted = restaurantService.deleteRestaurant(restaurantDto.id);
         return Response.noContent().build();
     }
 
     @POST
-    @Path("/menus")
+    @Path("/{id}/menus")
     @OwnerOnly
     public Response createMenu(@HeaderParam("Owner") String ownerId,
                                @Context UriInfo infosUri,
+                               @Context ContainerRequestContext crc,
                                MenuDto menuDto) {
-        URI location_menu = infosUri.getBaseUri(); // TODO : point the URI on corresponding GET
-        return Response.created(location_menu).build();
+        RestaurantDto restaurantDto = (RestaurantDto) crc.getProperty("restaurant");
+        String id = menuService.createMenu(menuDto, restaurantDto);
+
+        URI location = infosUri.getBaseUriBuilder().path("menus").path(id).build();
+        return Response.created(location).build();
     }
 }

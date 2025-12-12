@@ -18,8 +18,8 @@ import ca.ulaval.glo2003.entities.restaurant.Owner;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 import ca.ulaval.glo2003.entities.assemblers.ReservationAssembler;
 import ca.ulaval.glo2003.entities.reservation.ReservationFactory;
-import ca.ulaval.glo2003.entities.ReservationRepository;
-import ca.ulaval.glo2003.entities.RestaurantRepository;
+import ca.ulaval.glo2003.entities.reservation.ReservationRepository;
+import ca.ulaval.glo2003.entities.restaurant.RestaurantRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -73,45 +73,13 @@ public class ReservationServiceUnitTest {
         );
 
 
-        restaurantDto = new RestaurantDto(
-            "1",
-                new OwnerDto("2"),
-                "Pizz",
-                new HourDto(),
-                4,
-                new ConfigReservationDto()
-        );
+        restaurantDto = DomainTestUtils.getRestaurantDto();
 
-        reservationDto = new ReservationDto(
-                "10",
-                "2014-04-05",
-                new ReservationTimeDto(),
-                2,
-                new CustomerDto(),
-                restaurantDto
-        );
+        reservationDto = DomainTestUtils.getReservationDto();
 
-        restaurant = new Restaurant(
-                restaurantDto.id,
-                new Owner(restaurantDto.owner.id),
-                restaurantDto.name,
-                restaurantDto.capacity,
-                new Hours(restaurantDto.hours.open, restaurantDto.hours.close),
-                new ConfigReservation(restaurantDto.reservation.duration)
-        );
+        restaurant = DomainTestUtils.getRestaurant();
 
-        reservation = new Reservation(
-                reservationDto.number,
-                reservationDto.date,
-                new ReservationTime(reservationDto.time.start, reservationDto.time.end),
-                reservationDto.groupSize,
-                new Customer(
-                        reservationDto.customer.name,
-                        reservationDto.customer.email,
-                        reservationDto.customer.phoneNumber
-                ),
-                restaurant
-        );
+        reservation = DomainTestUtils.getReservation();
     }
 
     @Test
@@ -204,7 +172,6 @@ public class ReservationServiceUnitTest {
         List<ReservationDto> expected = new ArrayList<>();
         expected.add(reservationDto);
 
-        when(restaurantRepository.get(restaurant.getId())).thenReturn(Optional.of(restaurant));
         when(filterFactory.createFilters(
                 reservation.getCustomer().getName(),
                 reservation.getDate(),
@@ -215,10 +182,9 @@ public class ReservationServiceUnitTest {
         when(reservationRepository.search(any())).thenReturn(List.of(reservation));
 
         assertEquals(expected.size(), reservationService.findBySearchCriteria(
-                restaurant.getOwner().getId(),
-                reservation.getCustomer().getName(),
-                reservation.getDate(),
-                restaurant.getId()
+                restaurantDto,
+                reservationDto.customer.name,
+                reservationDto.date
         ).size());
     }
 
@@ -227,24 +193,20 @@ public class ReservationServiceUnitTest {
         List<ReservationDto> expected = new ArrayList<>();
         expected.add(reservationDto);
 
-
-        when(restaurantRepository.get(restaurant.getId())).thenReturn(Optional.of(restaurant));
         when(reservationRepository.getAll()).thenReturn(List.of(reservation));
 
         assertEquals(expected.size(), reservationService.findBySearchCriteria(
-                restaurant.getOwner().getId(),
+                restaurantDto,
                 null,
-                null,
-                restaurant.getId()
+                null
         ).size());
     }
 
     @Test
-    public void givenFindBySearchCriteria_whenNMatchingResult_thenThrowNotFoundException() {
+    public void givenFindBySearchCriteria_whenNoMatchingResult_thenThrowNotFoundException() {
         List<ReservationDto> expected = new ArrayList<>();
         expected.add(reservationDto);
 
-        when(restaurantRepository.get(restaurant.getId())).thenReturn(Optional.of(restaurant));
         when(filterFactory.createFilters(
                 reservation.getCustomer().getName(),
                 reservation.getDate(),
@@ -255,10 +217,9 @@ public class ReservationServiceUnitTest {
         when(reservationRepository.search(any())).thenReturn(new ArrayList<>());
 
         assertThrows(NotFoundException.class, () -> reservationService.findBySearchCriteria(
-                restaurant.getOwner().getId(),
-                reservation.getCustomer().getName(),
-                reservation.getDate(),
-                restaurant.getId()
+                restaurantDto,
+                reservationDto.customer.name,
+                reservationDto.date
         ));
     }
 

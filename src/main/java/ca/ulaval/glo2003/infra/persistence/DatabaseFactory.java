@@ -1,10 +1,13 @@
 package ca.ulaval.glo2003.infra.persistence;
 
-import ca.ulaval.glo2003.entities.ReservationRepository;
-import ca.ulaval.glo2003.entities.RestaurantRepository;
+import ca.ulaval.glo2003.entities.menu.MenuRepository;
+import ca.ulaval.glo2003.entities.reservation.ReservationRepository;
+import ca.ulaval.glo2003.entities.restaurant.RestaurantRepository;
+import ca.ulaval.glo2003.infra.persistence.inMemory.InMemoryMenuRepository;
 import ca.ulaval.glo2003.infra.persistence.inMemory.InMemoryReservationRepository;
 import ca.ulaval.glo2003.infra.persistence.inMemory.InMemoryRestaurantRepository;
 import ca.ulaval.glo2003.infra.persistence.mongoDB.MongoDBConnection;
+import ca.ulaval.glo2003.infra.persistence.mongoDB.MongoMenuRepository;
 import ca.ulaval.glo2003.infra.persistence.mongoDB.MongoReservationRepository;
 import ca.ulaval.glo2003.infra.persistence.mongoDB.MongoRestaurantRepository;
 import dev.morphia.Datastore;
@@ -38,6 +41,13 @@ public class DatabaseFactory {
         return switch (dbConfig.getPersistenceType()) {
             case DBConfig.PersistenceType.MONGO_DB -> new MongoReservationRepository(getDatastore());
             default -> new InMemoryReservationRepository();
+        };
+    }
+
+    public MenuRepository getMenuRepository() {
+        return switch (dbConfig.getPersistenceType()) {
+            case DBConfig.PersistenceType.MONGO_DB -> new MongoMenuRepository(getDatastore());
+            default -> new InMemoryMenuRepository();
         };
     }
 

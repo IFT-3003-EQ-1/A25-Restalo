@@ -3,10 +3,8 @@ package ca.ulaval.glo2003.entities.assemblers;
 import ca.ulaval.glo2003.domain.dtos.ReservationDto;
 import ca.ulaval.glo2003.domain.dtos.ReservationTimeDto;
 import ca.ulaval.glo2003.entities.Customer;
+import ca.ulaval.glo2003.entities.EntityTestUtils;
 import ca.ulaval.glo2003.entities.reservation.ReservationTime;
-import ca.ulaval.glo2003.entities.restaurant.ConfigReservation;
-import ca.ulaval.glo2003.entities.restaurant.Hours;
-import ca.ulaval.glo2003.entities.restaurant.Owner;
 import ca.ulaval.glo2003.entities.reservation.Reservation;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +32,7 @@ class ReservationAssemblerTest {
 
     @Test
     void toDto_shouldMapAllFields_whenAllFieldsArePopulated() {
-        Restaurant restaurant =  createDummyRestaurant();
+        Restaurant restaurant =  EntityTestUtils.createRestaurant();
         Reservation reservation = createDummyReservation();
         reservation.setGroupSize(2);
         ReservationDto result = reservationAssembler.toDto(reservation);
@@ -43,7 +41,7 @@ class ReservationAssemblerTest {
 
     @Test
     void toDto_shouldHandleNullCustomer_gracefully() {
-        Restaurant restaurant = createDummyRestaurant();
+        Restaurant restaurant = EntityTestUtils.createRestaurant();
         
         ReservationTimeDto timeDto = new ReservationTimeDto();
         
@@ -60,7 +58,7 @@ class ReservationAssemblerTest {
 
     @Test
     void toDto_shouldHandleNullTime_gracefully() {
-        Restaurant restaurant = createDummyRestaurant();
+        Restaurant restaurant = EntityTestUtils.createRestaurant();
         
         Customer customerDto = new Customer();
         
@@ -78,17 +76,6 @@ class ReservationAssemblerTest {
         assertEquals("RES222", result.number);
     }
 
-    private Restaurant createDummyRestaurant() {
-        return new Restaurant(
-                "restaurant-123",
-                new Owner("1"),
-                "Hot pizza",
-                20,
-                new Hours("10:00:00","22:00:00"),
-                new ConfigReservation(60)
-        );
-    }
-
     private Reservation createDummyReservation() {
         String reservationNumber = "RES123456";
         String reservationDate = "2025-10-20";
@@ -101,7 +88,7 @@ class ReservationAssemblerTest {
         reservation.setNumber(reservationNumber);
         reservation.setDate(reservationDate);
         reservation.setCustomer(customerDto);
-        reservation.setRestaurant(createDummyRestaurant());
+        reservation.setRestaurant(EntityTestUtils.createRestaurant());
         reservation.setTime(timeDto);
         reservation.setGroupSize(4);
         return reservation;

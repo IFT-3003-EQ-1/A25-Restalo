@@ -6,10 +6,7 @@ import java.time.LocalTime;
 
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
-import dev.morphia.annotations.Embedded;
-import org.bson.types.ObjectId;
-import java.time.Duration;
-import java.time.LocalTime;
+import java.util.Objects;
 
 @Entity("restaurants")
 public class Restaurant {
@@ -67,5 +64,17 @@ public class Restaurant {
         LocalTime openTime = LocalTime.parse(hours.getOpen());
         LocalTime closeTime = LocalTime.parse(hours.getClose());
         return (int) Duration.between(openTime, closeTime).toMinutes();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Restaurant that = (Restaurant) o;
+        return capacity == that.capacity && Objects.equals(id, that.id) && Objects.equals(owner, that.owner) && Objects.equals(name, that.name) && Objects.equals(hours, that.hours) && Objects.equals(configReservation, that.configReservation);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, owner, name, capacity, hours, configReservation);
     }
 }

@@ -1,6 +1,5 @@
 package ca.ulaval.glo2003.api.requests;
 
-import ca.ulaval.glo2003.api.response.exceptions.MissingParameterExceptionMapper;
 import ca.ulaval.glo2003.domain.SecurityService;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
 import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
@@ -34,7 +33,7 @@ public class AutorizationRequestFilter implements ContainerRequestFilter {
         String ownerId = ownerIdHeaderParam.getFirst();
         String idRestaurant = idRestaurantPathParam.getFirst();
 
-        RestaurantDto dto = securityService.accessRestaurant(idRestaurant, ownerId);
+        RestaurantDto dto = securityService.getRestaurant(idRestaurant, ownerId);
 
         requestContext.setProperty("restaurant", dto);
 

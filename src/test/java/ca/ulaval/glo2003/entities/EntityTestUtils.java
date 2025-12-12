@@ -1,19 +1,20 @@
-package ca.ulaval.glo2003.persistence.infra.inMemory;
+package ca.ulaval.glo2003.entities;
 
 import ca.ulaval.glo2003.entities.restaurant.ConfigReservation;
 import ca.ulaval.glo2003.entities.restaurant.Hours;
 import ca.ulaval.glo2003.entities.restaurant.Owner;
 import ca.ulaval.glo2003.entities.restaurant.Restaurant;
 
-public class InMemoryRestaurantRepositoryTestUtils {
+public class EntityTestUtils {
 
-    public static Restaurant createRestaurant(String restaurantId) {
+
+    public static Restaurant createRestaurant() {
         return new Restaurant(
-                restaurantId,
+                "restaurant-123",
                 new Owner("1"),
-                "Pizz",
-                2,
-                new Hours( "11:00:00", "19:00:00"),
+                "Hot pizza",
+                20,
+                new Hours("10:00:00","22:00:00"),
                 new ConfigReservation(60)
         );
     }

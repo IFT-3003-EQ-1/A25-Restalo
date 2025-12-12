@@ -1,7 +1,6 @@
-package ca.ulaval.glo2003.entities;
+package ca.ulaval.glo2003.entities.reservation;
 
 import ca.ulaval.glo2003.entities.filters.Filter;
-import ca.ulaval.glo2003.entities.reservation.Reservation;
 
 import java.util.List;
 import java.util.Optional;

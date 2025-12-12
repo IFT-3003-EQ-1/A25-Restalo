@@ -2,7 +2,7 @@ package ca.ulaval.glo2003.infra.persistence.inMemory;
 
 import ca.ulaval.glo2003.entities.filters.Filter;
 import ca.ulaval.glo2003.entities.reservation.Reservation;
-import ca.ulaval.glo2003.entities.ReservationRepository;
+import ca.ulaval.glo2003.entities.reservation.ReservationRepository;
 
 import java.util.*;
 

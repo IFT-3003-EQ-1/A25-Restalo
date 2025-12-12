@@ -12,6 +12,7 @@ public class RestaurantAssembler {
     public RestaurantDto toDto(Restaurant restaurant) {
         return new RestaurantDto(
                 restaurant.getId(),
+                new OwnerDto(restaurant.getOwner().getId()),
                 restaurant.getName(),
                 toDto(restaurant.getHours()),
                 restaurant.getCapacity(),
@@ -22,9 +23,11 @@ public class RestaurantAssembler {
     public RestaurantDto toPartialDto(Restaurant restaurant) {
         return new RestaurantDto(
                 restaurant.getId(),
+                null,
                 restaurant.getName(),
                 toDto(restaurant.getHours()),
-                restaurant.getCapacity()
+                restaurant.getCapacity(),
+                null
         );
     }
 
