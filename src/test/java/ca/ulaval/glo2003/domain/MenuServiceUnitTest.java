@@ -5,7 +5,6 @@ import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
 import ca.ulaval.glo2003.entities.exceptions.InvalideParameterException;
 import ca.ulaval.glo2003.entities.menu.MenuFactory;
 import ca.ulaval.glo2003.entities.menu.MenuRepository;
-import ca.ulaval.glo2003.entities.restaurant.OwnerFactory;
 import ca.ulaval.glo2003.entities.restaurant.RestaurantFactory;
 import com.google.common.base.Strings;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,9 +31,6 @@ public class MenuServiceUnitTest {
     @Mock
     private RestaurantFactory restaurantFactory;
 
-    @Mock
-    private OwnerFactory ownerFactory;
-
     private MenuDto menuDto;
 
     private RestaurantDto restaurantDto;
@@ -44,8 +40,7 @@ public class MenuServiceUnitTest {
         menuService = new MenuService(
                 menuRepository,
                 menuFactory,
-                restaurantFactory,
-                ownerFactory
+                restaurantFactory
         );
         restaurantDto = DomainTestUtils.getRestaurantDto();
         menuDto = DomainTestUtils.getMenuDto();
@@ -55,9 +50,8 @@ public class MenuServiceUnitTest {
     @Test
     public void givenCreateMenu_whenParametersValid_thenMenuIsCreated() {
 
-        when(restaurantFactory.createRestaurant(any(), any())).thenReturn(DomainTestUtils.getRestaurant());
+        when(restaurantFactory.fromDto(any())).thenReturn(DomainTestUtils.getRestaurant());
         when(menuFactory.createMenu(any(), any())).thenReturn(DomainTestUtils.getMenu());
-        when(menuRepository.save(any())).thenReturn(menuDto.id);
 
         String id = menuService.createMenu(menuDto, restaurantDto);
 
@@ -69,7 +63,7 @@ public class MenuServiceUnitTest {
     public void givenCreateMenu_whenParameterIsInvalid_thenMenuIsNotCreated() {
         menuDto.items.clear();
 
-        when(restaurantFactory.createRestaurant(any(), any())).thenReturn(DomainTestUtils.getRestaurant());
+        when(restaurantFactory.fromDto(any())).thenReturn(DomainTestUtils.getRestaurant());
         when(menuFactory.createMenu(any(), any())).thenThrow(new InvalideParameterException(""));
 
         assertThrows(InvalideParameterException.class, () -> menuService.createMenu(menuDto, restaurantDto));

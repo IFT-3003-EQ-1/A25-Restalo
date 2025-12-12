@@ -81,7 +81,7 @@ public class RestaurantEnd2EndTest extends JerseyTest {
             String locationPath = location.getPath();
             assertTrue(locationPath.startsWith("/restaurants/"),
                     "Location should start with /restaurants/");
-            String restaurantId = extractIdFromLocation(response);
+            String restaurantId = End2EndTestUtils.extractIdFromLocation(response);
             assertNotNull(restaurantId, "Restaurant ID should be present");
             assertFalse(restaurantId.isEmpty(), "Restaurant ID should not be empty");
 
@@ -232,7 +232,7 @@ public class RestaurantEnd2EndTest extends JerseyTest {
 
         try (Response response = target("/restaurants/" + restaurantDto.id + "/menus/").request()
                 .header("Owner", restaurantDto.owner.id).post(Entity.json(json))) {
-            String location = extractIdFromLocation(response);
+            String location = End2EndTestUtils.extractIdFromLocation(response);
 
             assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
             assertFalse(Strings.isNullOrEmpty(location));
@@ -255,10 +255,39 @@ public class RestaurantEnd2EndTest extends JerseyTest {
         }
     }
 
-    private String extractIdFromLocation(Response response) {
-        URI location = response.getLocation();
-        String path = location.getPath();
-        return path.substring(path.lastIndexOf('/') + 1);
+    @Test
+    public void givenGetMenu_whenValidParameter_thenReturnMenu() {
+        End2EndTestUtils.postRestaurant(target(), restaurantDto);
+        MenuDto menuDto = End2EndTestUtils.buildDefaultMenuDto(restaurantDto.id);
+        End2EndTestUtils.postMenu(target(), menuDto, restaurantDto.owner.id);
+
+        try (Response response = target("/restaurants/" + restaurantDto.id + "/menus/").request().get()) {
+            MenuDto dto = response.readEntity(MenuDto.class);
+
+            assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+            assertEquals(menuDto.restaurantId, dto.restaurantId);
+        }
     }
+
+    @Test
+    public void givenGetMenu_whenMenuDoesntExist_thenReturnNotFound() {
+        End2EndTestUtils.postRestaurant(target(), restaurantDto);
+
+        try (Response response = target("/restaurants/" + restaurantDto.id + "/menus/").request().get()) {
+
+            assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
+        }
+    }
+
+
+    @Test
+    public void givenWriteSalesReport_whenValidParameter_thenReturnCreated() {
+
+    }
+
+    @Test
+    public void givenWriteSalesReport_whenMissingParameter_thenReturnBadRequest() {
+    }
+
 
 }

@@ -6,6 +6,7 @@ import ca.ulaval.glo2003.domain.MenuService;
 import ca.ulaval.glo2003.domain.ReservationService;
 import ca.ulaval.glo2003.domain.RestaurantService;
 import ca.ulaval.glo2003.domain.dtos.ReservationDto;
+import ca.ulaval.glo2003.domain.dtos.SalesDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.MenuDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.OwnerDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
@@ -92,7 +93,6 @@ public class RestaurantResource {
     @OwnerOnly
     public Response searchReservation(
             @HeaderParam("Owner") String ownerId,
-            @PathParam("id") String restaurantId,
             @QueryParam("date") String reservationData,
             @QueryParam("customerName") String customerName,
             @Context UriInfo infosUri,
@@ -125,4 +125,25 @@ public class RestaurantResource {
         URI location = infosUri.getBaseUriBuilder().path("menus").path(id).build();
         return Response.created(location).build();
     }
+
+    @GET
+    @Path("/{id}/menus")
+    public Response getMenu(@PathParam("id") String restaurantId) {
+
+        MenuDto menuDto = menuService.getMenu(restaurantId);
+        return Response.ok(menuDto.toJson()).build();
+    }
+
+    @POST
+    @Path("/{id}/sales")
+    @OwnerOnly
+    public Response writeSalesReport(@Context ContainerRequestContext crc,
+                                     SalesDto salesDto) {
+        RestaurantDto restaurantDto = (RestaurantDto) crc.getProperty("restaurant");
+
+        URI location = null;
+        return Response.created(location).build();
+    }
+
+
 }
