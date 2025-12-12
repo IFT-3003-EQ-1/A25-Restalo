@@ -166,4 +166,8 @@ Nous avons choisi la licence MIT pour les raisons suivantes :
 - **Analyser les dépendances** : mvn dependency-check:check
 - **Générer un rapport sans faire échouer le build** : mvn dependency-check:aggregate
 - **Mettre à jour la base de données NVD** : mvn dependency-check:update-only
-
+- **Builder le projet** : mvn -B clean compile
+- **Rouler tests unitaires** : mvn -B test
+- **Control du formatage** : mvn checkstyle:check
+- **Créer les archives logiciels** :  mvn -B package -DskipTests
+- **Scan des vulnérabilités OWASP** : mvn org.owasp:dependency-check-maven:9.0.9:check -DfailBuildOnCVSS=7 -DskipTestScope=false
