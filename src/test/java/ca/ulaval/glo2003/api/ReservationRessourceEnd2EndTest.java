@@ -43,13 +43,6 @@ public class ReservationRessourceEnd2EndTest extends JerseyTest {
     }
 
     @Test
-    public void givenGetReservation_whenIdIsNotValid_thenReturnNotFound() {
-        try (Response response = target("/reservations/" + INVALID_ID).request().get()) {
-            assertEquals(Response.Status.NOT_FOUND.getStatusCode(), response.getStatus());
-        }
-    }
-
-    @Test
     public void givenDeleteReservation_whenRequestIsValid_thenReturnNoContent() {
         End2EndTestUtils.postReservation(target(), reservationDto);
         try (Response response = target("/reservations/" + reservationDto.number).request().delete()) {

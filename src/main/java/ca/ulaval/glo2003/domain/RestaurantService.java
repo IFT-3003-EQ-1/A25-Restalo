@@ -50,22 +50,6 @@ public class RestaurantService {
         return restaurant.getId();
     }
 
-    public RestaurantDto getRestaurant(String idRestaurant, String ownerId) {
-
-        if (ownerId == null || ownerId.isBlank()) {
-            throw new MissingParameterException("Owner");
-        }
-
-        Restaurant restaurant = restaurantRepository.get(idRestaurant).orElseThrow(
-                () -> new NotFoundException("")
-        );
-
-        if (!restaurant.getOwner().getId().equals(ownerId)) {
-            throw new ForbiddenAccessException("");
-        }
-        return restaurantAssembler.toDto(restaurant);
-    }
-
     public List<RestaurantDto> getRestaurants(String ownerId) {
 
         if (ownerId == null || ownerId.isBlank()) {

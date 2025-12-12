@@ -1,16 +1,19 @@
 package ca.ulaval.glo2003;
 
+import ca.ulaval.glo2003.api.HealthResource;
 import ca.ulaval.glo2003.api.ReservationResource;
 import ca.ulaval.glo2003.api.SearchResource;
 import ca.ulaval.glo2003.api.RestaurantResource;
 import ca.ulaval.glo2003.api.assemblers.ReservationDtoAssembler;
 import ca.ulaval.glo2003.api.assemblers.RestaurantDtoAssembler;
+import ca.ulaval.glo2003.api.requests.AutorizationRequestFilter;
 import ca.ulaval.glo2003.api.response.exceptions.ForbiddenAccessExceptionMapper;
 import ca.ulaval.glo2003.api.response.exceptions.NotFoundExceptionMapper;
 import ca.ulaval.glo2003.api.response.exceptions.InvalideParameterExceptionMapper;
 import ca.ulaval.glo2003.api.response.exceptions.MissingParameterExceptionMapper;
 import ca.ulaval.glo2003.domain.ReservationService;
 import ca.ulaval.glo2003.domain.RestaurantService;
+import ca.ulaval.glo2003.domain.SecurityService;
 import ca.ulaval.glo2003.entities.CustomerFactory;
 import ca.ulaval.glo2003.entities.ReservationRepository;
 import ca.ulaval.glo2003.entities.RestaurantRepository;
@@ -70,14 +73,22 @@ public class AppContext extends ResourceConfig {
          final ReservationResource reservationResource =
                  new ReservationResource(reservationService, new ReservationDtoAssembler());
 
+         final HealthResource healthResource = new HealthResource();
+
+         final AutorizationRequestFilter autorizationRequestFilter = new AutorizationRequestFilter(
+                 new SecurityService(restaurantRepository, new RestaurantAssembler())
+         );
+
          return new ResourceConfig()
-                .register(searchRessource)
-                .register(restaurantRessource)
-                .register(reservationResource)
-                .register(ForbiddenAccessExceptionMapper.class)
-                .register(InvalideParameterExceptionMapper.class)
-                .register(MissingParameterExceptionMapper.class)
-                .register(NotFoundExceptionMapper.class);
+                 .register(autorizationRequestFilter)
+                 .register(healthResource)
+                 .register(searchRessource)
+                 .register(restaurantRessource)
+                 .register(reservationResource)
+                 .register(ForbiddenAccessExceptionMapper.class)
+                 .register(InvalideParameterExceptionMapper.class)
+                 .register(MissingParameterExceptionMapper.class)
+                 .register(NotFoundExceptionMapper.class);
     }
 
     private DBConfig getConfigFromEnv() {
