@@ -161,3 +161,9 @@ Nous avons choisi la licence MIT pour les raisons suivantes :
 - [Code of Conduct](../CODE_OF_CONDUCT.md)
 - [Guide de contribution](../CONTRIBUTING.md)
 - [Licence](../LICENCE)
+
+## Commandes 
+- **Analyser les dépendances** : mvn dependency-check:check
+- **Générer un rapport sans faire échouer le build** : mvn dependency-check:aggregate
+- **Mettre à jour la base de données NVD** : mvn dependency-check:update-only
+

@@ -26,8 +26,29 @@ jobs:
 
       - name: Run tests
         run: mvn -B test
+
       - name: Run Checkstyle
         run: mvn checkstyle:check
+
+      - name: Cache OWASP Dependency-Check data
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository/org/owasp/dependency-check-data
+          key: ${{ runner.os }}-dependency-check-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-dependency-check-
+
+      - name: OWASP Dependency-Check
+        run: mvn org.owasp:dependency-check-maven:9.0.9:check -DfailBuildOnCVSS=7 -DskipTestScope=false
+        continue-on-error: false
+
+      - name: Upload Dependency-Check Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dependency-check-report
+          path: target/dependency-check-report.html
+          retention-days: 30
 
       - name: Package application
         run: mvn -B package -DskipTests
