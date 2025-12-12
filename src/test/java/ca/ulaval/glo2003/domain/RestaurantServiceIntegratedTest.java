@@ -1,8 +1,7 @@
 package ca.ulaval.glo2003.domain;
 
-import ca.ulaval.glo2003.domain.dtos.restaurant.ConfigReservationDto;
+import ca.ulaval.glo2003.domain.dtos.SalesDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.HourDto;
-import ca.ulaval.glo2003.domain.dtos.restaurant.OwnerDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
 import ca.ulaval.glo2003.entities.restaurant.OwnerFactory;
 import ca.ulaval.glo2003.entities.assemblers.RestaurantAssembler;
@@ -11,6 +10,7 @@ import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
 import ca.ulaval.glo2003.entities.filters.FilterRestaurantFactory;
 import ca.ulaval.glo2003.infra.persistence.inMemory.InMemoryReservationRepository;
 import ca.ulaval.glo2003.infra.persistence.inMemory.InMemoryRestaurantRepository;
+import ca.ulaval.glo2003.infra.persistence.inMemory.InMemorySalesRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -29,6 +29,7 @@ public class RestaurantServiceIntegratedTest {
                 new RestaurantFactory(),
                 new InMemoryRestaurantRepository(),
                 new InMemoryReservationRepository(),
+                new InMemorySalesRepository(),
                 new OwnerFactory(),
                 new RestaurantAssembler(),
                 new FilterRestaurantFactory()
@@ -120,4 +121,28 @@ public class RestaurantServiceIntegratedTest {
         assertTrue(isDeleted, "Should be able to delete restaurant");
     }
 
+    @Test
+    public void givenCreateSalesReport_whenValidParameters_thenReturnId() {
+        SalesDto salesDto = new SalesDto(
+                null,
+                "2014-04-04",
+                300.0F,
+                restaurantDto.id
+        );
+
+        String id = restaurantService.createSalesReport(salesDto, restaurantDto);
+        assertEquals(restaurantDto.id, id);
+    }
+
+    @Test
+    public void givenCreateSalesReport_whenMissingParameter_thenThrowMissingParameterException() {
+        SalesDto salesDto = new SalesDto(
+                null,
+                null,
+                300.0F,
+                restaurantDto.id
+        );
+
+        assertThrows(MissingParameterException.class, () -> restaurantService.createSalesReport(salesDto, restaurantDto));
+    }
 }

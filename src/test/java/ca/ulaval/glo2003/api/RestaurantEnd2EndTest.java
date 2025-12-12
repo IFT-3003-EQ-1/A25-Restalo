@@ -3,6 +3,7 @@ package ca.ulaval.glo2003.api;
 import ca.ulaval.glo2003.AppContext;
 import ca.ulaval.glo2003.api.assemblers.RestaurantDtoAssembler;
 import ca.ulaval.glo2003.domain.dtos.ReservationDto;
+import ca.ulaval.glo2003.domain.dtos.SalesDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.ConfigReservationDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.MenuDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
@@ -282,11 +283,29 @@ public class RestaurantEnd2EndTest extends JerseyTest {
 
     @Test
     public void givenWriteSalesReport_whenValidParameter_thenReturnCreated() {
-
+        End2EndTestUtils.postRestaurant(target(), restaurantDto);
+        SalesDto salesDto = new SalesDto(
+                null,
+                "2014-04-04",
+                400.0F,
+                restaurantDto.id
+        );
+        Map<String, Object> json = salesDto.toJson();
+        try (Response response = target("/restaurants/" + restaurantDto.id + "/sales").request().header("Owner", restaurantDto.owner.id).post(Entity.json(json))) {
+            assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
+        }
     }
 
     @Test
     public void givenWriteSalesReport_whenMissingParameter_thenReturnBadRequest() {
+        End2EndTestUtils.postRestaurant(target(), restaurantDto);
+        Map<String, Object> json = Map.of();
+        try (Response response = target("/restaurants/" + restaurantDto.id + "/sales").request().header("Owner", restaurantDto.owner.id).post(Entity.json(json))) {
+            ErrorDto error = response.readEntity(ErrorDto.class);
+
+            assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+        }
+
     }
 
 

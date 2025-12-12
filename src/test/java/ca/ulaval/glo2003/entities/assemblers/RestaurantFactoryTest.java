@@ -1,16 +1,15 @@
 package ca.ulaval.glo2003.entities.assemblers;
 
 
+import ca.ulaval.glo2003.domain.dtos.SalesDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.ConfigReservationDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.HourDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.OwnerDto;
 import ca.ulaval.glo2003.domain.dtos.restaurant.RestaurantDto;
-import ca.ulaval.glo2003.entities.restaurant.Owner;
-import ca.ulaval.glo2003.entities.restaurant.OwnerFactory;
-import ca.ulaval.glo2003.entities.restaurant.Restaurant;
+import ca.ulaval.glo2003.entities.Sales;
+import ca.ulaval.glo2003.entities.restaurant.*;
 import ca.ulaval.glo2003.entities.exceptions.InvalideParameterException;
 import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
-import ca.ulaval.glo2003.entities.restaurant.RestaurantFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,18 +19,19 @@ public class RestaurantFactoryTest {
 
     private RestaurantDto restaurantDto;
 
-    private Owner proprietaire;
+    private Restaurant restaurant;
 
-    private OwnerFactory proprietaireFactory;
+    private Owner proprietaire;
 
     private RestaurantFactory restaurantFactory;
 
     @BeforeEach
     public void setUp() {
-        proprietaireFactory = new OwnerFactory();
+        OwnerFactory proprietaireFactory = new OwnerFactory();
         restaurantFactory = new RestaurantFactory();
 
         restaurantDto = new RestaurantDto();
+        restaurantDto.id = "1";
         restaurantDto.owner = new OwnerDto();
         restaurantDto.reservation = new ConfigReservationDto();
         restaurantDto.name = "Pizz";
@@ -39,6 +39,15 @@ public class RestaurantFactoryTest {
         restaurantDto.hours = new HourDto("10:00:00","19:00:00");
         restaurantDto.reservation.duration = 90;
         restaurantDto.owner.id = "1";
+
+        restaurant = new Restaurant(
+                restaurantDto.id,
+                new Owner(restaurantDto.owner.id),
+                restaurantDto.name,
+                restaurantDto.capacity,
+                new Hours(restaurantDto.hours.open, restaurantDto.hours.close),
+                new ConfigReservation(restaurantDto.reservation.duration)
+        );
 
         proprietaire = proprietaireFactory.createOwner("1");
 
@@ -93,4 +102,43 @@ public class RestaurantFactoryTest {
 
         assertEquals(RestaurantFactory.DEFAULT_RESERVATION_DURATION, restaurant.getConfigReservation().getDuration());
     }
+    
+    @Test
+    public void givenCreateSalesReport_whenParamatersAreValid_thenReturnId() {
+        SalesDto salesDto = new SalesDto(
+                null,
+                "2014-04-04",
+                300.0F,
+                restaurantDto.id
+        );
+        Sales sales = restaurantFactory.createSalesReport(salesDto, restaurant);
+
+        assertEquals(salesDto.date, sales.getDate());
+        assertEquals(salesDto.salesAmount, sales.getSalesAmount());
+        assertEquals(salesDto.restaurantId, sales.getRestaurant().getId());
+    }
+
+    @Test
+    public void givenCreateSalesReport_whenDateIsNotValid_thenThrowInvalidParameterException() {
+        SalesDto salesDto = new SalesDto(
+                null,
+                "04-04-2014",
+                300.0F,
+                restaurantDto.id
+        );
+        assertThrows(InvalideParameterException.class, () -> restaurantFactory.createSalesReport(salesDto, restaurant));
+    }
+
+    @Test
+    public void givenCreateSalesReport_whenDateIsMissing_thenThrowMissingParameterException() {
+        SalesDto salesDto = new SalesDto(
+                null,
+                null,
+                300.0F,
+                restaurantDto.id
+        );
+        assertThrows(MissingParameterException.class, () -> restaurantFactory.createSalesReport(salesDto, restaurant));
+
+    }
+
 }
