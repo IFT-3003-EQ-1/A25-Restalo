@@ -7,10 +7,7 @@ import ca.ulaval.glo2003.api.RestaurantResource;
 import ca.ulaval.glo2003.api.assemblers.ReservationDtoAssembler;
 import ca.ulaval.glo2003.api.assemblers.RestaurantDtoAssembler;
 import ca.ulaval.glo2003.api.requests.AutorizationRequestFilter;
-import ca.ulaval.glo2003.api.response.exceptions.ForbiddenAccessExceptionMapper;
-import ca.ulaval.glo2003.api.response.exceptions.NotFoundExceptionMapper;
-import ca.ulaval.glo2003.api.response.exceptions.InvalideParameterExceptionMapper;
-import ca.ulaval.glo2003.api.response.exceptions.MissingParameterExceptionMapper;
+import ca.ulaval.glo2003.api.response.exceptions.*;
 import ca.ulaval.glo2003.domain.MenuService;
 import ca.ulaval.glo2003.domain.ReservationService;
 import ca.ulaval.glo2003.domain.RestaurantService;
@@ -102,7 +99,8 @@ public class AppContext extends ResourceConfig {
                  .register(ForbiddenAccessExceptionMapper.class)
                  .register(InvalideParameterExceptionMapper.class)
                  .register(MissingParameterExceptionMapper.class)
-                 .register(NotFoundExceptionMapper.class);
+                 .register(NotFoundExceptionMapper.class)
+                 .register(SentryExceptionMapper.class);
     }
 
     private DBConfig getConfigFromEnv() {

@@ -72,7 +72,7 @@ Voici une capture d'écran de notre arbre de commits.
 
 Voici un diagramme de notre architecture
 
-![GET architecture](./images/TP4/Architecture.png)
+![GET architecture](images/TP4/Architecture.png)
 
 Comme vous pouvez le constater, l'architecture n'a pas changé entre les deux sprints.
 En effet, dans le présent Sprint, nous avons principalement implémenté des nouveaux features, sans modifier significativement l'architecture générale de l'application.
@@ -82,6 +82,8 @@ En effet, dans le présent Sprint, nous avons principalement implémenté des no
 Nous avons utilisé l'outil de synthèse de Google (AI overview) pour simplifier nos recherches web.
 
 # Outils de métrique
+
+![Log_Exception_Sentry](./images/TP4/log_sentry.png)
 
 # Sécurité (Gabriel)
 

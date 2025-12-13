@@ -7,6 +7,7 @@ import ca.ulaval.glo2003.entities.Sales;
 import ca.ulaval.glo2003.entities.exceptions.InvalideParameterException;
 import ca.ulaval.glo2003.entities.exceptions.MissingParameterException;
 import com.google.common.base.Strings;
+import io.sentry.Sentry;
 
 import java.time.DateTimeException;
 import java.time.Duration;
@@ -14,6 +15,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.UUID;
+
+import static java.time.Duration.*;
 
 public class RestaurantFactory {
 
@@ -23,6 +26,11 @@ public class RestaurantFactory {
     }
 
     public Restaurant createRestaurant(Owner proprietaire, RestaurantDto restaurantDto) {
+        // Ajouter du contexte métier pour Sentry
+        Sentry.setExtra("operation", "createRestaurant");
+        Sentry.setExtra("restaurantName", restaurantDto.name);
+        Sentry.setExtra("capacity", new String(String.valueOf(restaurantDto.capacity)));
+
         if (restaurantDto.name == null) {
             throw new MissingParameterException("nom");
         }
@@ -47,6 +55,8 @@ public class RestaurantFactory {
             open = LocalTime.parse(restaurantDto.hours.open);
             close = LocalTime.parse(restaurantDto.hours.close);
         } catch (DateTimeParseException e) {
+            Sentry.setExtra("horaireOuverture", restaurantDto.hours.open);
+            Sentry.setExtra("horaireFermeture", restaurantDto.hours.close);
             throw new InvalideParameterException("`horaires.*` doivent respecter le format HH:mm:ss");
         }
 
@@ -54,14 +64,20 @@ public class RestaurantFactory {
         LocalTime max = LocalTime.of(23, 59, 59);
 
         if (!open.isBefore(close)) {
-            throw  new InvalideParameterException("`ouverture` doit être strictement avant `fermeture`");
+            Sentry.setExtra("horaireOuverture", open.toString());
+            Sentry.setExtra("horaireFermeture", close.toString());
+            throw new InvalideParameterException("`ouverture` doit être strictement avant `fermeture`");
         }
 
         if (open.isBefore(min) || close.isAfter(max)) {
+            Sentry.setExtra("horaireOuverture", open.toString());
+            Sentry.setExtra("horaireFermeture", close.toString());
             throw new InvalideParameterException("Les heures doivent être entre 00:00:00 et 23:59:59");
         }
 
-        if (Duration.between(open, close).toMinutes() < 60) {
+        if (between(open, close).toMinutes() < 60) {
+            Sentry.setExtra("dureeOuvertureMinutes",
+                    String.valueOf(Duration.between(open, close).toMinutes()));
             throw new InvalideParameterException("Le restaurant doit être ouvert au moins 1 heure");
         }
 
@@ -79,8 +95,9 @@ public class RestaurantFactory {
     }
 
     public Restaurant fromDto(RestaurantDto restaurantDto) {
-        if (Strings.isNullOrEmpty(restaurantDto.id))
+        if (Strings.isNullOrEmpty(restaurantDto.id)) {
             throw new IllegalStateException("cannot use this method to initialise a new restaurant");
+        }
         return new Restaurant(
                 restaurantDto.id,
                 new Owner(restaurantDto.owner.id),
@@ -91,8 +108,8 @@ public class RestaurantFactory {
         );
     }
 
-    private ConfigReservation createConfigReservation(ConfigReservationDto  configReservationDto) {
-        if(configReservationDto == null) {
+    private ConfigReservation createConfigReservation(ConfigReservationDto configReservationDto) {
+        if (configReservationDto == null) {
             return new ConfigReservation(DEFAULT_RESERVATION_DURATION);
         } else {
             return new ConfigReservation(configReservationDto.duration);
@@ -100,11 +117,18 @@ public class RestaurantFactory {
     }
 
     public Sales createSalesReport(SalesDto salesDto, Restaurant restaurant) {
-        if(Strings.isNullOrEmpty(salesDto.date))
-            throw new MissingParameterException("date");
+        // Ajouter du contexte métier pour Sentry
+        Sentry.setExtra("operation", "createSalesReport");
+        Sentry.setExtra("salesDate", salesDto.date);
+        Sentry.setExtra("restaurantId", salesDto.restaurantId);
 
-        if(Strings.isNullOrEmpty(salesDto.restaurantId))
+        if (Strings.isNullOrEmpty(salesDto.date)) {
+            throw new MissingParameterException("date");
+        }
+
+        if (Strings.isNullOrEmpty(salesDto.restaurantId)) {
             throw new MissingParameterException("restaurant id");
+        }
 
         try {
             LocalDate.parse(salesDto.date);
