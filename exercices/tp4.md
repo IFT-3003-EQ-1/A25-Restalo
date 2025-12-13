@@ -54,18 +54,19 @@ Pull Request 3
 
 
 ## Arbre de commits
+Voici une capture d'écran de notre arbre de commits.
 
 ![GET commit_tree](images/TP4/commit_tree.png)
 
-
-# Open Source (Brahima)
-
-# Outils d'analyse (Brahima)
+# Outils d'analyse
 
 # Architecture
 Voici un diagramme de notre architecture
 
+![GET architecture](./images/TP4/Architecture.png)
 
+Comme vous pouvez le constater, l'architecture n'a pas changé entre les deux sprints.
+En effet, dans le présent Sprint, nous avons principalement implémenté des nouveaux features, sans modifier significativement l'architecture générale de l'application.
 
 # Déclaration IA (Gabriel)
 Nous avons utilisé l'outil de synthèse de Google (AI overview) pour simplifier nos recherches web.
@@ -154,6 +155,7 @@ Cependant, ces cours ne traitent jamais des techniques et du savoir-faire relati
 
 2) Nous avons également apprit à apprécier la puissance des outils de CD/CI. Plus précisément, a quel point ils peuvent être simple à implémenter via les intégrations Gihub.
 
+# Open Source
 
 ## 1. Trois avantages pour une entreprise de contribuer à des projets open source
 
