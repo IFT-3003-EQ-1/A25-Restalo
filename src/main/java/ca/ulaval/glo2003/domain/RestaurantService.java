@@ -15,6 +15,7 @@ import ca.ulaval.glo2003.entities.filters.Filter;
 import ca.ulaval.glo2003.entities.filters.FilterRestaurantFactory;
 import ca.ulaval.glo2003.entities.restaurant.RestaurantFactory;
 import ca.ulaval.glo2003.entities.restaurant.RestaurantRepository;
+import io.sentry.Sentry;
 
 import java.util.List;
 
@@ -46,55 +47,91 @@ public class RestaurantService {
     }
 
     public String createRestaurant(OwnerDto ownerDto, RestaurantDto restaurantDto) {
+        // Ajouter du contexte pour Sentry
+        Sentry.setExtra("operation", "createRestaurant");
+        Sentry.setExtra("ownerId", ownerDto.id);
+        Sentry.setExtra("restaurantName", restaurantDto.name);
+        Sentry.setExtra("capacity", String.valueOf(restaurantDto.capacity));
+        Sentry.setExtra("openTime", restaurantDto.hours != null ? restaurantDto.hours.open : null);
+        Sentry.setExtra("closeTime", restaurantDto.hours != null ? restaurantDto.hours.close : null);
+
         Owner owner = ownerFactory.createOwner(ownerDto.id);
-        Restaurant restaurant = restaurantFactory.createRestaurant(
-                owner,
-                restaurantDto
-        );
+        Restaurant restaurant = restaurantFactory.createRestaurant(owner, restaurantDto);
         restaurantRepository.save(restaurant);
+
         return restaurant.getId();
     }
 
     public List<RestaurantDto> getRestaurants(String ownerId) {
+        // Ajouter du contexte pour Sentry
+        Sentry.setExtra("operation", "getRestaurants");
+        Sentry.setExtra("ownerId", ownerId);
 
         if (ownerId == null || ownerId.isBlank()) {
             throw new MissingParameterException("Owner");
         }
 
-        return restaurantRepository
-                .listByOwner(ownerId)
-                .stream()
-                .map(restaurantAssembler::toDto)
-                .toList();
+        List<Restaurant> restaurants = restaurantRepository.listByOwner(ownerId);
+        Sentry.setExtra("restaurantsCount", String.valueOf(restaurants.size()));
+
+        return restaurants.stream().map(restaurantAssembler::toDto).toList();
     }
 
     public List<RestaurantDto> searchRestaurants(RestaurantDto searchValues) {
+        // Ajouter du contexte pour Sentry
+        Sentry.setExtra("operation", "searchRestaurants");
+        Sentry.setExtra("searchName", searchValues.name);
+        Sentry.setExtra("searchOpenTime", searchValues.hours != null ? searchValues.hours.open : null);
+        Sentry.setExtra("searchCloseTime", searchValues.hours != null ? searchValues.hours.close : null);
 
-        List<Filter<Restaurant>> filtres = filterRestaurantFactory.createFilters(searchValues.name, searchValues.hours.open, searchValues.hours.close);
+        List<Filter<Restaurant>> filtres = filterRestaurantFactory.createFilters(
+                searchValues.name,
+                searchValues.hours != null ? searchValues.hours.open : null,
+                searchValues.hours != null ? searchValues.hours.close : null
+        );
+
+        Sentry.setExtra("filtersCount", String.valueOf(filtres.size()));
+        Sentry.setExtra("hasFilters", String.valueOf(!filtres.isEmpty()));
+
+        List<Restaurant> results;
+
         if (filtres.isEmpty()) {
-            return restaurantRepository
-                    .getAll()
-                    .stream()
-                    .map(restaurantAssembler::toDto)
-                    .toList();
+            results = restaurantRepository.getAll();
         } else {
-            return restaurantRepository
-                    .searchRestaurants(filtres)
-                    .stream()
-                    .map(restaurantAssembler::toDto)
-                    .toList();
+            results = restaurantRepository.searchRestaurants(filtres);
         }
 
+        Sentry.setExtra("resultsCount", String.valueOf(results.size()));
+
+        return results.stream().map(restaurantAssembler::toDto).toList();
     }
 
     public boolean deleteRestaurant(String restaurantId) {
+        // Ajouter du contexte pour Sentry
+        Sentry.setExtra("operation", "deleteRestaurant");
+        Sentry.setExtra("restaurantId", restaurantId);
+
+        // Supprimer les réservations liées
         reservationRepository.deleteRelatedReservations(restaurantId);
-        return restaurantRepository.delete(restaurantId);
+        Sentry.addBreadcrumb("Réservations supprimées pour le restaurant " + restaurantId);
+
+        // Supprimer le restaurant
+        boolean deleted = restaurantRepository.delete(restaurantId);
+        Sentry.setExtra("deleted", String.valueOf(deleted));
+
+        return deleted;
     }
 
     public String createSalesReport(SalesDto salesDto, RestaurantDto restaurantDto) {
+        // Ajouter du contexte pour Sentry
+        Sentry.setExtra("operation", "createSalesReport");
+        Sentry.setExtra("restaurantId", restaurantDto.id);
+        Sentry.setExtra("salesDate", salesDto.date);
+        Sentry.setExtra("salesAmount", String.valueOf(salesDto.salesAmount));
+
         Sales sales = restaurantFactory.createSalesReport(salesDto, restaurantFactory.fromDto(restaurantDto));
         salesRepository.saveSalesReport(sales);
+
         return restaurantDto.id;
     }
 }

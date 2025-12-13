@@ -83,6 +83,8 @@ Nous avons utilisé l'outil de synthèse de Google (AI overview) pour simplifier
 
 # Outils de métrique
 
+![Log_Exception_Sentry](./images/TP4/log_sentry.png)
+
 # Sécurité (Gabriel)
 
 Voici l'ensemble des outils que nous avons mit en place pour améliorer la sécurité de notre application.
