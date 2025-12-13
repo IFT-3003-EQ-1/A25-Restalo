@@ -59,8 +59,12 @@ Pull Request 3
 
 
 # Open Source (Brahima)
+- [Code of Conduct](../CODE_OF_CONDUCT.md)
+- [Guide de contribution](../CONTRIBUTING.md)
+- [Licence](../LICENCE)
 
 # Outils d'analyse (Brahima)
+![Analyse static](./images/TP4/rapport_scan_scurité_trivy.png)
 
 # Architecture
 Voici un diagramme de notre architecture
@@ -158,9 +162,7 @@ Nous avons choisi la licence MIT pour les raisons suivantes :
 
 ## 📄 Documentation Open Source
 
-- [Code of Conduct](../CODE_OF_CONDUCT.md)
-- [Guide de contribution](../CONTRIBUTING.md)
-- [Licence](../LICENCE)
+
 
 ## Commandes 
 - **Analyser les dépendances** : mvn dependency-check:check
