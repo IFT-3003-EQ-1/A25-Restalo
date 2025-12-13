@@ -132,14 +132,22 @@ Voici quelques bons coups réalisés par l'équipe :
 1) Le méchanism d'authentification avec l'annotation custom @OwnerOnly. Ce petit tour de passe-passe technique nous a permis de simplifier énormément nos tests, et facilité le développement lors du dernier sprint.
 Le mechanism permet de gérer toute la redondance liée à la validation que l'ID do Owner correspond à celui dans l'entité restaurant.
 
-2) Encore dans le volet technique : nous sommes fières de notre implémentation du connecteur MongoDBConnection.java et de la DatabaseFactory.java.
+2) Nous sommes fières de notre implémentation du connecteur MongoDBConnection.java et de la DatabaseFactory.java.
 Notre première approche était d'utiliser le patron Singleton pour implémenter le connecteur. Cependant, nous avions un sérieux problème de "code smell" lorsqu'on essayait d'injecter les configurations d'environnement dans le connecteur.
-Dans notre présente approche, on injecte l'état de la connection a la DB via un object DBConfig lors de l'initialisation de l'application. 
+Dans notre présente approche, on injecte l'état de la connection à la DB via un object DBConfig lors de l'initialisation de l'application. 
 On n'utilise pas de singleton a proprement parler, mais l'objet DatabaseFactory s'assure qu'une seule connection est ouverte à la fois, en plus de retourner la bonne implémentation de Repository (InMemory/Mongo.)
 
-3) Trois
+3) Finalement, l'ensemble de l'architecture lié aux filtres est un autre bon coups technique. En effet, la structure en place permet de paramétrer des Requêtes filtrées, sans avoir de logique d'affaire dans la couche Infrastructure.
+
+Concernant le conseil pour les prochains étudiants qui suivront ce cours:
+Réalisez le projet le plus tôt possible à chaque sprint. Cela vous donne davantage de marge de manœuvre si quelqu'un abandon le cours, ou décide de ne rien faire.
 
 
+D'un point de vue des apprentissages réalisés : 
+1) Écrire des tests de qualités. Le sujet des différents types de tests, ainsi que de leur importance est abordé dans d'autres cours. 
+Cependant, ces cours n'abordent jamais les techniques et le savoir-faire relatif à leur implémentation. Or, c'est en réalisant des tests de qualité suffisante qu'on prend réellement conscience de leurs utilités.
+
+2) 
 ## 1. Trois avantages pour une entreprise de contribuer à des projets open source
 
 ### 1.1. Amélioration de la qualité logicielle
