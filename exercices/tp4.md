@@ -125,7 +125,12 @@ Au lieu d'assigner l'ensemble du sprint au début du milestone, assigner les tâ
 2) Notre code a beaucoup d'incohérence en termes de style de codage et de nomenclature. Développer en pair programming aiderait à standardiser notre code. Évidement, une telle solution n'est pas réaliste dans une équipe de deux programmeurs. 
 Une autre solution pour standardiser le style de code dans une grande organisation serait d'avoir un document technique explicitant les attentes en termes de style et nomenclature.  
 
-TODO : Démarche pour intégrer des nouveaux outils?
+Notre stratégie pour explorer de nouveaux outils était essentiellement d'y aller par essaie-erreur jusqu'à ce qu'on obtienne un résultat satisfaisant. 
+La raison principale d'utilisé ce genre d'approche, c'est notre manque de connaissance préalable sur ce type de technologie.
+En effet, un prérequis pour une approche structuré (tel qu'utilisé des tests automatisés), c'est d'avoir une idée précise du résultat final désiré.
+Lorsqu'on avance dans le noir, le mieux, c'est d'y aller à tatons. 
+Ceci étant dit : si j'avais à refaire un pipeline de CI/CD (par exemple), j'essaierais de créer d'abord un script de test qui pull récupérerait la sortie de mon pipeline de CI/CD, et vérifierait que la route health soit fonctionnel.
+Cela me permettrait de valider le fonctionnement de mon pipeline (ainsi que de valider mes hypothèses concernant le fonctionnement de l'application.) 
 
 Voici quelques bons coups réalisés par l'équipe :
 
@@ -139,15 +144,17 @@ On n'utilise pas de singleton a proprement parler, mais l'objet DatabaseFactory 
 
 3) Finalement, l'ensemble de l'architecture lié aux filtres est un autre bon coups technique. En effet, la structure en place permet de paramétrer des Requêtes filtrées, sans avoir de logique d'affaire dans la couche Infrastructure.
 
-Concernant le conseil pour les prochains étudiants qui suivront ce cours:
+Concernant le conseil pour les prochains étudiants qui suivront ce cours :
 Réalisez le projet le plus tôt possible à chaque sprint. Cela vous donne davantage de marge de manœuvre si quelqu'un abandon le cours, ou décide de ne rien faire.
 
 
-D'un point de vue des apprentissages réalisés : 
-1) Écrire des tests de qualités. Le sujet des différents types de tests, ainsi que de leur importance est abordé dans d'autres cours. 
-Cependant, ces cours n'abordent jamais les techniques et le savoir-faire relatif à leur implémentation. Or, c'est en réalisant des tests de qualité suffisante qu'on prend réellement conscience de leurs utilités.
+Concernant les apprentissages réalisés : 
+1) Écrire des tests de qualités. Le sujet des différents types de tests, ainsi que de leur importance, est abordé dans d'autres cours. 
+Cependant, ces cours ne traitent jamais des techniques et du savoir-faire relatif à leur implémentation. Or, c'est justement en réalisant des tests de qualité suffisante qu'on prend réellement conscience de leurs utilités.
 
-2) 
+2) Nous avons également apprit à apprécier la puissance des outils de CD/CI. Plus précisément, a quel point ils peuvent être simple à implémenter via les intégrations Gihub.
+
+
 ## 1. Trois avantages pour une entreprise de contribuer à des projets open source
 
 ### 1.1. Amélioration de la qualité logicielle
