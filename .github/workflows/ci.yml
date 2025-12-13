@@ -6,6 +6,12 @@ on:
   pull_request:
     branches: [ "main"]
 
+# PERMISSIONS NÉCESSAIRES POUR GITHUB SECURITY
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -30,7 +36,7 @@ jobs:
       - name: Run Checkstyle
         run: mvn checkstyle:check
 
-      # 🔒 Trivy Security Scan - Version corrigée
+      # 🔒 Trivy Security Scan
       - name: Run Trivy Security Scan
         uses: aquasecurity/trivy-action@master
         with:
@@ -52,22 +58,6 @@ jobs:
           output: 'trivy-report.json'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
 
-      # Rapport HTML - VERSION CORRIGÉE
-      - name: Install HTML template
-        if: always()
-        run: |
-          mkdir -p contrib
-          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl -o contrib/html.tpl
-
-      - name: Generate Trivy HTML Report
-        if: always()
-        run: |
-          trivy fs . \
-            --format template \
-            --template @contrib/html.tpl \
-            --output trivy-report.html \
-            --severity CRITICAL,HIGH,MEDIUM,LOW
-
       # Rapport SARIF
       - name: Generate Trivy SARIF Report
         if: always()
@@ -84,13 +74,12 @@ jobs:
         with:
           name: trivy-security-reports
           path: |
-            trivy-report.html
             trivy-report.json
             trivy-results.sarif
           retention-days: 30
 
       - name: Upload to GitHub Security Tab
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         if: always()
         with:
           sarif_file: 'trivy-results.sarif'
