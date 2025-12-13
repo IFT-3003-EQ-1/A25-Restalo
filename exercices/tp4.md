@@ -1,21 +1,23 @@
 # Exercices - TP4
 
 # Planification (Gabriel)
+
 Voici différents screenshot décrivant notre planification
 
 ## GitHub project
+
 Capture d'écran de notre Kanban
 
 ![GET kanban](./images/TP4/kanban.png)
 
-
 ## Milestone
+
 Capture d'écran du Milestone 4
 
 ![GET milestone](./images/TP4/milestones.png)
 
-
 ## Issues
+
 Issue 1
 
 ![GET issue_1_1](./images/TP4/issue1_1.png)
@@ -29,7 +31,6 @@ Issue 2
 Issue 3
 
 ![GET issue_3](./images/TP4/issue3_1.png)
-
 
 ## Pull requests
 
@@ -45,22 +46,30 @@ Pull Request 2
 
 ![GET get_menu_1](./images/TP4/get_menu_2.png)
 
-
 Pull Request 3
 
 ![GET sales_1](./images/TP4/sales_1.png)
 
 ![GET sales_2](./images/TP4/sales_2.png)
 
-
 ## Arbre de commits
+
 Voici une capture d'écran de notre arbre de commits.
 
 ![GET commit_tree](images/TP4/commit_tree.png)
 
-# Outils d'analyse
+# Open Source (Brahima)
+
+- [Code of Conduct](../CODE_OF_CONDUCT.md)
+- [Guide de contribution](../CONTRIBUTING.md)
+- [Licence](../LICENCE)
+
+# Outils d'analyse (Brahima)
+
+![Analyse static](./images/TP4/rapport_scan_scurité_trivy.png)
 
 # Architecture
+
 Voici un diagramme de notre architecture
 
 ![GET architecture](./images/TP4/Architecture.png)
@@ -69,12 +78,13 @@ Comme vous pouvez le constater, l'architecture n'a pas changé entre les deux sp
 En effet, dans le présent Sprint, nous avons principalement implémenté des nouveaux features, sans modifier significativement l'architecture générale de l'application.
 
 # Déclaration IA (Gabriel)
+
 Nous avons utilisé l'outil de synthèse de Google (AI overview) pour simplifier nos recherches web.
 
 # Outils de métrique
 
-
 # Sécurité (Gabriel)
+
 Voici l'ensemble des outils que nous avons mit en place pour améliorer la sécurité de notre application.
 
 ## Analyse de sécurité
@@ -120,40 +130,41 @@ Si on avait un bloquant, on contactait l'autre membre pour se planifier une renc
 
 Ceci étant dit, il est clair que ce genre de processus n'est pas "scalable" pour des équipes plus grandes.
 Dans un tel context :
-1) En assignant l'ensemble des tâches du sprint au début du Milestone, il est plus difficile de réorganiser le travail si une tâche prend plus (ou moins) de temps que prévue. Dans notre cas, la moyenne au volume réduisait l'impact de la variance des estimations individuelles.
-Au lieu d'assigner l'ensemble du sprint au début du milestone, assigner les tâches une à la fois et laisser le reste dans un backlog. Ce faisant, il est plus facile de redistribuer le travail à mesure que le sprint avance.
 
-2) Notre code a beaucoup d'incohérence en termes de style de codage et de nomenclature. Développer en pair programming aiderait à standardiser notre code. Évidement, une telle solution n'est pas réaliste dans une équipe de deux programmeurs. 
-Une autre solution pour standardiser le style de code dans une grande organisation serait d'avoir un document technique explicitant les attentes en termes de style et nomenclature.  
+1. En assignant l'ensemble des tâches du sprint au début du Milestone, il est plus difficile de réorganiser le travail si une tâche prend plus (ou moins) de temps que prévue. Dans notre cas, la moyenne au volume réduisait l'impact de la variance des estimations individuelles.
+   Au lieu d'assigner l'ensemble du sprint au début du milestone, assigner les tâches une à la fois et laisser le reste dans un backlog. Ce faisant, il est plus facile de redistribuer le travail à mesure que le sprint avance.
 
-Notre stratégie pour explorer de nouveaux outils était essentiellement d'y aller par essaie-erreur jusqu'à ce qu'on obtienne un résultat satisfaisant. 
+2. Notre code a beaucoup d'incohérence en termes de style de codage et de nomenclature. Développer en pair programming aiderait à standardiser notre code. Évidement, une telle solution n'est pas réaliste dans une équipe de deux programmeurs.
+   Une autre solution pour standardiser le style de code dans une grande organisation serait d'avoir un document technique explicitant les attentes en termes de style et nomenclature.
+
+Notre stratégie pour explorer de nouveaux outils était essentiellement d'y aller par essaie-erreur jusqu'à ce qu'on obtienne un résultat satisfaisant.
 La raison principale d'utilisé ce genre d'approche, c'est notre manque de connaissance préalable sur ce type de technologie.
 En effet, un prérequis pour une approche structuré (tel qu'utilisé des tests automatisés), c'est d'avoir une idée précise du résultat final désiré.
-Lorsqu'on avance dans le noir, le mieux, c'est d'y aller à tatons. 
+Lorsqu'on avance dans le noir, le mieux, c'est d'y aller à tatons.
 Ceci étant dit : si j'avais à refaire un pipeline de CI/CD (par exemple), j'essaierais de créer d'abord un script de test qui pull récupérerait la sortie de mon pipeline de CI/CD, et vérifierait que la route health soit fonctionnel.
-Cela me permettrait de valider le fonctionnement de mon pipeline (ainsi que de valider mes hypothèses concernant le fonctionnement de l'application.) 
+Cela me permettrait de valider le fonctionnement de mon pipeline (ainsi que de valider mes hypothèses concernant le fonctionnement de l'application.)
 
 Voici quelques bons coups réalisés par l'équipe :
 
-1) Le méchanism d'authentification avec l'annotation custom @OwnerOnly. Ce petit tour de passe-passe technique nous a permis de simplifier énormément nos tests, et facilité le développement lors du dernier sprint.
-Le mechanism permet de gérer toute la redondance liée à la validation que l'ID do Owner correspond à celui dans l'entité restaurant.
+1. Le méchanism d'authentification avec l'annotation custom @OwnerOnly. Ce petit tour de passe-passe technique nous a permis de simplifier énormément nos tests, et facilité le développement lors du dernier sprint.
+   Le mechanism permet de gérer toute la redondance liée à la validation que l'ID do Owner correspond à celui dans l'entité restaurant.
 
-2) Nous sommes fières de notre implémentation du connecteur MongoDBConnection.java et de la DatabaseFactory.java.
-Notre première approche était d'utiliser le patron Singleton pour implémenter le connecteur. Cependant, nous avions un sérieux problème de "code smell" lorsqu'on essayait d'injecter les configurations d'environnement dans le connecteur.
-Dans notre présente approche, on injecte l'état de la connection à la DB via un object DBConfig lors de l'initialisation de l'application. 
-On n'utilise pas de singleton a proprement parler, mais l'objet DatabaseFactory s'assure qu'une seule connection est ouverte à la fois, en plus de retourner la bonne implémentation de Repository (InMemory/Mongo.)
+2. Nous sommes fières de notre implémentation du connecteur MongoDBConnection.java et de la DatabaseFactory.java.
+   Notre première approche était d'utiliser le patron Singleton pour implémenter le connecteur. Cependant, nous avions un sérieux problème de "code smell" lorsqu'on essayait d'injecter les configurations d'environnement dans le connecteur.
+   Dans notre présente approche, on injecte l'état de la connection à la DB via un object DBConfig lors de l'initialisation de l'application.
+   On n'utilise pas de singleton a proprement parler, mais l'objet DatabaseFactory s'assure qu'une seule connection est ouverte à la fois, en plus de retourner la bonne implémentation de Repository (InMemory/Mongo.)
 
-3) Finalement, l'ensemble de l'architecture lié aux filtres est un autre bon coups technique. En effet, la structure en place permet de paramétrer des Requêtes filtrées, sans avoir de logique d'affaire dans la couche Infrastructure.
+3. Finalement, l'ensemble de l'architecture lié aux filtres est un autre bon coups technique. En effet, la structure en place permet de paramétrer des Requêtes filtrées, sans avoir de logique d'affaire dans la couche Infrastructure.
 
 Concernant le conseil pour les prochains étudiants qui suivront ce cours :
 Réalisez le projet le plus tôt possible à chaque sprint. Cela vous donne davantage de marge de manœuvre si quelqu'un abandon le cours, ou décide de ne rien faire.
 
+Concernant les apprentissages réalisés :
 
-Concernant les apprentissages réalisés : 
-1) Écrire des tests de qualités. Le sujet des différents types de tests, ainsi que de leur importance, est abordé dans d'autres cours. 
-Cependant, ces cours ne traitent jamais des techniques et du savoir-faire relatif à leur implémentation. Or, c'est justement en réalisant des tests de qualité suffisante qu'on prend réellement conscience de leurs utilités.
+1. Écrire des tests de qualités. Le sujet des différents types de tests, ainsi que de leur importance, est abordé dans d'autres cours.
+   Cependant, ces cours ne traitent jamais des techniques et du savoir-faire relatif à leur implémentation. Or, c'est justement en réalisant des tests de qualité suffisante qu'on prend réellement conscience de leurs utilités.
 
-2) Nous avons également apprit à apprécier la puissance des outils de CD/CI. Plus précisément, a quel point ils peuvent être simple à implémenter via les intégrations Gihub.
+2. Nous avons également apprit à apprécier la puissance des outils de CD/CI. Plus précisément, a quel point ils peuvent être simple à implémenter via les intégrations Gihub.
 
 # Open Source
 
@@ -203,6 +214,13 @@ Nous avons choisi la licence MIT pour les raisons suivantes :
 
 ## 📄 Documentation Open Source
 
-- [Code of Conduct](../CODE_OF_CONDUCT.md)
-- [Guide de contribution](../CONTRIBUTING.md)
-- [Licence](../LICENCE)
+## Commandes
+
+- **Analyser les dépendances** : mvn dependency-check:check
+- **Générer un rapport sans faire échouer le build** : mvn dependency-check:aggregate
+- **Mettre à jour la base de données NVD** : mvn dependency-check:update-only
+- **Builder le projet** : mvn -B clean compile
+- **Rouler tests unitaires** : mvn -B test
+- **Control du formatage** : mvn checkstyle:check
+- **Créer les archives logiciels** : mvn -B package -DskipTests
+- **Scan des vulnérabilités Trivy** : Directement installé dans le Ci. Pas besoin de dependance mvn

@@ -1,10 +1,15 @@
-name: Java CI with Maven
+name: Java CI with Maven and Security Scan
 
 on:
   push:
     branches: [ "**" ]
   pull_request:
     branches: [ "main"]
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
 
 jobs:
   build:
@@ -26,8 +31,69 @@ jobs:
 
       - name: Run tests
         run: mvn -B test
+
       - name: Run Checkstyle
         run: mvn checkstyle:check
+
+      # 🔒 Trivy Security Scan
+      - name: Run Trivy Security Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'table'
+          severity: 'CRITICAL,HIGH'
+          exit-code: '1'
+        continue-on-error: true
+
+      # Rapport JSON (données brutes)
+      - name: Generate Trivy JSON Report
+        if: always()
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'json'
+          output: 'trivy-report.json'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
+      # Rapport SARIF (pour GitHub Security)
+      - name: Generate Trivy SARIF Report
+        if: always()
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      # 📄 Rapport TXT (facile à lire!)
+      - name: Generate Trivy Text Report
+        if: always()
+        run: |
+          trivy fs . \
+            --format table \
+            --severity CRITICAL,HIGH,MEDIUM,LOW \
+            --output trivy-report.txt
+
+      # 📊 Upload TOUS les rapports
+      - name: Upload Trivy Security Reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: trivy-security-reports
+          path: |
+            trivy-report.json
+            trivy-results.sarif
+            trivy-report.txt
+          retention-days: 30
+
+      # Upload vers GitHub Security Tab
+      - name: Upload to GitHub Security Tab
+        if: always()
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: 'trivy-results.sarif'
 
       - name: Package application
         run: mvn -B package -DskipTests
