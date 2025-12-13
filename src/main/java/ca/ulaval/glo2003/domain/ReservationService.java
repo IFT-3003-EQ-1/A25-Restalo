@@ -40,7 +40,6 @@ public class ReservationService {
     }
 
     public String addReservation(String restaurantId, ReservationDto createReservationDto) {
-        // Ajouter du contexte pour Sentry
         Sentry.setExtra("operation", "addReservation");
         Sentry.setExtra("restaurantId", restaurantId);
         Sentry.setExtra("groupSize", String.valueOf(createReservationDto.groupSize));
@@ -58,7 +57,6 @@ public class ReservationService {
     }
 
     public ReservationDto getReservation(String reservationId) {
-        // Ajouter du contexte pour Sentry
         Sentry.setExtra("operation", "getReservation");
         Sentry.setExtra("reservationId", reservationId);
 
@@ -70,7 +68,6 @@ public class ReservationService {
     }
 
     public boolean deleteReservation(String reservationNumber) {
-        // Ajouter du contexte pour Sentry
         Sentry.setExtra("operation", "deleteReservation");
         Sentry.setExtra("reservationNumber", reservationNumber);
 
@@ -84,7 +81,6 @@ public class ReservationService {
     }
 
     public List<ReservationDto> findBySearchCriteria(RestaurantDto restaurantDto, String customerName, String reservationData) {
-        // Ajouter du contexte pour Sentry
         Sentry.setExtra("operation", "findBySearchCriteria");
         Sentry.setExtra("restaurantId", restaurantDto.id);
         Sentry.setExtra("ownerId", restaurantDto.owner != null ? restaurantDto.owner.id : null);

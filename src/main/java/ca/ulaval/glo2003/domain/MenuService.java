@@ -25,7 +25,6 @@ public class MenuService {
     }
 
     public String createMenu(MenuDto menuDto, RestaurantDto restaurantDto) {
-        // Ajouter du contexte pour Sentry
         Sentry.setExtra("operation", "createMenu");
         Sentry.setExtra("restaurantId", restaurantDto.id);
         Sentry.setExtra("restaurantName", restaurantDto.name);
@@ -39,7 +38,6 @@ public class MenuService {
     }
 
     public MenuDto getMenu(String restaurantId) {
-        // Ajouter du contexte pour Sentry
         Sentry.setExtra("operation", "getMenu");
         Sentry.setExtra("restaurantId", restaurantId);
 

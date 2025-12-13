@@ -47,7 +47,6 @@ public class RestaurantService {
     }
 
     public String createRestaurant(OwnerDto ownerDto, RestaurantDto restaurantDto) {
-        // Ajouter du contexte pour Sentry
         Sentry.setExtra("operation", "createRestaurant");
         Sentry.setExtra("ownerId", ownerDto.id);
         Sentry.setExtra("restaurantName", restaurantDto.name);
@@ -63,7 +62,6 @@ public class RestaurantService {
     }
 
     public List<RestaurantDto> getRestaurants(String ownerId) {
-        // Ajouter du contexte pour Sentry
         Sentry.setExtra("operation", "getRestaurants");
         Sentry.setExtra("ownerId", ownerId);
 
@@ -78,7 +76,6 @@ public class RestaurantService {
     }
 
     public List<RestaurantDto> searchRestaurants(RestaurantDto searchValues) {
-        // Ajouter du contexte pour Sentry
         Sentry.setExtra("operation", "searchRestaurants");
         Sentry.setExtra("searchName", searchValues.name);
         Sentry.setExtra("searchOpenTime", searchValues.hours != null ? searchValues.hours.open : null);
@@ -107,15 +104,12 @@ public class RestaurantService {
     }
 
     public boolean deleteRestaurant(String restaurantId) {
-        // Ajouter du contexte pour Sentry
         Sentry.setExtra("operation", "deleteRestaurant");
         Sentry.setExtra("restaurantId", restaurantId);
 
-        // Supprimer les réservations liées
         reservationRepository.deleteRelatedReservations(restaurantId);
         Sentry.addBreadcrumb("Réservations supprimées pour le restaurant " + restaurantId);
 
-        // Supprimer le restaurant
         boolean deleted = restaurantRepository.delete(restaurantId);
         Sentry.setExtra("deleted", String.valueOf(deleted));
 
@@ -123,7 +117,6 @@ public class RestaurantService {
     }
 
     public String createSalesReport(SalesDto salesDto, RestaurantDto restaurantDto) {
-        // Ajouter du contexte pour Sentry
         Sentry.setExtra("operation", "createSalesReport");
         Sentry.setExtra("restaurantId", restaurantDto.id);
         Sentry.setExtra("salesDate", salesDto.date);
