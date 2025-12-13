@@ -30,35 +30,31 @@ jobs:
       - name: Run Checkstyle
         run: mvn checkstyle:check
 
-      - name: Cache OWASP Dependency-Check data
-        uses: actions/cache@v4
+      # 🔒 Trivy Security Scan (3 étapes seulement!)
+      - name: Run Trivy Security Scan
+        uses: aquasecurity/trivy-action@master
         with:
-          path: ~/.m2/repository/org/owasp/dependency-check-data
-          key: ${{ runner.os }}-dependency-check-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-dependency-check-
+          scan-type: 'fs'
+          scan-ref: '.'
+          severity: 'CRITICAL,HIGH'
+          exit-code: '1'
 
-      - name: Run OWASP Dependency-Check
-        env:
-          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
-        run: |
-          mvn org.owasp:dependency-check-maven:9.0.9:check \
-            -DnvdApiKey=${NVD_API_KEY} \
-            -DnvdApiDelay=6000 \
-            -DnvdMaxRetryCount=10 \
-            -DfailBuildOnCVSS=7 \
-            -DskipTestScope=false \
-            -Dformats=HTML,JSON
-        continue-on-error: false
+      - name: Generate Trivy HTML Report
+        if: always()
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'template'
+          template: '@/contrib/html.tpl'
+          output: 'trivy-report.html'
 
-      - name: Upload OWASP Dependency-Check Report
+      - name: Upload Trivy Report
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: owasp-dependency-check-report
-          path: |
-            target/dependency-check-report.html
-            target/dependency-check-report.json
+          name: security-report
+          path: trivy-report.html
           retention-days: 30
 
       - name: Package application
