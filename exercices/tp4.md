@@ -170,4 +170,4 @@ Nous avons choisi la licence MIT pour les raisons suivantes :
 - **Rouler tests unitaires** : mvn -B test
 - **Control du formatage** : mvn checkstyle:check
 - **Créer les archives logiciels** :  mvn -B package -DskipTests
-- **Scan des vulnérabilités OWASP** : mvn org.owasp:dependency-check-maven:9.0.9:check -DfailBuildOnCVSS=7 -DskipTestScope=false
+- **Scan des vulnérabilités OWASP** : mvn org.owasp:dependency-check-maven:9.0.9:check -DfailBuildOnCVSS=7 -DskipTestScope=false (nous avons généré une clef s'API stocker dans nos secrets)
