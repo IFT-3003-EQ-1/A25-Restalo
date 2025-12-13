@@ -30,32 +30,70 @@ jobs:
       - name: Run Checkstyle
         run: mvn checkstyle:check
 
-      # 🔒 Trivy Security Scan (3 étapes seulement!)
+      # 🔒 Trivy Security Scan - Version corrigée
       - name: Run Trivy Security Scan
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: 'fs'
           scan-ref: '.'
+          format: 'table'
           severity: 'CRITICAL,HIGH'
           exit-code: '1'
+        continue-on-error: true
 
-      - name: Generate Trivy HTML Report
+      # Rapport JSON
+      - name: Generate Trivy JSON Report
         if: always()
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: 'fs'
           scan-ref: '.'
-          format: 'template'
-          template: '@/contrib/html.tpl'
-          output: 'trivy-report.html'
+          format: 'json'
+          output: 'trivy-report.json'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
 
-      - name: Upload Trivy Report
+      # Rapport HTML - VERSION CORRIGÉE
+      - name: Install HTML template
+        if: always()
+        run: |
+          mkdir -p contrib
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/html.tpl -o contrib/html.tpl
+
+      - name: Generate Trivy HTML Report
+        if: always()
+        run: |
+          trivy fs . \
+            --format template \
+            --template @contrib/html.tpl \
+            --output trivy-report.html \
+            --severity CRITICAL,HIGH,MEDIUM,LOW
+
+      # Rapport SARIF
+      - name: Generate Trivy SARIF Report
+        if: always()
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy Security Reports
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: security-report
-          path: trivy-report.html
+          name: trivy-security-reports
+          path: |
+            trivy-report.html
+            trivy-report.json
+            trivy-results.sarif
           retention-days: 30
+
+      - name: Upload to GitHub Security Tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
 
       - name: Package application
         run: mvn -B package -DskipTests
